@@ -2,7 +2,7 @@
   "name": "n4translate-",
   "version": "0.0.0",
   "license": "MIT",
-  "description": "i18n angular distributingweb-service",
+  "description": "i18n angular distributing web-service",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
