@@ -1,0 +1,37 @@
+<div style="margin: 16px;">
+  <div style="padding: 16px; padding-left: 0px;" fxLayoutAlign="start center">
+    <button md-raised-button>
+      Import <md-icon>add</md-icon>
+    </button>
+  </div>
+
+  <div [ngStyle]="style()">
+    <div>
+      <div class="virtual-table-grid-header-field" fxFlex fxLayoutAlign="center center">Path</div>
+      <div class="virtual-table-grid-header-field" fxFlex fxLayoutAlign="center center">Translation</div>
+    </div>
+    <md-progress-bar *ngIf="loading" class="example-margin" mode="query"></md-progress-bar>
+  </div>
+
+  <div style="overflow: hidden;">
+    <div class="i18n-table-body" style="max-height: 600px; overflow-y: auto;">
+      <div *ngFor="let property of getPropertiesAsList()" fxLayout="row" class="i18n-table-row" (click)="openDialog(property)">
+        <div class="virtual-table-column" fxFlex fxLayoutAlign="start center">{{ property.key }}</div>
+        <div class="virtual-table-column" fxFlex fxLayoutAlign="start center">{{ property.value }}</div>
+
+        <!-- <div class="virtual-table-column i18n-translation-container" fxFlex fxLayoutAlign="start center" (click)="editTranslation(property)">
+          <span *ngIf="property != selectedProperty">{{ property.value }}</span>
+          <div *ngIf="property == selectedProperty">
+            <textarea class="i18n-translation-input" [(ngModel)]="property.value"></textarea>
+          </div>
+        </div> -->
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!loading" fxLayoutAlign="end center" style="height: 0; position: relative; top: -64px; margin-right: 42px;">
+    <button md-fab (click)="openCreateDialog()">
+      <md-icon>add</md-icon>
+    </button>
+  </div>
+</div>

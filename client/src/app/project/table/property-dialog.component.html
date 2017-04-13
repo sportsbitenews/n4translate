@@ -1,0 +1,24 @@
+<md-dialog-actions fxLayoutAlign="end center">
+  <button md-icon-button md-dialog-close>
+    <md-icon>close</md-icon>
+  </button>
+</md-dialog-actions>
+
+<md-dialog-content fxLayout="column" style="min-width: 600px;">
+  <md-input-container>
+    <input [(ngModel)]="entity.key" mdInput fxFlex="auto" placeholder="Path">
+  </md-input-container>
+
+  <md-input-container>
+    <textarea [(ngModel)]="entity.value" mdInput fxFlex="auto" placeholder="Value"></textarea>
+  </md-input-container>
+
+  <!-- entity: <pre>{{ entity | json }}</pre>
+  origin: <pre>{{ origin | json }}</pre> -->
+</md-dialog-content>
+
+<md-dialog-actions fxLayoutAlign="end center">
+  <button *ngIf="state == 'create'" md-raised-button (click)="add()">Add</button>
+  <button *ngIf="state == 'edit'" md-raised-button (click)="remove()">Remove</button>
+  <button *ngIf="state == 'edit'" md-raised-button (click)="submit()">Submit</button>
+</md-dialog-actions>

@@ -1,0 +1,56 @@
+$virtual-table-cell-border: 1px solid rgba(0,0,0,.1);
+
+.virtual-table-grid-header-field,
+.virtual-table-column {
+  width: 100%;
+  padding: 0 10px;
+  position: relative;
+  height: 40px;
+  border: $virtual-table-cell-border;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+
+.virtual-table-column {
+
+}
+
+.virtual-table-grid-header-field {
+  // position: absolute;
+}
+
+.virtual-table-grid-header-field {
+  text-align: center;
+  background-color: rgba(0,0,0,.05);
+  border: $virtual-table-cell-border;
+  font-size: 12px;
+  color: rgba(0,0,0,.5);
+  font-weight: 500;
+  box-sizing: border-box;
+}
+
+.i18n-translation-container:hover {
+  cursor: pointer;
+  width: inherit;
+  height: inherit;
+}
+
+.i18n-table-header {
+  height: 40px;
+  padding: 0;
+}
+
+.i18n-translation-input {
+  border: 0;
+  width: inherit;
+  height: inherit;
+  font-size: 12px;
+  color: rgba(0,0,0,.5);
+  font-weight: 500;
+}
+
+.i18n-table-row:hover {
+  cursor: pointer;
+  background-color: #eee;
+}

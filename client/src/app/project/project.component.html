@@ -1,0 +1,19 @@
+<pre>project: {{ project | json }}</pre>
+
+<md-tab-group>
+  <md-tab label="Table Editor">
+    <i18n-project-table [properties]="content"></i18n-project-table>
+  </md-tab>
+
+  <md-tab label="Tree Editor">
+    <i18n-project-section [properties]="content"></i18n-project-section>
+  </md-tab>
+
+  <md-tab label="JSON Preview">
+    <pre>{{ content | json }}</pre>
+  </md-tab>
+
+  <md-tab label="Property Paths">
+    <pre>{{ getPaths() | json }}</pre>
+  </md-tab>
+</md-tab-group>

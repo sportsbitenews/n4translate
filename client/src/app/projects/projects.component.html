@@ -1,0 +1,29 @@
+<div>
+  <div class="i18n-project" *ngFor="let project of projects" style="margin: 12px;" routerLink="/project/details/{{ project.filename }}">
+    <!-- <md-card class="project-card" md-ripple> -->
+    <md-card class="project-card">
+      <pre style="margin: 0px;">{{ project | json }}</pre>
+
+      <md-chip-list>
+        <md-chip *ngFor="let translation of project.translations">
+          {{ translation.lang }}
+        </md-chip>
+      </md-chip-list>
+    </md-card>
+  </div>
+</div>
+
+<div fxLayoutAlign="end center" style="margin-right: 42px;">
+  <button md-fab (click)="null">
+    <md-icon>add</md-icon>
+  </button>
+</div>
+
+<div style="padding: 16px; max-width: 400px;">
+  <md-input-container>
+    <input [(ngModel)]="entity.name" mdInput fxFlex="auto" placeholder="Path">
+  </md-input-container>
+  <div fxLayoutAlign="end center">
+    <button md-raised-button (click)="create()">Create</button>
+  </div>
+</div>

@@ -1,0 +1,26 @@
+<div style="padding: 16px;">
+  <pre style="margin: 0px;">{{ project | json }}</pre>
+</div>
+
+<div fxLayout="row" fxLayoutAlign="start center">
+  <md-chip-list *ngIf="project">
+    <md-chip *ngFor="let translation of project.translations"
+      (click)="selectTranslation(translation)"
+      style="margin: 4px;"
+      selected="{{ isSelectTranslation(translation) }}">
+        {{ translation.originalname }}
+    </md-chip>
+  </md-chip-list>
+
+  <button md-mini-fab (click)="null" style="margin: 4px;">
+    <md-icon>add</md-icon>
+  </button>
+</div>
+
+<div>
+  <input #upload style="display: none;" type="file" (change)="onChange($event)"/>
+
+  <button md-raised-button (click)="upload.click()">
+    Import <md-icon>file_upload</md-icon>
+  </button>
+</div>

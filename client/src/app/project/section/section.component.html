@@ -1,0 +1,12 @@
+<div flex layout="row" *ngFor="let property of properties | keys">
+  <span *ngIf="isTranslation(property)" style="font-size: 14px;">
+    {{ property.key }}: {{ property.value }}
+  </span>
+
+  <div *ngIf="isSection(property)" style="margin-left: 32px;">
+    <div>{{ property.key }}</div>
+    <div style="margin-left: 32px;">
+      <i18n-project-section [properties]="property.value"></i18n-project-section>
+    </div>
+  </div>
+</div>
