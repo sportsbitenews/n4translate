@@ -1,8 +1,9 @@
 <div>
   <div class="i18n-project" *ngFor="let project of projects" style="margin: 12px;" routerLink="/project/details/{{ project.filename }}">
-    <!-- <md-card class="project-card" md-ripple> -->
-    <md-card class="project-card">
-      <pre style="margin: 0px;">{{ project | json }}</pre>
+    <md-card class="project-card" md-ripple>
+    <!-- <md-card class="project-card"> -->
+      <md-card-title>{{ project.name }}</md-card-title>
+      <!-- <pre style="margin: 0px;">{{ project | json }}</pre> -->
 
       <md-chip-list>
         <md-chip *ngFor="let translation of project.translations">

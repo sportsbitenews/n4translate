@@ -2,6 +2,10 @@
   <pre style="margin: 0px;">{{ project | json }}</pre>
 </div>
 
+<div *ngIf="project" style="padding: 16px;">
+  {{ project.name }}
+</div>
+
 <div fxLayout="row" fxLayoutAlign="start center">
   <md-chip-list *ngIf="project">
     <md-chip *ngFor="let translation of project.translations"
@@ -23,4 +27,18 @@
   <button md-raised-button (click)="upload.click()">
     Import <md-icon>file_upload</md-icon>
   </button>
+
+  <button md-raised-button (click)="saveContent()">
+    Save <md-icon>save</md-icon>
+  </button>
+
+  <a #exportTarget style="display:none"></a>
+
+  <button md-raised-button (click)="export(exportTarget)">
+    Export <md-icon>file_download</md-icon>
+  </button>
 </div>
+
+<!-- <pre style="margin: 0px;">{{ content | json }}</pre> -->
+
+<i18n-project-translation [content]="content"></i18n-project-translation>

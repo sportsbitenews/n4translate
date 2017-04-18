@@ -20,6 +20,7 @@ import * as _ from "lodash";
 export class DetailsComponent implements OnDestroy, OnInit {
   project;
   selectedTranslation;
+  content;
 
   errorMessage;
   progress;
@@ -53,6 +54,12 @@ export class DetailsComponent implements OnDestroy, OnInit {
        }, error => console.log(error));
     });
 
+    this.subs.propertyRemoved = this.projectService.propertyRemovedObservable
+    .subscribe(() => {
+      console.log('DetailsComponent removed!');
+      this.saveContent();
+    }, error => console.log(error));
+
     this.progress = Observable.create(observer => {
       this.progressObserver = observer
     }).share();
@@ -65,19 +72,48 @@ export class DetailsComponent implements OnDestroy, OnInit {
 
   ngOnDestroy() {
     this.subs.routeParams.unsubscribe();
+    this.subs.propertyRemoved.unsubscribe();
   }
 
   selectTranslation(translation) {
     this.selectedTranslation = translation;
+    this.getContent();
   }
 
   isSelectTranslation(translation): boolean {
     return this.selectedTranslation === translation;
   }
 
+  getContent() {
+    console.log(this.selectedTranslation);
+    this.projectService.getTranslation(this.selectedTranslation || {})
+      .subscribe(
+         content => this.content = content,
+         error => this.errorMessage = <any>error
+      );
+  }
+
+  saveContent() {
+    this.projectService.saveTranslation(this.selectedTranslation, this.content)
+    .subscribe(
+       (res) => {
+         console.log(res);
+         console.log('translation saved!');
+       },
+       error => this.errorMessage = <any>error
+    );
+  }
+
+  export(element) {
+    if(this.content) {
+      let body = encodeURIComponent(JSON.stringify(this.content, null, 2));
+      element.setAttribute('href', `data:text/json;charset=utf-8,${body}`);
+      element.setAttribute('download', this.selectedTranslation.originalname);
+      element.click();
+    }
+  }
+
   onChange(event) {
-    console.log('onChange', event);
-    // var files = event.srcElement.files;
     let target = this.getTarget(event);
     if(target) {
       this.makeFileRequest(target.files)
@@ -98,6 +134,7 @@ export class DetailsComponent implements OnDestroy, OnInit {
       let xhr: XMLHttpRequest = new XMLHttpRequest();
 
       formData.append('$loki', this.project.$loki);
+      formData.append('lang', 'LU');
 
       if(files.length > 0) {
         formData.append("i18n", files[0], files[0].name);

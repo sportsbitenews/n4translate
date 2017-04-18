@@ -27,6 +27,12 @@ export class ProjectService {
   private projectUpdated = new Subject<any>();
   public projectUpdatedObservable;
 
+  private loadTranslation = new Subject<any>();
+  public loadTranslationObservable;
+
+  private translationLoaded = new Subject<any>();
+  public translationLoadedObservable;
+
   private projects;
 
   constructor (private http: Http) {
@@ -34,6 +40,9 @@ export class ProjectService {
     this.propertyAddedObservable = this.propertyAdded.asObservable().share();
     this.projectAddedObservable = this.projectAdded.asObservable().share();
     this.projectUpdatedObservable = this.projectUpdated.asObservable().share();
+
+    this.loadTranslationObservable = this.loadTranslation.asObservable().share();
+    this.translationLoadedObservable = this.translationLoaded.asObservable().share();
   }
 
   createProject(data): Observable<any> {
@@ -75,10 +84,23 @@ export class ProjectService {
       .map((projects) => _.find(projects, { filename }));
   }
 
-  getTranslation(): Observable<any> {
+  getTranslation(data): Observable<any> {
+    this.loadTranslation.next();
+
     return this.http
-      .get(`${this.host}/api/project/content`)
+      .post(`${this.host}/api/translation`, data)
       .map(this.extractData)
+      .map((translation) => {
+        this.translationLoaded.next(translation);
+        return translation;
+      })
+      .catch(this.handleError);
+  }
+
+  saveTranslation(translation, content): Observable<any> {
+    let body = _.assign({}, translation, { content });
+    return this.http
+      .post(`${this.host}/api/translation/save`, body)
       .catch(this.handleError);
   }
 

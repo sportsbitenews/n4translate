@@ -26,9 +26,11 @@ export class ProjectTableComponent implements OnDestroy, OnInit {
   loading = true;
   dialogRef;
 
-  translationsLoadedSubscription: Subscription;
   propertyRemovedSubscription: Subscription;
   propertyAddedSubscription: Subscription;
+
+  loadTranslationSubscription: Subscription;
+  translationsLoadedSubscription: Subscription;
 
   constructor(
     public dialog: MdDialog,
@@ -40,29 +42,29 @@ export class ProjectTableComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
-    // this.list = this.projectService.getPropertiesAsList(this.properties);
-
     this.propertyRemovedSubscription = this.projectService.propertyRemovedObservable
     .subscribe(() => {
-      this.list = [];
       console.log('ProjectTableComponent removed!');
+      this.list = this.projectService.getPropertiesAsList(this.properties);
     });
 
     this.propertyAddedSubscription = this.projectService.propertyAddedObservable
     .subscribe(() => {
-      this.list = [];
-      console.log('ProjectTableComponent removed!');
-    });
-  }
-
-  getPropertiesAsList() {
-    if(this.list.length === 0) {
+      console.log('ProjectTableComponent added!');
       this.list = this.projectService.getPropertiesAsList(this.properties);
-      setTimeout(() => {
-        this.loading = false;
-      }, 0);
-    }
-    return this.list;
+    });
+
+    this.loadTranslationSubscription = this.projectService.loadTranslationObservable
+    .subscribe((properties) => {
+      this.loading = true;
+    });
+
+    this.translationsLoadedSubscription = this.projectService.translationLoadedObservable
+    .subscribe((properties) => {
+      this.properties = properties;
+      this.list = this.projectService.getPropertiesAsList(this.properties);
+      this.loading = false;
+    });
   }
 
   style() {
@@ -111,6 +113,9 @@ export class ProjectTableComponent implements OnDestroy, OnInit {
   ngOnDestroy() {
     this.propertyRemovedSubscription.unsubscribe();
     this.propertyAddedSubscription.unsubscribe();
+
+    this.loadTranslationSubscription.unsubscribe();
+    this.translationsLoadedSubscription.unsubscribe();
   }
 
 }

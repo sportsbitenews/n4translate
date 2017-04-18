@@ -4,7 +4,6 @@ const Promise   = require('bluebird')
 const fs        = require('fs');
 const util      = require('../../modules/util.js');
 
-let registerPath = `repository/config/register.json`;
 let register;
 
 const collectionName = 'projects';
@@ -18,11 +17,11 @@ const getProjects = (db) => {
 
 const addProject = _.curry((db, project) => {
   return util.loadCollection(collectionName, db)
-  .then((collection) => {
-    const data = collection.insert(project);
-    db.saveDatabase();
-    return project;
-  });
+    .then((collection) => {
+      const data = collection.insert(project);
+      db.saveDatabase();
+      return project;
+    });
 });
 
 const findProjectByCollection = (collection, { $loki }) => {
@@ -68,24 +67,3 @@ module.exports = {
   getProjects,
   importTranslationToProject
 };
-
-// const addLang = _.curry((db, { $loki }, lang) => {
-//   return util.loadCollection(collectionName, db)
-//   .then((collection) => {
-//     let project = findProjectByCollection(collection, { $loki });
-//
-//     if(project) {
-//       let langs = _.get(project, 'langs', []);
-//
-//       if(_.includes(langs, lang) === false) {
-//         langs.push(lang);
-//         _.set(project, 'langs', langs);
-//
-//         collection.update(project);
-//         db.saveDatabase();
-//       }
-//     }
-//
-//     return project;
-//   });
-// });

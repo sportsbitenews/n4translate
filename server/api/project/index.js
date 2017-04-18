@@ -4,7 +4,7 @@ const _         = require('lodash');
 const Promise   = require('bluebird')
 
 const getFilepath = (filename) => {
-  return `repository/${filename}.json`;
+  return `repository/translations/${filename}`;
 };
 
 const getJSON = (filename) => {
@@ -31,8 +31,20 @@ const model = ({ name }) => {
   }
 };
 
+const createTranslation = (project, lang) => {
+  let filepath = getFilepath(`${project.filename}-${lang}`);
+  return util.outputFile(filepath, translation.content);
+}
+
+const saveTranslation = (translation) => {
+  let filepath = getFilepath(translation.filename);
+  return util.writeJson(filepath, translation.content);
+}
+
 module.exports = {
   getJSON,
   model,
-  saveEntity
+  saveEntity,
+  createTranslation,
+  saveTranslation
 };
