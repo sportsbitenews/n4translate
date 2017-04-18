@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule, Routes } from '@angular/router';
 
+import { NgxPaginationModule } from 'ngx-pagination';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MaterialModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -44,6 +45,7 @@ const appRoutes: Routes = [
   ],
   imports: [
     BrowserModule,
+    NgxPaginationModule,
     BrowserAnimationsModule,
     FlexLayoutModule,
     FormsModule,

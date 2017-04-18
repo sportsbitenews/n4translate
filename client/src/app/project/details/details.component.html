@@ -1,6 +1,6 @@
-<div style="padding: 16px;">
+<!-- <div style="padding: 16px;">
   <pre style="margin: 0px;">{{ project | json }}</pre>
-</div>
+</div> -->
 
 <div *ngIf="project" style="padding: 16px;">
   {{ project.name }}
@@ -41,4 +41,4 @@
 
 <!-- <pre style="margin: 0px;">{{ content | json }}</pre> -->
 
-<i18n-project-translation [content]="content"></i18n-project-translation>
+<i18n-project-translation [hidden]="!content" [content]="content"></i18n-project-translation>

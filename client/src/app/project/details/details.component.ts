@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ProjectService } from '../project.service';
 import { UserAgentService } from '../../shared/services/user-agent.service';
 
@@ -38,6 +38,7 @@ export class DetailsComponent implements OnDestroy, OnInit {
   constructor(
     private projectService: ProjectService,
     private route: ActivatedRoute,
+    private router: Router,
     private userAgentService: UserAgentService
   ) {}
 
@@ -48,9 +49,13 @@ export class DetailsComponent implements OnDestroy, OnInit {
     .subscribe(params => {
        this.projectService.findProjectByFilename(params.filename)
        .subscribe((project) => {
-         this.project = project;
-         let translation = _.get(this.project, 'translations', []);
-         this.selectTranslation(_.first(translation));
+         if(!project) {
+           this.router.navigate(['/']);
+         } else {
+           this.project = project;
+           let translation = _.get(this.project, 'translations', []);
+           this.selectTranslation(_.first(translation));
+         }
        }, error => console.log(error));
     });
 
@@ -77,7 +82,10 @@ export class DetailsComponent implements OnDestroy, OnInit {
 
   selectTranslation(translation) {
     this.selectedTranslation = translation;
-    this.getContent();
+    if(this.selectedTranslation) {
+      console.log('getContent');
+      this.getContent();
+    }
   }
 
   isSelectTranslation(translation): boolean {
@@ -85,7 +93,6 @@ export class DetailsComponent implements OnDestroy, OnInit {
   }
 
   getContent() {
-    console.log(this.selectedTranslation);
     this.projectService.getTranslation(this.selectedTranslation || {})
       .subscribe(
          content => this.content = content,
@@ -128,7 +135,7 @@ export class DetailsComponent implements OnDestroy, OnInit {
     if(handler) return handler(event);
   }
 
-  private makeFileRequest (files: File[]) {
+  private makeFileRequest(files: File[]) {
     return Observable.create((observer) => {
       let formData: FormData = new FormData();
       let xhr: XMLHttpRequest = new XMLHttpRequest();
@@ -164,7 +171,11 @@ export class DetailsComponent implements OnDestroy, OnInit {
           try {
             let project = JSON.parse(response);
             this.project = project;
+
             this.projectService.updateProject(this.project);
+
+            let translation = _.get(this.project, 'translations', []);
+            this.selectTranslation(_.last(translation));
           } catch(err) {
             console.log(err);
           }

@@ -1,4 +1,4 @@
-<div style="margin: 16px;">
+<!-- <div style="margin: 16px;">
   <div [ngStyle]="style()">
     <div>
       <div class="virtual-table-grid-header-field" fxFlex fxLayoutAlign="center center">Path</div>
@@ -12,13 +12,6 @@
       <div *ngFor="let property of list" fxLayout="row" class="i18n-table-row" (click)="openDialog(property)">
         <div class="virtual-table-column" fxFlex fxLayoutAlign="start center">{{ property.key }}</div>
         <div class="virtual-table-column" fxFlex fxLayoutAlign="start center">{{ property.value }}</div>
-
-        <!-- <div class="virtual-table-column i18n-translation-container" fxFlex fxLayoutAlign="start center" (click)="editTranslation(property)">
-          <span *ngIf="property != selectedProperty">{{ property.value }}</span>
-          <div *ngIf="property == selectedProperty">
-            <textarea class="i18n-translation-input" [(ngModel)]="property.value"></textarea>
-          </div>
-        </div> -->
       </div>
     </div>
   </div>
@@ -28,4 +21,12 @@
       <md-icon>add</md-icon>
     </button>
   </div>
-</div>
+</div> -->
+
+<ul>
+  <li *ngFor="let property of list | paginate: { itemsPerPage: 10, currentPage: p }">
+    <pre>{{ property | json }}</pre>
+  </li>
+</ul>
+
+<pagination-controls (pageChange)="p = $event"></pagination-controls>
