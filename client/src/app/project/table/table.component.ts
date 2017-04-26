@@ -11,6 +11,10 @@ import * as _ from "lodash";
 
 import { PropertyDialog } from './property-dialog.component';
 
+interface Credentials {
+  username: string,
+  password: string
+}
 
 @Component({
   selector: 'i18n-project-table',
@@ -23,6 +27,7 @@ export class ProjectTableComponent implements OnDestroy, OnInit {
   @Input() properties;
 
   list = [];
+  currentPage: number = 1;
   loading = true;
   dialogRef;
 
@@ -65,6 +70,10 @@ export class ProjectTableComponent implements OnDestroy, OnInit {
       this.list = this.projectService.getPropertiesAsList(this.properties);
       this.loading = false;
     });
+  }
+
+  onLogin(credentials: Credentials) {
+    console.log(credentials);
   }
 
   style() {

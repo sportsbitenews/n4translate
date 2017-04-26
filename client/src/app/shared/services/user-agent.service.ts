@@ -14,8 +14,8 @@ export class UserAgentService {
   public userAgent: string;
   private name: string;
 
-  constructor(@Inject('Window') private window: Window) {
-    this.userAgent = this.window.navigator.userAgent
+  constructor() {
+    this.userAgent = window.navigator.userAgent
   }
 
   getBrowser(): string {

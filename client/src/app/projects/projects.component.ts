@@ -1,7 +1,14 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit, OnDestroy, ViewContainerRef } from '@angular/core';
+import { MdDialog, MdDialogConfig, MdDialogRef } from '@angular/material';
+
 import { ProjectService } from '../project/project.service';
 
 import { Subscription }   from 'rxjs/Subscription';
+import { Observable } from 'rxjs/Observable';
+
+import * as _ from "lodash";
+
+import { ProjectDialogComponent } from './project-dialog/project-dialog.component';
 
 @Component({
   selector: 'app-projects',
@@ -10,12 +17,15 @@ import { Subscription }   from 'rxjs/Subscription';
 })
 export class ProjectsComponent implements OnDestroy, OnInit {
 
-  errorMessage;
-  entity = {};
   projects = [];
+  dialogRef: MdDialogRef<ProjectDialogComponent>
   private subs: { [x: string]: Subscription } = {};
 
-  constructor(private projectService: ProjectService) {}
+  constructor(
+    public dialog: MdDialog,
+    public viewContainerRef: ViewContainerRef,
+    public projectService: ProjectService,
+  ) {}
 
   ngOnInit() {
     this.subs.projectAdded = this.projectService.projectAddedObservable
@@ -33,12 +43,25 @@ export class ProjectsComponent implements OnDestroy, OnInit {
     this.subs.projectAdded.unsubscribe();
   }
 
-  create() {
-    this.projectService.createProject(this.entity)
+  create(project: { name: string }) {
+    this.projectService.createProject(project)
     .subscribe(
        content => console.log(content),
        error => console.log(error)
     );
+  }
+
+  openCreateDialog() {
+    let config = new MdDialogConfig();
+    config.viewContainerRef = this.viewContainerRef;
+
+    this.dialogRef = this.dialog.open(ProjectDialogComponent, config);
+    this.dialogRef.componentInstance.project = { name: '' };
+
+    this.dialogRef.afterClosed()
+      .subscribe(project => {
+        if(project) this.create(project);
+      });
   }
 
 }

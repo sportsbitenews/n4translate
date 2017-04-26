@@ -1,32 +1,17 @@
-<!-- <div style="margin: 16px;">
-  <div [ngStyle]="style()">
-    <div>
-      <div class="virtual-table-grid-header-field" fxFlex fxLayoutAlign="center center">Path</div>
-      <div class="virtual-table-grid-header-field" fxFlex fxLayoutAlign="center center">Translation</div>
-    </div>
-    <md-progress-bar *ngIf="loading" class="example-margin" mode="query"></md-progress-bar>
-  </div>
+<div style="overflow: hidden;">
+  <md-card *ngFor="let property of list | paginate: { itemsPerPage: 4, currentPage: currentPage }; let i = index;" style="margin: 8px;">
+    <md-card-title>
+      {{ property.key }}
+    </md-card-title>
 
-  <div style="overflow: hidden;">
-    <div class="i18n-table-body" style="max-height: 600px; overflow-y: auto;">
-      <div *ngFor="let property of list" fxLayout="row" class="i18n-table-row" (click)="openDialog(property)">
-        <div class="virtual-table-column" fxFlex fxLayoutAlign="start center">{{ property.key }}</div>
-        <div class="virtual-table-column" fxFlex fxLayoutAlign="start center">{{ property.value }}</div>
-      </div>
-    </div>
-  </div>
+    <md-card-content>
+      <!-- <pre>{{ property | json }}</pre> -->
 
-  <div *ngIf="!loading" fxLayoutAlign="end center" style="height: 0; position: relative; top: -64px; margin-right: 42px;">
-    <button md-fab (click)="openCreateDialog()">
-      <md-icon>add</md-icon>
-    </button>
-  </div>
-</div> -->
+      <md-input-container fxFlex>
+        <textarea mdInput [(ngModel)]="property.value" placeholder="Translation" rows="2"></textarea>
+      </md-input-container>
+    </md-card-content>
+  </md-card>
 
-<ul>
-  <li *ngFor="let property of list | paginate: { itemsPerPage: 10, currentPage: p }">
-    <pre>{{ property | json }}</pre>
-  </li>
-</ul>
-
-<pagination-controls (pageChange)="p = $event"></pagination-controls>
+  <pagination-controls (pageChange)="currentPage = $event"></pagination-controls>
+</div>

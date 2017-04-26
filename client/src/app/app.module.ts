@@ -22,6 +22,8 @@ import { SectionSelectorComponent } from './project/section-selector/section-sel
 import { UserComponent } from './user/user.component';
 import { ProjectsComponent } from './projects/projects.component';
 import { DetailsComponent } from './project/details/details.component';
+import { ProjectDialogComponent } from './projects/project-dialog/project-dialog.component';
+import { ImportTranslationDialogComponent } from './project/import-translation-dialog/import-translation-dialog.component';
 
 const appRoutes: Routes = [
   { path: 'user', component: UserComponent },
@@ -41,7 +43,9 @@ const appRoutes: Routes = [
     SectionSelectorComponent,
     UserComponent,
     ProjectsComponent,
-    DetailsComponent
+    DetailsComponent,
+    ProjectDialogComponent,
+    ImportTranslationDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -54,10 +58,12 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes)
   ],
   entryComponents: [
-    PropertyDialog
+    ImportTranslationDialogComponent,
+    PropertyDialog,
+    ProjectDialogComponent
   ],
   providers: [
-    { provide: 'Window',  useValue: window }
+    
   ],
   bootstrap: [AppComponent]
 })

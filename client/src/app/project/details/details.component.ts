@@ -1,4 +1,6 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit, OnDestroy, ViewContainerRef, ViewChild } from '@angular/core';
+import { MdDialog, MdDialogConfig, MdDialogRef } from '@angular/material';
+import { ElementRef } from '@angular/core';
 
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProjectService } from '../project.service';
@@ -9,6 +11,8 @@ import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
 
 import * as _ from "lodash";
+
+import { ImportTranslationDialogComponent } from '../import-translation-dialog/import-translation-dialog.component';
 
 @Component({
   selector: 'i18n-project-details',
@@ -26,6 +30,10 @@ export class DetailsComponent implements OnDestroy, OnInit {
   progress;
   progressObserver;
 
+  @ViewChild('upload') upload: ElementRef;
+
+  importTranslationDialogRef: MdDialogRef<ImportTranslationDialogComponent>
+
   private subs: { [x: string]: Subscription } = {};
   private uploadUrl: string = 'http://localhost:3000/api/translation/import';
 
@@ -36,6 +44,8 @@ export class DetailsComponent implements OnDestroy, OnInit {
   private browser: string;
 
   constructor(
+    private dialog: MdDialog,
+    private viewContainerRef: ViewContainerRef,
     private projectService: ProjectService,
     private route: ActivatedRoute,
     private router: Router,
@@ -83,7 +93,6 @@ export class DetailsComponent implements OnDestroy, OnInit {
   selectTranslation(translation) {
     this.selectedTranslation = translation;
     if(this.selectedTranslation) {
-      console.log('getContent');
       this.getContent();
     }
   }
@@ -109,6 +118,21 @@ export class DetailsComponent implements OnDestroy, OnInit {
        },
        error => this.errorMessage = <any>error
     );
+  }
+
+  openImportTranslationDialog() {
+    let config = new MdDialogConfig();
+    config.viewContainerRef = this.viewContainerRef;
+
+    this.importTranslationDialogRef = this.dialog.open(ImportTranslationDialogComponent, config);
+    this.importTranslationDialogRef.componentInstance.lang = '';
+
+    this.importTranslationDialogRef.afterClosed()
+      .subscribe(lang => {
+        console.log('lang', lang);
+        console.log(this.upload.nativeElement);
+        this.upload.nativeElement.click();
+      });
   }
 
   export(element) {

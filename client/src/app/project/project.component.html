@@ -1,17 +1,17 @@
-<md-tab-group>
-  <md-tab label="Table Editor">
+<md-tab-group fxFlex>
+  <md-tab label="Table Editor" fxFlex>
     <i18n-project-table [properties]="content"></i18n-project-table>
   </md-tab>
 
-  <md-tab label="Tree Editor">
+  <!-- <md-tab label="Tree Editor">
     <i18n-project-section [properties]="content"></i18n-project-section>
-  </md-tab>
+  </md-tab> -->
 
-  <md-tab label="JSON Preview">
+  <md-tab label="JSON Preview" fxFlex>
     <pre>{{ content | json }}</pre>
   </md-tab>
 
-  <md-tab label="Property Paths">
+  <!-- <md-tab label="Property Paths" fxFlex>
     <pre>{{ getPaths() | json }}</pre>
-  </md-tab>
+  </md-tab> -->
 </md-tab-group>
