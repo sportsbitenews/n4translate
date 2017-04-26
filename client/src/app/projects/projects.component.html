@@ -4,7 +4,7 @@
       <md-card-title>{{ project.name }}</md-card-title>
 
       <md-chip-list>
-        <md-chip *ngFor="let translation of project.translations">
+        <md-chip *ngFor="let translation of project.translations" selectable="false">
           {{ translation.lang }}
         </md-chip>
       </md-chip-list>
@@ -14,6 +14,6 @@
 
 <div fxLayoutAlign="end center" style="margin-right: 42px;">
   <button md-fab (click)="openCreateDialog()">
-    <md-icon>add</md-icon>
+    <md-icon>create_new_folder</md-icon>
   </button>
 </div>

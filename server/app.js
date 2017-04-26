@@ -40,12 +40,24 @@ const upload = multer({
 
 app.post('/api/translation/import', upload.single('i18n'), (req, res) => {
   let projectRef = { $loki: _.parseInt(req.body.$loki) };
-  // console.log('projectRef', projectRef);
-
   let translation =_.assign({ lang: req.body.lang }, req.file);
-  // console.log('translation', translation);
 
   Register.importTranslationToProject(projectRef, translation)
+    .then((project) => {
+      res.json(project);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.sendStatus(400);
+    });
+});
+
+app.post('/api/translation/append', (req, res) => {
+  let projectRef = { $loki: _.parseInt(req.body.$loki) };
+  let translation =_.assign({}, { lang: req.body.lang });
+  let content = req.body.content;
+  
+  Register.appendTranslationToProject(projectRef, translation)
     .then((project) => {
       res.json(project);
     })

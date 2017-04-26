@@ -24,13 +24,12 @@ import { ImportTranslationDialogComponent } from '../import-translation-dialog/i
 export class DetailsComponent implements OnDestroy, OnInit {
   project;
   selectedTranslation;
+  lang = 'DE';
   content;
 
   errorMessage;
   progress;
   progressObserver;
-
-  @ViewChild('upload') upload: ElementRef;
 
   importTranslationDialogRef: MdDialogRef<ImportTranslationDialogComponent>
 
@@ -85,6 +84,11 @@ export class DetailsComponent implements OnDestroy, OnInit {
       });
   }
 
+  invalidLang(): boolean {
+    console.log('invalidLang');
+    return _.findIndex(this.project.translations, { lang: this.lang }) > -1;
+  }
+
   ngOnDestroy() {
     this.subs.routeParams.unsubscribe();
     this.subs.propertyRemoved.unsubscribe();
@@ -130,8 +134,6 @@ export class DetailsComponent implements OnDestroy, OnInit {
     this.importTranslationDialogRef.afterClosed()
       .subscribe(lang => {
         console.log('lang', lang);
-        console.log(this.upload.nativeElement);
-        this.upload.nativeElement.click();
       });
   }
 
@@ -165,7 +167,7 @@ export class DetailsComponent implements OnDestroy, OnInit {
       let xhr: XMLHttpRequest = new XMLHttpRequest();
 
       formData.append('$loki', this.project.$loki);
-      formData.append('lang', 'LU');
+      formData.append('lang', this.lang);
 
       if(files.length > 0) {
         formData.append("i18n", files[0], files[0].name);
