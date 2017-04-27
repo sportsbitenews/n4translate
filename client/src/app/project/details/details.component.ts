@@ -4,8 +4,7 @@ import { ElementRef } from '@angular/core';
 
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProjectService } from '../project.service';
-import { UserAgentService } from '../../shared/services/user-agent.service';
-
+import { UploadFileService } from '../../shared/services/upload-file.service';
 
 import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
@@ -18,7 +17,7 @@ import { ImportTranslationDialogComponent } from '../import-translation-dialog/i
   selector: 'i18n-project-details',
   templateUrl: './details.component.html',
   styleUrls: ['./details.component.scss'],
-  providers: [ UserAgentService ]
+  providers: [ UploadFileService ]
 })
 
 export class DetailsComponent implements OnDestroy, OnInit {
@@ -26,21 +25,12 @@ export class DetailsComponent implements OnDestroy, OnInit {
   selectedTranslation;
   lang = 'DE';
   content;
-
   errorMessage;
-  progress;
-  progressObserver;
 
   importTranslationDialogRef: MdDialogRef<ImportTranslationDialogComponent>
 
   private subs: { [x: string]: Subscription } = {};
   private uploadUrl: string = 'http://localhost:3000/api/translation/import';
-
-  private targetHandlers = {
-    chrome: (event) => event.srcElement,
-    firefox: (event) => event.target
-  };
-  private browser: string;
 
   constructor(
     private dialog: MdDialog,
@@ -48,12 +38,10 @@ export class DetailsComponent implements OnDestroy, OnInit {
     private projectService: ProjectService,
     private route: ActivatedRoute,
     private router: Router,
-    private userAgentService: UserAgentService
+    private uploadFileService: UploadFileService
   ) {}
 
   ngOnInit() {
-    this.browser = this.userAgentService.getBrowser();
-
     this.subs.routeParams = this.route.params
     .subscribe(params => {
        this.projectService.emptySelectedProjectProperties();
@@ -80,20 +68,19 @@ export class DetailsComponent implements OnDestroy, OnInit {
       this.saveContent();
     }, error => console.log(error));
 
-    this.progress = Observable.create(observer => {
-      this.progressObserver = observer
-    }).share();
-
-    this.progress.subscribe(
-      data => {
-        console.log(`progress = ${data}`);
-      });
+    // this.progress = Observable.create(observer => {
+    //   this.progressObserver = observer
+    // }).share();
+    //
+    // this.progress.subscribe(
+    //   data => {
+    //     console.log(`progress = ${data}`);
+    //   });
   }
 
   ngOnDestroy() {
     this.subs.routeParams.unsubscribe();
     this.subs.propertyRemoved.unsubscribe();
-    // this.subs.translationsLoadedSubscription.unsubscribe();
   }
 
   invalidLang(): boolean {
@@ -132,6 +119,7 @@ export class DetailsComponent implements OnDestroy, OnInit {
     .subscribe(
        (project) => {
          console.log(project);
+         this.lang = '';
          this.project = project;
          this.projectService.updateProject(this.project);
 
@@ -198,75 +186,29 @@ export class DetailsComponent implements OnDestroy, OnInit {
   }
 
   onChange(event) {
-    let target = this.getTarget(event);
-    if(target) {
-      this.makeFileRequest(target.files)
-      .subscribe(() => {
-        console.log('sent');
-      });
+    let data = {
+      $loki: this.project.$loki,
+      lang: this.lang
+    };
+
+    if(_.has(this.project, 'reflang') === false) {
+      _.set(data, 'reflang', this.lang);
     }
-  }
 
-  private getTarget(event) {
-    let handler = this.targetHandlers[this.browser];
-    if(handler) return handler(event);
-  }
+    this.uploadFileService.send(this.uploadUrl, event, data)
+    .subscribe((project) => {
+      console.log('file saved!');
+      this.project = project;
 
-  private makeFileRequest(files: File[]) {
-    return Observable.create((observer) => {
-      let formData: FormData = new FormData();
-      let xhr: XMLHttpRequest = new XMLHttpRequest();
+      this.projectService.updateProject(this.project);
 
-      formData.append('$loki', this.project.$loki);
-      formData.append('lang', this.lang);
+      let translation = _.get(this.project, 'translations', []);
+      this.selectTranslation(_.last(translation));
 
-      if(files.length > 0) {
-        formData.append("i18n", files[0], files[0].name);
-      }
-
-      xhr.onreadystatechange = () => {
-        if(xhr.readyState === 4) {
-          if(xhr.status === 200) {
-            observer.next(JSON.parse(xhr.response));
-            observer.complete();
-          } else {
-             observer.error(xhr.response);
-          }
-        }
-      };
-
-      xhr.upload.onprogress = (event) => {
-        this.progress = Math.round(event.loaded / event.total * 100);
-        this.progressObserver.next(this.progress);
-      };
-
-      xhr.addEventListener("loadend", (event) => {
-        let target = this.getTarget(event);
-        let response: string = _.get(target, 'response', '');
-
-        if(response) {
-          try {
-            let project = JSON.parse(response);
-            this.project = project;
-
-            this.projectService.updateProject(this.project);
-
-            let translation = _.get(this.project, 'translations', []);
-            this.selectTranslation(_.last(translation));
-
-            this.projectService.requestSelectedProjectProperties(this.project)
-              .subscribe((properties) => {
-                // console.log(properties);
-              });
-          } catch(err) {
-            console.log(err);
-          }
-        }
+      this.projectService.requestSelectedProjectProperties(this.project)
+      .subscribe((properties) => {
+        // console.log(properties);
       });
-
-      xhr.open('POST', this.uploadUrl, true);
-      // xhr.setRequestHeader('enctype', 'multipart/form-data');
-      xhr.send(formData);
     });
   }
 

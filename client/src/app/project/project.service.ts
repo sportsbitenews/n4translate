@@ -222,12 +222,17 @@ export class ProjectService {
   }
 
   requestSelectedProjectProperties(project: any) {
-    let translation = this.getRefTranslationMeta(project)
-    return this.http
-      .post(`${this.host}/api/translation`, translation)
-      .map(this.extractData)
-      .map(json => this.getPropertiesAsList(json))
-      .map(properties => this.setSelectedProjectProperties(properties))
-      .catch(this.handleError);
+    let translation = this.getRefTranslationMeta(project);
+
+    if(translation) {
+      return this.http
+        .post(`${this.host}/api/translation`, translation)
+        .map(this.extractData)
+        .map(json => this.getPropertiesAsList(json))
+        .map(properties => this.setSelectedProjectProperties(properties))
+        .catch(this.handleError);
+    } else {
+      return Observable.of(this.selectedProjectProperties);
+    }
   }
 }

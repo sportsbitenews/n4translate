@@ -1,5 +1,9 @@
 <!-- <div style="padding: 16px;">
   <pre style="margin: 0px;">{{ project | json }}</pre>
+</div>
+
+<div *ngIf="project" style="padding: 16px;">
+  <pre style="margin: 0px;">{{ getLangs() | json }}</pre>
 </div> -->
 
 <md-card *ngIf="project" style="margin: 12px;">
@@ -10,10 +14,14 @@
   <md-card-content>
     <div fxLayout="row">
       <div style="margin-top: 16px;">
-        <md-select placeholder="Reflang" [(ngModel)]="project.reflang" name="reflang" (change)="updateRefLang($event)">
-          <md-option *ngFor="let translationLang of getLangs()" [value]="translationLang">
-            {{translationLang}}
-          </md-option>
+        <md-select placeholder="Reflang"
+          [(ngModel)]="project.reflang"
+          name="reflang"
+          (change)="updateRefLang($event)"
+          disabled="{{ getLangs()['length'] === 0 }}">
+            <md-option *ngFor="let translationLang of getLangs()" [value]="translationLang">
+              {{ translationLang }}
+            </md-option>
         </md-select>
       </div>
 

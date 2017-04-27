@@ -1,0 +1,18 @@
+<!-- <form #f="ngForm" (ngSubmit)="onLogin(f.value)" *ngIf="!auth.loggedIn()"> -->
+
+<md-card>
+  <form #f="ngForm" (ngSubmit)="onLogin(f.value)">
+    <md-input-container>
+      <input mdInput ngModel name="username" placeholder="username" autocomplete="off">
+    </md-input-container>
+
+    <md-input-container>
+      <input type="password" mdInput ngModel name="password" placeholder="username" autocomplete="off">
+    </md-input-container>
+
+    <!-- <input type="text" placeholder="username" ngModel name="username" autocomplete="off"> -->
+    <!-- <input type="password" placeholder="password" ngModel name="password" autocomplete="off"> -->
+
+    <button md-raised-button type="submit">Submit</button>
+  </form>
+</md-card>

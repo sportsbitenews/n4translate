@@ -1,10 +1,16 @@
 'use strict';
 const express        = require('express');
 const app            = express();
+
 const path           = require('path');
 const fs             = require('fs');
+
 const bodyParser     = require('body-parser');
 const cors           = require('cors');
+
+const jwt            = require('jsonwebtoken');
+const expressJwt     = require('express-jwt');
+
 const multer         = require('multer');
 const Loki           = require('lokijs');
 const util           = require('./modules/util.js');
@@ -39,10 +45,13 @@ const upload = multer({
 });
 
 app.post('/api/translation/import', upload.single('i18n'), (req, res) => {
-  let projectRef = { $loki: _.parseInt(req.body.$loki) };
+  let project = {
+    $loki: _.parseInt(req.body.$loki),
+    reflang: req.body.reflang
+  };
   let translation =_.assign({ lang: req.body.lang }, req.file);
 
-  Register.importTranslationToProject(projectRef, translation)
+  Register.importTranslationToProject(project, translation)
     .then((project) => {
       res.json(project);
     })
@@ -55,13 +64,6 @@ app.post('/api/translation/import', upload.single('i18n'), (req, res) => {
 app.post('/api/translation/append', (req, res) => {
   let $loki = _.parseInt(req.body.$loki);
   let translation = req.body.translation;
-
-  // console.log({
-  //   $loki,
-  //   translation,
-  //   filename: translation.filename,
-  //   content: req.body.content
-  // });
 
   Project.saveTranslation({
     filename: translation.filename,
@@ -116,6 +118,8 @@ app.post('/api/project/reflang', (req, res) => {
 });
 
 app.post('/api/translation', (req, res) => {
+  // console.log('/api/translation', req.body.filename);
+
   Project.getJSON(req.body.filename)
     .then((content) => {
       res.json(content);
@@ -136,6 +140,10 @@ app.post('/api/translation/save', (req, res) => {
       console.log(err);
       res.status(404);
     });
+});
+
+app.post('/api/authenticate', (req, res) => {
+  res.json(req.body);
 });
 
 const server = require('http').Server(app);

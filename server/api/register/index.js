@@ -34,7 +34,7 @@ const findProjectByCollection = (collection, { $loki }) => {
   return _.first(candidates);
 };
 
-const importTranslationToProject = _.curry((db, { $loki }, translation) => {
+const importTranslationToProject = _.curry((db, { $loki, reflang }, translation) => {
   return util.loadCollection(collectionName, db)
   .then((collection) => {
     let project = findProjectByCollection(collection, { $loki });
@@ -44,6 +44,10 @@ const importTranslationToProject = _.curry((db, { $loki }, translation) => {
 
       translations.push(translation);
       _.set(project, 'translations', translations);
+
+      if(reflang) {
+        _.set(project, 'reflang', reflang);
+      }
 
       collection.update(project);
       db.saveDatabase();
