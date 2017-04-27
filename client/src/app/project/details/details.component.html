@@ -8,33 +8,45 @@
   </md-card-title>
 
   <md-card-content>
-    <!-- <md-card-subtitle>Translations</md-card-subtitle> -->
-    <div fxLayout="row" fxLayoutAlign="start center">
-      <md-chip-list *ngIf="project">
-        <md-chip *ngFor="let translation of project.translations"
-          (click)="selectTranslation(translation)"
-          style="margin: 4px;"
-          selected="{{ isSelectTranslation(translation) }}">
-            {{ translation.lang }}
-        </md-chip>
-      </md-chip-list>
-    </div>
+    <div fxLayout="row">
+      <div style="margin-top: 16px;">
+        <md-select placeholder="Reflang" [(ngModel)]="project.reflang" name="reflang" (change)="updateRefLang($event)">
+          <md-option *ngFor="let translationLang of getLangs()" [value]="translationLang">
+            {{translationLang}}
+          </md-option>
+        </md-select>
+      </div>
 
-    <div fxLayout="row" fxLayoutAlign="start center" style="margin-top: 12px; margin-left: 12px;">
-      <md-input-container style="margin-right: 12px;">
-        <input mdInput [(ngModel)]="lang" placeholder="Lang">
-      </md-input-container>
+      <div fxFlex style="margin-left: 32px;" fxLayout="row" fxLayoutAlign="start center">
+        <!-- <md-card-subtitle>Dog Breed</md-card-subtitle> -->
+        <div fxLayout="row" fxLayoutAlign="start center">
+          <md-chip-list *ngIf="project">
+            <md-chip *ngFor="let translation of project.translations"
+              (click)="selectTranslation(translation)"
+              style="margin: 4px;"
+              selected="{{ isSelectTranslation(translation) }}">
+                {{ translation.lang }}
+            </md-chip>
+          </md-chip-list>
+        </div>
 
-      <input #upload style="display: none;" type="file" (change)="onChange($event)"/>
+        <div fxLayout="row" fxLayoutAlign="start center" style="margin-top: 12px; margin-left: 12px;">
+          <md-input-container style="margin-right: 12px;">
+            <input mdInput [(ngModel)]="lang" placeholder="Lang">
+          </md-input-container>
 
-      <div fxLayout="row" fxLayoutAlign="start center">
-        <button md-raised-button md-icon-button (click)="upload.click()" style="margin-right: 12px;" mdTooltip="Import" disabled="{{ invalidLang() }}">
-          <md-icon>file_upload</md-icon>
-        </button>
+          <input #upload style="display: none;" type="file" (change)="onChange($event)"/>
 
-        <button md-raised-button md-icon-button (click)="upload.click()" style="margin-right: 12px;" mdTooltip="Create" disabled="{{ invalidLang() }}">
-          <md-icon>add</md-icon>
-        </button>
+          <div fxLayout="row" fxLayoutAlign="start center">
+            <button md-raised-button md-icon-button (click)="upload.click()" style="margin-right: 12px;" mdTooltip="Import" disabled="{{ invalidLang() }}">
+              <md-icon>file_upload</md-icon>
+            </button>
+
+            <button md-raised-button md-icon-button (click)="appendTranslationToProject()" style="margin-right: 12px;" mdTooltip="Create" disabled="{{ invalidLang() }}">
+              <md-icon>add</md-icon>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </md-card-content>

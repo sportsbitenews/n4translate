@@ -56,6 +56,7 @@ export class DetailsComponent implements OnDestroy, OnInit {
 
     this.subs.routeParams = this.route.params
     .subscribe(params => {
+       this.projectService.emptySelectedProjectProperties();
        this.projectService.findProjectByFilename(params.filename)
        .subscribe((project) => {
          if(!project) {
@@ -64,6 +65,11 @@ export class DetailsComponent implements OnDestroy, OnInit {
            this.project = project;
            let translation = _.get(this.project, 'translations', []);
            this.selectTranslation(_.first(translation));
+
+           this.projectService.requestSelectedProjectProperties(this.project)
+           .subscribe((properties) => {
+             console.log(properties);
+           });
          }
        }, error => console.log(error));
     });
@@ -84,14 +90,54 @@ export class DetailsComponent implements OnDestroy, OnInit {
       });
   }
 
-  invalidLang(): boolean {
-    console.log('invalidLang');
-    return _.findIndex(this.project.translations, { lang: this.lang }) > -1;
-  }
-
   ngOnDestroy() {
     this.subs.routeParams.unsubscribe();
     this.subs.propertyRemoved.unsubscribe();
+    // this.subs.translationsLoadedSubscription.unsubscribe();
+  }
+
+  invalidLang(): boolean {
+    if(_.isString(this.lang) === false) return true;
+    if(_.trim(this.lang) === '') return true;
+
+    return _.findIndex(this.project.translations, { lang: this.lang }) > -1;
+  }
+
+  getLangs(): any[] {
+    return _.map(this.project.translations, 'lang');
+  }
+
+  updateRefLang(event) {
+    console.log(event);
+    let reflang = _.get(event, 'value');
+    if(_.isString(reflang)) {
+      this.projectService.setReflangOfProject(this.project, reflang)
+      .subscribe(
+         (res) => {
+           console.log(res);
+           console.log('reflang saved!');
+
+           this.projectService.requestSelectedProjectProperties(this.project)
+             .subscribe((properties) => {
+               console.log(properties);
+             });
+         },
+         error => this.errorMessage = <any>error
+      );
+    }
+  }
+
+  appendTranslationToProject() {
+    this.projectService.appendTranslationToProject(this.project, this.lang, this.content)
+    .subscribe(
+       (project) => {
+         console.log(project);
+         this.project = project;
+         this.projectService.updateProject(this.project);
+         console.log(`new Lang: ${ this.lang } appended!`);
+       },
+       error => this.errorMessage = <any>error
+    );
   }
 
   selectTranslation(translation) {
@@ -114,6 +160,7 @@ export class DetailsComponent implements OnDestroy, OnInit {
   }
 
   saveContent() {
+    console.log(this.selectedTranslation, this.content);
     this.projectService.saveTranslation(this.selectedTranslation, this.content)
     .subscribe(
        (res) => {

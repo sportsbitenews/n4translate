@@ -53,17 +53,58 @@ const importTranslationToProject = _.curry((db, { $loki }, translation) => {
   });
 });
 
+const appendTranslationToProject = _.curry((db, { $loki, translation }) => {
+  return util.loadCollection(collectionName, db)
+  .then((collection) => {
+    let project = findProjectByCollection(collection, { $loki });
+
+    if(project) {
+      let translations = _.get(project, 'translations', []);
+
+      translations.push(translation);
+      _.set(project, 'translations', translations);
+
+      collection.update(project);
+      db.saveDatabase();
+    }
+
+    return project;
+  });
+});
+
+const setReflangOfProject = _.curry((db, { $loki, reflang }) => {
+  return util.loadCollection(collectionName, db)
+  .then((collection) => {
+    let project = findProjectByCollection(collection, { $loki });
+
+    if(project) {
+      let translations = _.get(project, 'translations', []);
+
+      _.set(project, 'reflang', reflang);
+
+      collection.update(project);
+      db.saveDatabase();
+    }
+
+    return project;
+  });
+});
+
 const apply = (db) => {
   return {
     addProject: addProject(db),
+    appendTranslationToProject: appendTranslationToProject(db),
     getProjects: () => getProjects(db),
-    importTranslationToProject: importTranslationToProject(db)
+    importTranslationToProject: importTranslationToProject(db),
+    setReflangOfProject: setReflangOfProject(db)
   }
 };
 
 module.exports = {
-  apply,
   addProject,
+  apply,
+  appendTranslationToProject,
   getProjects,
-  importTranslationToProject
+  importTranslationToProject,
+  setReflangOfProject
 };

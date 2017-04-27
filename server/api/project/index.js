@@ -26,7 +26,7 @@ const model = ({ name }) => {
   return {
     name,
     filename: _.kebabCase(name),
-    refLang: 'DE',
+    reflang: 'DE',
     translations: []
   }
 };

@@ -34,6 +34,7 @@ export class ProjectService {
   public translationLoadedObservable;
 
   private projects;
+  public selectedProjectProperties;
 
   constructor (private http: Http) {
     this.propertyRemovedObservable = this.propertyRemoved.asObservable().share();
@@ -82,6 +83,42 @@ export class ProjectService {
   findProjectByFilename(filename: string): Observable<any> {
     return this.getProjects()
       .map((projects) => _.find(projects, { filename }));
+  }
+
+  getRefTranslationMeta(project: any): any {
+    let reflang = _.get(project, 'reflang');
+    return _.find(project.translations, { lang: reflang });
+  }
+
+  appendTranslationToProject(project: any, lang: string, content: any): Observable<any> {
+    let translation = _.cloneDeep(this.getRefTranslationMeta(project));
+    translation.filename = `${translation.filename}_${lang}`;
+    translation.lang = lang;
+
+    return this.http
+      .post(`${this.host}/api/translation/append`, {
+        $loki: _.get(project, '$loki'),
+        translation,
+        content
+      })
+      .map(this.extractData)
+      .map((project) => {
+        return project;
+      })
+      .catch(this.handleError);
+  }
+
+  setReflangOfProject(project: any, reflang: string): Observable<any> {
+    return this.http
+      .post(`${this.host}/api/project/reflang`, {
+        reflang,
+        $loki: _.get(project, '$loki')
+      })
+      .map(this.extractData)
+      .map((project) => {
+        return project;
+      })
+      .catch(this.handleError);
   }
 
   getTranslation(data): Observable<any> {
@@ -170,4 +207,27 @@ export class ProjectService {
     this.propertyAdded.next();
   }
 
+  save(entity, json) {
+    entity = _.assign(entity, json);
+    this.propertyAdded.next();
+  }
+
+  emptySelectedProjectProperties() {
+    this.selectedProjectProperties = undefined;
+  }
+
+  setSelectedProjectProperties(properties) {
+    this.selectedProjectProperties = properties;
+    return this.selectedProjectProperties;
+  }
+
+  requestSelectedProjectProperties(project: any) {
+    let translation = this.getRefTranslationMeta(project)
+    return this.http
+      .post(`${this.host}/api/translation`, translation)
+      .map(this.extractData)
+      .map(json => this.getPropertiesAsList(json))
+      .map(properties => this.setSelectedProjectProperties(properties))
+      .catch(this.handleError);
+  }
 }

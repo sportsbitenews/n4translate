@@ -50,13 +50,13 @@ export class ProjectTableComponent implements OnDestroy, OnInit {
     this.propertyRemovedSubscription = this.projectService.propertyRemovedObservable
     .subscribe(() => {
       console.log('ProjectTableComponent removed!');
-      this.list = this.projectService.getPropertiesAsList(this.properties);
+      this.updateList();
     });
 
     this.propertyAddedSubscription = this.projectService.propertyAddedObservable
     .subscribe(() => {
       console.log('ProjectTableComponent added!');
-      this.list = this.projectService.getPropertiesAsList(this.properties);
+      this.updateList();
     });
 
     this.loadTranslationSubscription = this.projectService.loadTranslationObservable
@@ -67,9 +67,29 @@ export class ProjectTableComponent implements OnDestroy, OnInit {
     this.translationsLoadedSubscription = this.projectService.translationLoadedObservable
     .subscribe((properties) => {
       this.properties = properties;
-      this.list = this.projectService.getPropertiesAsList(this.properties);
+      this.updateList();
       this.loading = false;
     });
+
+    setTimeout(() => {
+      this.updateList();
+    }, 200);
+  }
+
+  updateList() {
+    let candidates = this.projectService.getPropertiesAsList(this.properties);
+    console.log(candidates);
+    this.list = _.map(this.getRefProperties(), (property) => {
+      return _.find(candidates, { key: property.key });
+    });
+  }
+
+  save(entity) {
+    this.projectService.add(entity, this.properties);
+  }
+
+  getRefProperties(): any[] {
+    return this.projectService.selectedProjectProperties;
   }
 
   onLogin(credentials: Credentials) {
@@ -126,5 +146,4 @@ export class ProjectTableComponent implements OnDestroy, OnInit {
     this.loadTranslationSubscription.unsubscribe();
     this.translationsLoadedSubscription.unsubscribe();
   }
-
 }

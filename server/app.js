@@ -53,18 +53,30 @@ app.post('/api/translation/import', upload.single('i18n'), (req, res) => {
 });
 
 app.post('/api/translation/append', (req, res) => {
-  let projectRef = { $loki: _.parseInt(req.body.$loki) };
-  let translation =_.assign({}, { lang: req.body.lang });
-  let content = req.body.content;
-  
-  Register.appendTranslationToProject(projectRef, translation)
-    .then((project) => {
-      res.json(project);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.sendStatus(400);
-    });
+  let $loki = _.parseInt(req.body.$loki);
+  let translation = req.body.translation;
+
+  // console.log({
+  //   $loki,
+  //   translation,
+  //   filename: translation.filename,
+  //   content: req.body.content
+  // });
+
+  Project.saveTranslation({
+    filename: translation.filename,
+    content: req.body.content
+  })
+  .then(() => {
+    return Register.appendTranslationToProject({ $loki, translation });
+  })
+  .then((project) => {
+    res.json(project);
+  })
+  .catch((err) => {
+    console.log(err);
+    res.sendStatus(400);
+  });
 });
 
 app.get('/api/projects', (req, res) => {
@@ -82,6 +94,20 @@ app.post('/api/project/create', (req, res) => {
   });
 
   Register.addProject(project)
+  .then(project => res.json(project))
+  .catch((err) => {
+    console.log(err);
+    res.status(404);
+  });
+});
+
+app.post('/api/project/reflang', (req, res) => {
+  let options = {
+    $loki: _.parseInt(req.body.$loki),
+    reflang: req.body.reflang
+  };
+
+  Register.setReflangOfProject(options)
   .then(project => res.json(project))
   .catch((err) => {
     console.log(err);
