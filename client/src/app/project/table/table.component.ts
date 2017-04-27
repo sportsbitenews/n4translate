@@ -78,7 +78,7 @@ export class ProjectTableComponent implements OnDestroy, OnInit {
 
   updateList() {
     let candidates = this.projectService.getPropertiesAsList(this.properties);
-    console.log(candidates);
+    // console.log(candidates);
     this.list = _.map(this.getRefProperties(), (property) => {
       return _.find(candidates, { key: property.key });
     });

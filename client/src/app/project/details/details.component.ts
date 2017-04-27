@@ -68,7 +68,7 @@ export class DetailsComponent implements OnDestroy, OnInit {
 
            this.projectService.requestSelectedProjectProperties(this.project)
            .subscribe((properties) => {
-             console.log(properties);
+            //  console.log(properties);
            });
          }
        }, error => console.log(error));
@@ -119,7 +119,7 @@ export class DetailsComponent implements OnDestroy, OnInit {
 
            this.projectService.requestSelectedProjectProperties(this.project)
              .subscribe((properties) => {
-               console.log(properties);
+              //  console.log(properties);
              });
          },
          error => this.errorMessage = <any>error
@@ -256,7 +256,7 @@ export class DetailsComponent implements OnDestroy, OnInit {
 
             this.projectService.requestSelectedProjectProperties(this.project)
               .subscribe((properties) => {
-                console.log(properties);
+                // console.log(properties);
               });
           } catch(err) {
             console.log(err);
