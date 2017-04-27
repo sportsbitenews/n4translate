@@ -134,6 +134,10 @@ export class DetailsComponent implements OnDestroy, OnInit {
          console.log(project);
          this.project = project;
          this.projectService.updateProject(this.project);
+
+         let translation = _.get(this.project, 'translations', []);
+         this.selectTranslation(_.last(translation));
+
          console.log(`new Lang: ${ this.lang } appended!`);
        },
        error => this.errorMessage = <any>error
@@ -249,6 +253,11 @@ export class DetailsComponent implements OnDestroy, OnInit {
 
             let translation = _.get(this.project, 'translations', []);
             this.selectTranslation(_.last(translation));
+
+            this.projectService.requestSelectedProjectProperties(this.project)
+              .subscribe((properties) => {
+                console.log(properties);
+              });
           } catch(err) {
             console.log(err);
           }
