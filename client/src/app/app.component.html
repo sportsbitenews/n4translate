@@ -1,20 +1,25 @@
 <div style="height: 100%;">
-  <nav class="i18n-toolbar">
-    <ul>
-      <!-- <li>
-        <a md-ripple mdRippleColor="rgba(255, 255, 255, 0.1)" routerLink="/user" routerLinkActive="active">User</a>
-      </li> -->
-      <li>
-        <a md-ripple mdRippleColor="rgba(255, 255, 255, 0.1)" routerLink="/projects" routerLinkActive="active">Projects</a>
-      </li>
-    </ul>
-  </nav>
+  <app-auth [hidden]="loggedIn()"></app-auth>
 
-  <div class="clear"></div>
+  <div [hidden]="!loggedIn()">
+    <nav class="i18n-toolbar">
+      <ul>
+        <!-- <li>
+          <a md-ripple mdRippleColor="rgba(255, 255, 255, 0.1)" routerLink="/user" routerLinkActive="active">User</a>
+        </li> -->
+        <li>
+          <a md-ripple mdRippleColor="rgba(255, 255, 255, 0.1)" routerLink="/projects" routerLinkActive="active">Projects</a>
+        </li>
+        <li>
+          <button md-button (click)="logout()">logout</button>
+        </li>
+      </ul>
+    </nav>
 
-  <!-- <app-auth></app-auth> -->
-  
-  <div>
-    <router-outlet></router-outlet>
+    <div class="clear"></div>
+
+    <div>
+      <router-outlet></router-outlet>
+    </div>
   </div>
 </div>

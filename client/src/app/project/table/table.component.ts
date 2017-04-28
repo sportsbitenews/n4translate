@@ -7,7 +7,7 @@ import { UserAgentService } from '../../shared/services/user-agent.service';
 import { Subscription }   from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
 
-import * as _ from "lodash";
+import { find, map} from "lodash";
 
 import { PropertyDialog } from './property-dialog.component';
 
@@ -79,8 +79,8 @@ export class ProjectTableComponent implements OnDestroy, OnInit {
   updateList() {
     let candidates = this.projectService.getPropertiesAsList(this.properties);
     // console.log(candidates);
-    this.list = _.map(this.getRefProperties(), (property) => {
-      return _.find(candidates, { key: property.key });
+    this.list = map(this.getRefProperties(), (property) => {
+      return find(candidates, { key: property.key });
     });
   }
 

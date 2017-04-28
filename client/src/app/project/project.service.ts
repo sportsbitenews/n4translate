@@ -7,7 +7,23 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
-import * as _ from "lodash";
+import {
+  assign,
+  chain,
+  cloneDeep,
+  concat,
+  isPlainObject,
+  isNumber,
+  find,
+  findIndex,
+  forOwn,
+  get,
+  has,
+  map,
+  pick,
+  set,
+  trimStart
+} from "lodash";
 
 @Injectable()
 export class ProjectService {
@@ -58,8 +74,8 @@ export class ProjectService {
   }
 
   updateProject(project) {
-    let index = _.findIndex(this.projects, _.pick(project, ['$loki']));
-    if(_.isNumber(index)) {
+    let index = findIndex(this.projects, pick(project, ['$loki']));
+    if(isNumber(index)) {
       this.projects[index] = project;
       this.projectUpdated.next();
     }
@@ -82,22 +98,22 @@ export class ProjectService {
 
   findProjectByFilename(filename: string): Observable<any> {
     return this.getProjects()
-      .map((projects) => _.find(projects, { filename }));
+      .map((projects) => find(projects, { filename }));
   }
 
   getRefTranslationMeta(project: any): any {
-    let reflang = _.get(project, 'reflang');
-    return _.find(project.translations, { lang: reflang });
+    let reflang = get(project, 'reflang');
+    return find(project.translations, { lang: reflang });
   }
 
   appendTranslationToProject(project: any, lang: string, content: any): Observable<any> {
-    let translation = _.cloneDeep(this.getRefTranslationMeta(project));
+    let translation = cloneDeep(this.getRefTranslationMeta(project));
     translation.filename = `${translation.filename}_${lang}`;
     translation.lang = lang;
 
     return this.http
       .post(`${this.host}/api/translation/append`, {
-        $loki: _.get(project, '$loki'),
+        $loki: get(project, '$loki'),
         translation,
         content
       })
@@ -112,7 +128,7 @@ export class ProjectService {
     return this.http
       .post(`${this.host}/api/project/reflang`, {
         reflang,
-        $loki: _.get(project, '$loki')
+        $loki: get(project, '$loki')
       })
       .map(this.extractData)
       .map((project) => {
@@ -135,7 +151,7 @@ export class ProjectService {
   }
 
   saveTranslation(translation, content): Observable<any> {
-    let body = _.assign({}, translation, { content });
+    let body = assign({}, translation, { content });
     return this.http
       .post(`${this.host}/api/translation/save`, body)
       .catch(this.handleError);
@@ -159,20 +175,20 @@ export class ProjectService {
 
   getPaths(json, path = '') {
 		let paths: string[] = [];
-		_.forOwn(json, (value, key) => {
+		forOwn(json, (value, key) => {
 			let valuePath = `${path}.${key}`;
-			if(_.isPlainObject(value)) {
-				paths = _.concat(paths, this.getPaths(value, valuePath));
+			if(isPlainObject(value)) {
+				paths = concat(paths, this.getPaths(value, valuePath));
 			} else {
 				paths.push(valuePath);
 			}
 		});
-		return _.map(paths, path => _.trimStart(path, '.'));
+		return map(paths, path => trimStart(path, '.'));
   }
 
   getKeysAsJSON(json) {
-    return _.map(json, (value, key) => {
-      if(_.isPlainObject(value)) {
+    return map(json, (value, key) => {
+      if(isPlainObject(value)) {
         let node = {};
         node[key] = this.getPaths(value);
         return node;
@@ -183,12 +199,11 @@ export class ProjectService {
   }
 
   getPropertiesAsList(json) {
-    return _
-      .chain(this.getPaths(json))
+    return chain(this.getPaths(json))
       .map((path) => {
         return {
           key: path,
-          value: _.get(json, path)
+          value: get(json, path)
         }
       })
       .filter(entity => entity.value)
@@ -196,19 +211,19 @@ export class ProjectService {
   }
 
   remove(path, json) {
-    if(_.has(json, path)) {
-      _.set(json, path, undefined);
+    if(has(json, path)) {
+      set(json, path, undefined);
       this.propertyRemoved.next();
     }
   }
 
   add(entity, json) {
-    _.set(json, entity.key, entity.value);
+    set(json, entity.key, entity.value);
     this.propertyAdded.next();
   }
 
   save(entity, json) {
-    entity = _.assign(entity, json);
+    entity = assign(entity, json);
     this.propertyAdded.next();
   }
 

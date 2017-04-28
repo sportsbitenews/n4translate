@@ -6,8 +6,6 @@ import { ProjectService } from '../project.service';
 import { Subscription }   from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
 
-import * as _ from "lodash";
-
 @Component({
   selector: 'app-import-translation-dialog',
   templateUrl: './import-translation-dialog.component.html',
@@ -16,7 +14,7 @@ import * as _ from "lodash";
 export class ImportTranslationDialogComponent implements OnInit {
 
   lang: string;
-  
+
   constructor(
     public dialogRef: MdDialogRef<ImportTranslationDialogComponent>,
     public projectService: ProjectService

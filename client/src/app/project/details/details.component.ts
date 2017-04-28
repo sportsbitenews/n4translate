@@ -9,7 +9,18 @@ import { UploadFileService } from '../../shared/services/upload-file.service';
 import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
 
-import * as _ from "lodash";
+import {
+  find,
+  findIndex,
+  first,
+  get,
+  isString,
+  has,
+  last,
+  map,
+  trim,
+  set
+} from "lodash";
 
 import { ImportTranslationDialogComponent } from '../import-translation-dialog/import-translation-dialog.component';
 
@@ -51,8 +62,8 @@ export class DetailsComponent implements OnDestroy, OnInit {
            this.router.navigate(['/']);
          } else {
            this.project = project;
-           let translation = _.get(this.project, 'translations', []);
-           this.selectTranslation(_.first(translation));
+           let translation = get(this.project, 'translations', []);
+           this.selectTranslation(first(translation));
 
            this.projectService.requestSelectedProjectProperties(this.project)
            .subscribe((properties) => {
@@ -84,20 +95,20 @@ export class DetailsComponent implements OnDestroy, OnInit {
   }
 
   invalidLang(): boolean {
-    if(_.isString(this.lang) === false) return true;
-    if(_.trim(this.lang) === '') return true;
+    if(isString(this.lang) === false) return true;
+    if(trim(this.lang) === '') return true;
 
-    return _.findIndex(this.project.translations, { lang: this.lang }) > -1;
+    return findIndex(this.project.translations, { lang: this.lang }) > -1;
   }
 
   getLangs(): any[] {
-    return _.map(this.project.translations, 'lang');
+    return map(this.project.translations, 'lang');
   }
 
   updateRefLang(event) {
     console.log(event);
-    let reflang = _.get(event, 'value');
-    if(_.isString(reflang)) {
+    let reflang = get(event, 'value');
+    if(isString(reflang)) {
       this.projectService.setReflangOfProject(this.project, reflang)
       .subscribe(
          (res) => {
@@ -123,8 +134,8 @@ export class DetailsComponent implements OnDestroy, OnInit {
          this.project = project;
          this.projectService.updateProject(this.project);
 
-         let translation = _.get(this.project, 'translations', []);
-         this.selectTranslation(_.last(translation));
+         let translation = get(this.project, 'translations', []);
+         this.selectTranslation(last(translation));
 
          console.log(`new Lang: ${ this.lang } appended!`);
        },
@@ -191,8 +202,8 @@ export class DetailsComponent implements OnDestroy, OnInit {
       lang: this.lang
     };
 
-    if(_.has(this.project, 'reflang') === false) {
-      _.set(data, 'reflang', this.lang);
+    if(has(this.project, 'reflang') === false) {
+      set(data, 'reflang', this.lang);
     }
 
     this.uploadFileService.send(this.uploadUrl, event, data)
@@ -202,8 +213,8 @@ export class DetailsComponent implements OnDestroy, OnInit {
 
       this.projectService.updateProject(this.project);
 
-      let translation = _.get(this.project, 'translations', []);
-      this.selectTranslation(_.last(translation));
+      let translation = get(this.project, 'translations', []);
+      this.selectTranslation(last(translation));
 
       this.projectService.requestSelectedProjectProperties(this.project)
       .subscribe((properties) => {

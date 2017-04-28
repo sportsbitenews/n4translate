@@ -86,7 +86,7 @@ app.get('/api/projects', (req, res) => {
   .then(projects => res.json(projects))
   .catch((err) => {
     console.log(err);
-    res.status(404);
+    res.status(404).send();
   });
 });
 
@@ -99,7 +99,7 @@ app.post('/api/project/create', (req, res) => {
   .then(project => res.json(project))
   .catch((err) => {
     console.log(err);
-    res.status(404);
+    res.status(404).send();
   });
 });
 
@@ -113,7 +113,7 @@ app.post('/api/project/reflang', (req, res) => {
   .then(project => res.json(project))
   .catch((err) => {
     console.log(err);
-    res.status(404);
+    res.status(404).send();
   });
 });
 
@@ -126,24 +126,62 @@ app.post('/api/translation', (req, res) => {
     })
     .catch((err) => {
       console.log(err);
-      res.status(404);
+      res.status(404).send();
     });
 });
 
 app.post('/api/translation/save', (req, res) => {
   Project.saveTranslation(req.body)
     .then((content) => {
-      console.log(content);
+      // console.log(content);
       res.json(content);
     })
     .catch((err) => {
       console.log(err);
-      res.status(404);
+      res.status(404).send();
     });
 });
 
+const authenticate = ({ email, password }) => {
+  return new Promise((resolve, reject) => {
+    if(email === 'andre@g.com' && password === '1234') {
+      resolve({ name: 'andre', admin: true });
+    }
+
+    resolve(undefined);
+  });
+};
+
+const JWT_SECRET = 'secret';
+const authCheck = expressJwt({ secret: JWT_SECRET });
+
 app.post('/api/authenticate', (req, res) => {
-  res.json(req.body);
+  authenticate(req.body)
+  .then((user) => {
+    if(user) {
+      let token = jwt.sign(user, JWT_SECRET, { expiresIn: '1h' });
+      // console.log(token);
+
+      // let decoded = jwt.verify(token, JWT_SECRET);
+      // console.log(decoded);
+
+      res.json(_.assign(user, { token }));
+    } else {
+      res.status(401).send();
+    }
+  })
+  .catch((err) => {
+    console.log(err);
+    res.status(404).send();
+  });
+});
+
+app.get('/api/authenticated', authCheck, (req, res) => {
+  if (!req.user) {
+    res.status(401).send();
+  } else {
+    res.json({ authenticated: true });
+  }
 });
 
 const server = require('http').Server(app);

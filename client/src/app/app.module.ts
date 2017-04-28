@@ -5,7 +5,8 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule, Http, RequestOptions } from '@angular/http';
 import { AuthHttp, AuthConfig } from 'angular2-jwt';
-import { RouterModule, Routes } from '@angular/router';
+import { CanActivate, RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from './auth/auth-guard.service';
 
 import { NgxPaginationModule } from 'ngx-pagination';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -30,6 +31,7 @@ import { UploadFileService } from './shared/services/upload-file.service';
 import { UserAgentService } from './shared/services/user-agent.service';
 import { AuthComponent } from './auth/auth.component';
 import { AuthService } from './auth/auth.service';
+import { ProjectService } from './project/project.service';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig(), http, options);
@@ -42,10 +44,26 @@ export const authHttp = {
 };
 
 const appRoutes: Routes = [
-  { path: 'user', component: UserComponent },
-  { path: 'project/:filename', component: ProjectComponent },
-  { path: 'project/details/:filename', component: DetailsComponent },
-  { path: 'projects', component: ProjectsComponent }
+  {
+    path: 'user',
+    component: UserComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'project/:filename',
+    component: ProjectComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'project/details/:filename',
+    component: DetailsComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'projects',
+    component: ProjectsComponent,
+    canActivate: [AuthGuard]
+  },
 ];
 
 @NgModule({
@@ -81,7 +99,9 @@ const appRoutes: Routes = [
   ],
   providers: [
     AuthService,
+    AuthGuard,
     authHttp,
+    ProjectService,
     UploadFileService,
     UserAgentService
   ],

@@ -6,8 +6,6 @@ import { ProjectService } from '../project.service';
 import { Subscription }   from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
 
-import * as _ from "lodash";
-
 @Component({
   selector: 'property-dialog',
   templateUrl: './property-dialog.component.html',

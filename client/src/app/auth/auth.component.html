@@ -1,18 +1,44 @@
-<!-- <form #f="ngForm" (ngSubmit)="onLogin(f.value)" *ngIf="!auth.loggedIn()"> -->
-
 <md-card>
-  <form #f="ngForm" (ngSubmit)="onLogin(f.value)">
-    <md-input-container>
-      <input mdInput ngModel name="username" placeholder="username" autocomplete="off">
-    </md-input-container>
+  <md-card-content>
+    <form (ngSubmit)="login()">
+      <md-input-container>
+        <input type="text"
+          mdInput
+          name="email"
+          [(ngModel)]="credentials.email"
+          #email="ngModel"
+          placeholder="Email"
+          autocomplete="off"
+          email
+          required>
 
-    <md-input-container>
-      <input type="password" mdInput ngModel name="password" placeholder="username" autocomplete="off">
-    </md-input-container>
+        <md-hint *ngIf="email.dirty || email.touched" [hidden]="email.pristine || email.valid" style="color: #f44336">
+          <span [hidden]="email.errors?.required || !email.errors?.email">This doesn't appear to be a valid email address.</span>
+          <span [hidden]="!email.errors?.required">Email is required.</span>
+        </md-hint>
+      </md-input-container>
 
-    <!-- <input type="text" placeholder="username" ngModel name="username" autocomplete="off"> -->
-    <!-- <input type="password" placeholder="password" ngModel name="password" autocomplete="off"> -->
+      <md-input-container>
+        <input type="password"
+          mdInput
+          name="password"
+          [(ngModel)]="credentials.password"
+          #password="ngModel"
+          placeholder="Password"
+          autocomplete="off"
+          required>
 
-    <button md-raised-button type="submit">Submit</button>
-  </form>
+        <md-hint *ngIf="password.dirty || password.touched" [hidden]="password.pristine || password.valid" style="color: #f44336">
+          <span [hidden]="!password.errors?.required">Password is required.</span>
+        </md-hint>
+      </md-input-container>
+
+      <button md-raised-button type="submit">Submit</button>
+    </form>
+
+    <pre>{{ loggedIn() }}</pre>
+
+    <button md-raised-button (click)="getLoggedInFromBackend()">Authenticated?</button>
+    <button md-raised-button (click)="logout()">logout</button>
+  </md-card-content>
 </md-card>

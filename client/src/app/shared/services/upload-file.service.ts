@@ -4,7 +4,7 @@ import { UserAgentService } from './user-agent.service';
 import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
 
-import * as _ from "lodash";
+import { forOwn } from "lodash";
 
 @Injectable()
 export class UploadFileService {
@@ -49,7 +49,7 @@ export class UploadFileService {
       let formData: FormData = new FormData();
       let xhr: XMLHttpRequest = new XMLHttpRequest();
 
-      _.forOwn(data, (value, param) => {
+      forOwn(data, (value, param) => {
         formData.append(param, value);
       });
 
