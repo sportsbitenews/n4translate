@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { UserAgentService } from './user-agent.service';
 
-import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
 
 import { forOwn } from "lodash";
@@ -75,6 +74,7 @@ export class UploadFileService {
 
       xhr.open('POST', url, true);
       // xhr.setRequestHeader('enctype', 'multipart/form-data');
+      xhr.setRequestHeader('Authorization', `Bearer ${localStorage.getItem('token')}`);
       xhr.send(formData);
     });
   }

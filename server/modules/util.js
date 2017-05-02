@@ -26,18 +26,8 @@ const exists = (filepath) => {
   return fs.existsSync(filepath);
 }
 
-const loadCollection = (name, db) => {
-  return new Promise((resolve, reject) => {
-    db.loadDatabase({}, () => {
-      const collection = db.getCollection(name) || db.addCollection(name);
-      resolve(collection);
-    })
-  });
-};
-
 module.exports = {
   exists,
-  loadCollection,
   outputFile,
   outputJson,
   readFile,

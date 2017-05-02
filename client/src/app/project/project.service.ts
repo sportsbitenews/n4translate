@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
+import { AuthHttp } from 'angular2-jwt';
 
 import { Subject }    from 'rxjs/Subject';
 import { Subscription }   from 'rxjs/Subscription';
@@ -52,7 +53,7 @@ export class ProjectService {
   private projects;
   public selectedProjectProperties;
 
-  constructor (private http: Http) {
+  constructor (private http: Http, private authHttp: AuthHttp) {
     this.propertyRemovedObservable = this.propertyRemoved.asObservable().share();
     this.propertyAddedObservable = this.propertyAdded.asObservable().share();
     this.projectAddedObservable = this.projectAdded.asObservable().share();
@@ -63,7 +64,7 @@ export class ProjectService {
   }
 
   createProject(data): Observable<any> {
-    return this.http
+    return this.authHttp
       .post(`${this.host}/api/project/create`, data)
       .map(this.extractData)
       .map((project) => {
@@ -86,7 +87,7 @@ export class ProjectService {
       return Observable.of(this.projects);
     }
 
-    return this.http
+    return this.authHttp
       .get(`${this.host}/api/projects`)
       .map(this.extractData)
       .map((projects) => {
@@ -111,7 +112,7 @@ export class ProjectService {
     translation.filename = `${translation.filename}_${lang}`;
     translation.lang = lang;
 
-    return this.http
+    return this.authHttp
       .post(`${this.host}/api/translation/append`, {
         $loki: get(project, '$loki'),
         translation,
@@ -125,7 +126,7 @@ export class ProjectService {
   }
 
   setReflangOfProject(project: any, reflang: string): Observable<any> {
-    return this.http
+    return this.authHttp
       .post(`${this.host}/api/project/reflang`, {
         reflang,
         $loki: get(project, '$loki')
@@ -140,7 +141,7 @@ export class ProjectService {
   getTranslation(data): Observable<any> {
     this.loadTranslation.next();
 
-    return this.http
+    return this.authHttp
       .post(`${this.host}/api/translation`, data)
       .map(this.extractData)
       .map((translation) => {
@@ -152,7 +153,7 @@ export class ProjectService {
 
   saveTranslation(translation, content): Observable<any> {
     let body = assign({}, translation, { content });
-    return this.http
+    return this.authHttp
       .post(`${this.host}/api/translation/save`, body)
       .catch(this.handleError);
   }
@@ -240,7 +241,7 @@ export class ProjectService {
     let translation = this.getRefTranslationMeta(project);
 
     if(translation) {
-      return this.http
+      return this.authHttp
         .post(`${this.host}/api/translation`, translation)
         .map(this.extractData)
         .map(json => this.getPropertiesAsList(json))
