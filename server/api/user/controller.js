@@ -1,12 +1,22 @@
 'use strict';
-const util      = require('../../modules/util.js');
+const User      = require('./model.js');
 const _         = require('lodash');
-const Promise   = require('bluebird')
+const db        = require('../../modules/service.js').getDb();
 
-const create = _.curry((db, { email, password }) => {
+const create = (user) => {
+  return User.create(db, user);
+};
 
-});
+const findByEmail = (email) => {
+  return User.findByEmail(db, email);
+};
+
+const getAll = () => {
+  return User.getAll(db);
+};
 
 module.exports = {
-
+  create,
+  findByEmail,
+  getAll
 };

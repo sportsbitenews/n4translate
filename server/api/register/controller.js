@@ -2,22 +2,22 @@
 const _         = require('lodash');
 const Promise   = require('bluebird')
 const fs        = require('fs');
-const storage   = require('../../modules/storage.js');
 
-let register;
+const storage   = require('../../modules/storage.js');
+const db        = require('../../modules/service.js').getDb();
 
 const COLLECTION_NAME = 'projects';
 
-const getProjects = (db) => {
+const getProjects = () => {
   return storage.loadCollection(db, COLLECTION_NAME)
   .then((collection) => {
     return collection.data;
   });
 };
 
-const addProject = _.curry((db, project) => {
+const addProject = (project) => {
   return storage.insert(db, COLLECTION_NAME, project);
-});
+};
 
 const findProjectByCollection = (collection, { $loki }) => {
   let candidates = collection
@@ -29,7 +29,7 @@ const findProjectByCollection = (collection, { $loki }) => {
   return _.first(candidates);
 };
 
-const importTranslationToProject = _.curry((db, { $loki, reflang }, translation) => {
+const importTranslationToProject = ({ $loki, reflang }, translation) => {
   return storage.loadCollection(db, COLLECTION_NAME)
   .then((collection) => {
     let project = findProjectByCollection(collection, { $loki });
@@ -50,9 +50,9 @@ const importTranslationToProject = _.curry((db, { $loki, reflang }, translation)
 
     return project;
   });
-});
+};
 
-const appendTranslationToProject = _.curry((db, { $loki, translation }) => {
+const appendTranslationToProject = ({ $loki, translation }) => {
   return storage.loadCollection(db, COLLECTION_NAME)
   .then((collection) => {
     let project = findProjectByCollection(collection, { $loki });
@@ -69,9 +69,9 @@ const appendTranslationToProject = _.curry((db, { $loki, translation }) => {
 
     return project;
   });
-});
+};
 
-const setReflangOfProject = _.curry((db, { $loki, reflang }) => {
+const setReflangOfProject = ({ $loki, reflang }) => {
   return storage.loadCollection(db, COLLECTION_NAME)
   .then((collection) => {
     let project = findProjectByCollection(collection, { $loki });
@@ -87,21 +87,10 @@ const setReflangOfProject = _.curry((db, { $loki, reflang }) => {
 
     return project;
   });
-});
-
-const apply = (db) => {
-  return {
-    addProject: addProject(db),
-    appendTranslationToProject: appendTranslationToProject(db),
-    getProjects: () => getProjects(db),
-    importTranslationToProject: importTranslationToProject(db),
-    setReflangOfProject: setReflangOfProject(db)
-  }
 };
 
 module.exports = {
   addProject,
-  apply,
   appendTranslationToProject,
   getProjects,
   importTranslationToProject,

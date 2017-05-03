@@ -1,16 +1,23 @@
 'use strict';
 const _         = require('lodash');
 const Promise   = require('bluebird')
-const storage      = require('../../modules/storage.js');
+const storage   = require('../../modules/storage.js');
+
+const Auth      = require('../auth/controller');
 
 const COLLECTION_NAME = 'users';
 
 const create = _.curry((db, user) => {
+  user.password = Auth.hash(user.password);
   return storage.insert(db, COLLECTION_NAME, user);
 });
 
-const find = _.curry((db, { email }) => {
+const findByEmail = _.curry((db, email) => {
   return storage.findBy(db, COLLECTION_NAME, { email });
+});
+
+const getAll = _.curry((db) => {
+  return storage.loadCollection(db, COLLECTION_NAME);
 });
 
 const update = _.curry((db, user) => {
@@ -19,5 +26,7 @@ const update = _.curry((db, user) => {
 
 module.exports = {
   create,
-  update
+  findByEmail,
+  getAll,
+  update,
 };

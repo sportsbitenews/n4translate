@@ -5,36 +5,12 @@ const app            = express();
 const bodyParser     = require('body-parser');
 const cors           = require('cors');
 
-const Loki           = require('lokijs');
-
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const config = {
-  upload: 'repository/translations',
-  database: 'db.json',
-};
-
-const db = new Loki(`${config.upload}/${config.database}`, {
-  persistenceMethod: 'fs'
-});
-
-require('./api/auth')({
-  app,
-  db
-});
-
-const Project = require('./api/project');
-const Register = require('./api/register/controller').apply(db);
-const Auth = require('./api/auth/controller');
-
-require('./api/register')({
-  app,
-  Auth,
-  Project,
-  Register
-});
+app.use(require('./api/auth'));
+app.use(require('./api/register'));
 
 const server = require('http').Server(app);
 

@@ -1,8 +1,18 @@
 'use strict';
 const Promise  = require('bluebird')
+const _              = require('lodash');
+
+const loadCollection = (db, name) => {
+  return new Promise((resolve, reject) => {
+    db.loadDatabase({}, () => {
+      const collection = db.getCollection(name) || db.addCollection(name);
+      resolve(collection);
+    })
+  });
+};
 
 const insert = (db, name, item) => {
-  return loadCollection(name, db)
+  return loadCollection(db, name)
     .then((collection) => {
       const data = collection.insert(item);
       db.saveDatabase();
@@ -11,7 +21,7 @@ const insert = (db, name, item) => {
 };
 
 const find = (db, name, { $loki }) => {
-  return loadCollection(name, db)
+  return loadCollection(db, name)
     .then((collection) => {
       let candidates = collection
         .chain()
@@ -24,7 +34,7 @@ const find = (db, name, { $loki }) => {
 };
 
 const findBy = (db, name, needle) => {
-  return loadCollection(name, db)
+  return loadCollection(db, name)
     .then((collection) => {
       let candidates = collection
         .chain()
@@ -46,17 +56,9 @@ const update = (db, name, item) => {
     });
 };
 
-const loadCollection = (db, name) => {
-  return new Promise((resolve, reject) => {
-    db.loadDatabase({}, () => {
-      const collection = db.getCollection(name) || db.addCollection(name);
-      resolve(collection);
-    })
-  });
-};
-
 module.exports = {
   find,
+  findBy,
   insert,
   loadCollection,
   update
