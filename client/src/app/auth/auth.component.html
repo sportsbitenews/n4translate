@@ -1,7 +1,7 @@
-<md-card>
+<md-card style="max-width: 400px; margin: auto;">
   <md-card-content>
-    <form (ngSubmit)="login()">
-      <md-input-container>
+    <form #loginForm="ngForm" (ngSubmit)="login()" fxLayout="column">
+      <md-input-container fxFlex style="margin: 16px;">
         <input type="text"
           mdInput
           name="email"
@@ -18,7 +18,7 @@
         </md-hint>
       </md-input-container>
 
-      <md-input-container>
+      <md-input-container fxFlex style="margin: 16px;">
         <input type="password"
           mdInput
           name="password"
@@ -33,12 +33,13 @@
         </md-hint>
       </md-input-container>
 
-      <button md-raised-button type="submit">Submit</button>
+      <!-- <pre>{{ loginForm.form | json }}</pre> -->
+      <button md-raised-button type="submit" style="margin: 16px;" [disabled]="!loginForm.form.valid">Submit</button>
     </form>
 
-    <pre>{{ loggedIn() }}</pre>
+    <!-- <pre>{{ loggedIn() }}</pre>
 
     <button md-raised-button (click)="getLoggedInFromBackend()">Authenticated?</button>
-    <button md-raised-button (click)="logout()">logout</button>
+    <button md-raised-button (click)="logout()">logout</button> -->
   </md-card-content>
 </md-card>
