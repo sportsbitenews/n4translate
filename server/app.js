@@ -10,6 +10,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(require('./api/auth'));
+app.use(require('./api/user'));
 app.use(require('./api/register'));
 
 const server = require('http').Server(app);

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ProjectService } from './project/project.service';
 import { AuthService } from './auth/auth.service';
+import { UserService } from './user/user.service';
+
 
 @Component({
   selector: 'app-root',
@@ -10,7 +12,7 @@ import { AuthService } from './auth/auth.service';
 
 export class AppComponent implements OnInit {
 
-  constructor(private auth: AuthService) {
+  constructor(private auth: AuthService, private user: UserService) {
 
   }
 
@@ -24,6 +26,10 @@ export class AppComponent implements OnInit {
 
   logout() {
     return this.auth.logout();
+  }
+
+  isAdmin(): boolean {
+    return this.user.isAdmin();
   }
 
 }

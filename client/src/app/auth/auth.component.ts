@@ -28,7 +28,6 @@ export class AuthComponent implements OnInit {
   }
 
   login() {
-    console.log(this.credentials);
     this.auth.login(this.credentials);
   }
 

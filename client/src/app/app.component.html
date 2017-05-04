@@ -4,16 +4,19 @@
   <div [hidden]="!loggedIn()">
     <nav class="i18n-toolbar">
       <ul>
-        <!-- <li>
+        <li *ngIf="isAdmin()">
           <a md-ripple mdRippleColor="rgba(255, 255, 255, 0.1)" routerLink="/user" routerLinkActive="active">User</a>
-        </li> -->
+        </li>
         <li>
           <a md-ripple mdRippleColor="rgba(255, 255, 255, 0.1)" routerLink="/projects" routerLinkActive="active">Projects</a>
         </li>
-        <li>
-          <button md-button (click)="logout()">logout</button>
-        </li>
       </ul>
+
+      <div fxFlex fxLayoutAlign="end center">
+        <button md-icon-button (click)="logout()" style="margin-right: 12px;">
+          <md-icon style="color: #fff;">power_settings_new</md-icon>
+        </button>
+      </div>
     </nav>
 
     <div class="clear"></div>

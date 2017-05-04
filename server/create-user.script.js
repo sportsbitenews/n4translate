@@ -14,7 +14,7 @@ const db = new Loki(`${config.upload}/${config.database}`, {
 
 const User = require('./api/user/controller');
 
-User.create({ email: 'andre@g.com', password: '1234'})
+User.create({ email: 'andre@g.com', password: '1234', admin: true })
   .then((user) => {
     console.log('created user', user);
 

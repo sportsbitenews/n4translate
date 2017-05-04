@@ -2,7 +2,7 @@
 const express        = require('express');
 const router         = express.Router();
 
-const Auth           = require('./controller.js');
+const Auth           = require('./controller');
 const _              = require('lodash');
 
 router.post('/api/authenticate', (req, res) => {

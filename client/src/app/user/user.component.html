@@ -1,3 +1,4 @@
-<p>
-  user works!
-</p>
+<pre>isAdmin: {{ isAdmin() | json }}</pre>
+<pre>user: {{ getUser() | json }}</pre>
+<pre>users: {{ getUsers() | json }}</pre>
+<pre>users$: {{ user.users$ | async | json }}</pre>

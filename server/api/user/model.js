@@ -7,6 +7,17 @@ const Auth      = require('../auth/controller');
 
 const COLLECTION_NAME = 'users';
 
+const PROPERTIES = [
+  '$loki',
+  'email',
+  'admin',
+  'meta'
+];
+
+const project = (user) => {
+  return _.pick(user, PROPERTIES);
+};
+
 const create = _.curry((db, user) => {
   user.password = Auth.hash(user.password);
   return storage.insert(db, COLLECTION_NAME, user);
@@ -17,7 +28,8 @@ const findByEmail = _.curry((db, email) => {
 });
 
 const getAll = _.curry((db) => {
-  return storage.loadCollection(db, COLLECTION_NAME);
+  return storage.loadCollection(db, COLLECTION_NAME)
+    .then(users => _.map(users.data, project));
 });
 
 const update = _.curry((db, user) => {

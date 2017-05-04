@@ -31,6 +31,8 @@ import { UploadFileService } from './shared/services/upload-file.service';
 import { UserAgentService } from './shared/services/user-agent.service';
 import { AuthComponent } from './auth/auth.component';
 import { AuthService } from './auth/auth.service';
+import { UserService } from './user/user.service';
+
 import { ProjectService } from './project/project.service';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
@@ -103,7 +105,8 @@ const appRoutes: Routes = [
     authHttp,
     ProjectService,
     UploadFileService,
-    UserAgentService
+    UserAgentService,
+    UserService
   ],
   bootstrap: [AppComponent]
 })

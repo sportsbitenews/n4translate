@@ -1,3 +1,5 @@
+import { User } from '../user/user.interface';
+
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { AuthHttp, tokenNotExpired } from 'angular2-jwt';
@@ -9,9 +11,9 @@ import { Subscription }   from 'rxjs/Subscription';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
-import { forOwn } from "lodash";
+import { forOwn, pick } from "lodash";
 
-interface Commander {
+interface Pubsub {
   [x: string]: {
     subject: Subject<any>;
     observable?: Observable<any>;
@@ -20,11 +22,13 @@ interface Commander {
 
 @Injectable()
 export class AuthService {
-  public commander: Commander  = {
+  public pubsub: Pubsub  = {
     loggedIn: {
-      subject: new Subject<boolean>()
+      subject: new Subject<User>()
     }
   }
+
+  private domain: string = 'http://localhost:3000';
 
   constructor(
     private http: Http,
@@ -35,19 +39,19 @@ export class AuthService {
   }
 
   init() {
-    forOwn(this.commander, (relay) => {
+    forOwn(this.pubsub, (relay) => {
       relay.observable = relay.subject.asObservable().share();
     });
   }
 
   login(credentials) {
-    return this.http.post('http://localhost:3000/api/authenticate', credentials)
+    return this.http.post(`${this.domain}/api/authenticate`, credentials)
       .map(res => res.json())
       .subscribe(
         (data) => {
-          // this.commander.loggedIn.subject.next(true);
-          console.log('response', data);
+          let user: User = <User>pick(data, ['$loki', 'email', 'admin']);
           localStorage.setItem('token', data.token);
+          this.pubsub.loggedIn.subject.next(user);
           this.router.navigateByUrl('/projects');
         },
         error => console.log(error)
@@ -59,7 +63,7 @@ export class AuthService {
   }
 
   getLoggedInFromBackend(): Observable<any> {
-    return this.authHttp.get('http://localhost:3000/api/authenticated')
+    return this.authHttp.get(`${this.domain}/api/authenticated`)
       .map(res => res.json());
   }
 

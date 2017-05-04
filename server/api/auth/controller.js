@@ -13,7 +13,7 @@ const authenticate = ({ email, password }) => {
   return User.findByEmail(email)
     .then((user) => {
       if(user && hash(password) === user.password) {
-        return _.pick(user, ['$loki', 'name', 'admin']);
+        return _.pick(user, ['$loki', 'email', 'admin']);
       }
     });
 };
@@ -32,7 +32,6 @@ const verify = (token) => {
   // console.log(token);
   return jwt.verify(token, config.jwt_secret);
 };
-
 
 module.exports = {
   authenticate,
