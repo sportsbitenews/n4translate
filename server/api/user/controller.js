@@ -1,7 +1,7 @@
 'use strict';
 const _         = require('lodash');
 
-const User      = require('./model.js');
+const User      = require('./service.js');
 const db        = require('../../modules/service.js').getDb();
 
 const create = (user) => {

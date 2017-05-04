@@ -3,7 +3,7 @@ const _         = require('lodash');
 const Promise   = require('bluebird')
 const storage   = require('../../modules/storage.js');
 
-const Auth      = require('../auth/controller');
+const Auth      = require('../auth/service');
 
 const COLLECTION_NAME = 'users';
 

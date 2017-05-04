@@ -1,41 +1,27 @@
 'use strict';
-const jwt            = require('jsonwebtoken');
 const expressJwt     = require('express-jwt');
 const crypto         = require('crypto');
 const _              = require('lodash');
 
-const config = require('../../config.json');
+const config         = require('../../config.json');
 
-const check = expressJwt({ secret: config.jwt_secret });
-const User = require('../user/controller');
+const User           = require('../user/controller');
+const Auth           = require('./service');
 
 const authenticate = ({ email, password }) => {
   return User.findByEmail(email)
     .then((user) => {
-      if(user && hash(password) === user.password) {
+      if(user && Auth.hash(password) === user.password) {
         return _.pick(user, ['$loki', 'email', 'admin']);
       }
     });
 };
 
-const hash = (password) => {
-  return crypto.createHash(config.crypto.algorithm, config.crypto.salt)
-    .update(password)
-    .digest('base64');
-};
+const check = expressJwt({ secret: config.jwt_secret });
 
-const sign = (user) => {
-  return jwt.sign(user, config.jwt_secret, { expiresIn: '1h' });
-};
-
-const verify = (token) => {
-  // console.log(token);
-  return jwt.verify(token, config.jwt_secret);
-};
 
 module.exports = {
   authenticate,
   check,
-  hash,
-  sign
+  sign: Auth.sign
 }

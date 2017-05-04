@@ -1,5 +1,5 @@
 'use strict';
-const Promise  = require('bluebird')
+const Promise        = require('bluebird')
 const _              = require('lodash');
 
 const loadCollection = (db, name) => {
