@@ -1,4 +1,30 @@
-<pre>isAdmin: {{ isAdmin() | json }}</pre>
-<pre>user: {{ getUser() | json }}</pre>
-<pre>users: {{ getUsers() | json }}</pre>
-<pre>users$: {{ user.users$ | async | json }}</pre>
+<!-- <pre>isAdmin: {{ isAdmin() | json }}</pre> -->
+<!-- <pre>user: {{ getUser() | json }}</pre> -->
+<!-- <pre>users: {{ getUsers() | json }}</pre> -->
+<!-- <pre>users$: {{ user.users$ | async | json }}</pre> -->
+
+
+<md-card *ngFor="let client of getUsers()" style="margin: 8px;">
+  <md-card-title>{{ client.email }}</md-card-title>
+
+  <!-- <md-card-subtitle>
+    {{ client.meta.created | date['shortDate'] }}
+  </md-card-subtitle> -->
+
+  <md-card-content>
+    <md-slide-toggle [disabled]="false">
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <span>Supervisor</span>
+        <md-icon style="margin-left: 12px;">supervisor_account</md-icon>
+      </div>
+    </md-slide-toggle>
+
+    <!-- <pre>{{ client | json }}</pre> -->
+  </md-card-content>
+</md-card>
+
+<div fxLayoutAlign="end center" style="margin-right: 42px;">
+  <button md-fab (click)="openCreateDialog()">
+    <md-icon>add</md-icon>
+  </button>
+</div>

@@ -26,6 +26,7 @@ import { ProjectsComponent } from './projects/projects.component';
 import { DetailsComponent } from './project/details/details.component';
 import { ProjectDialogComponent } from './projects/project-dialog/project-dialog.component';
 import { ImportTranslationDialogComponent } from './project/import-translation-dialog/import-translation-dialog.component';
+import { UserDialogComponent } from './user/user-dialog/user-dialog.component';
 
 import { UploadFileService } from './shared/services/upload-file.service';
 import { UserAgentService } from './shared/services/user-agent.service';
@@ -47,7 +48,7 @@ export const authHttp = {
 
 const appRoutes: Routes = [
   {
-    path: 'user',
+    path: 'users',
     component: UserComponent,
     canActivate: [AuthGuard]
   },
@@ -82,7 +83,8 @@ const appRoutes: Routes = [
     DetailsComponent,
     ProjectDialogComponent,
     ImportTranslationDialogComponent,
-    AuthComponent
+    AuthComponent,
+    UserDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -97,7 +99,8 @@ const appRoutes: Routes = [
   entryComponents: [
     ImportTranslationDialogComponent,
     PropertyDialog,
-    ProjectDialogComponent
+    ProjectDialogComponent,
+    UserDialogComponent
   ],
   providers: [
     AuthService,

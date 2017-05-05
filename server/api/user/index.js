@@ -29,4 +29,23 @@ router.get('/api/user/users', Auth.check, (req, res) => {
   }
 });
 
+router.post('/api/user/create', Auth.check, (req, res) => {
+  if (!req.user) {
+    res.status(401).send();
+  } else {
+    let user = _.pick(req.body, ['email']);
+    user.password = 'pass';
+    user.admin = false;
+
+    User.create(user)
+    .then((user) => {
+      res.json(user);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(400).send();
+    });
+  }
+});
+
 module.exports = router;

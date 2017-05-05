@@ -58,6 +58,20 @@ export class UserService {
     return this.users;
   }
 
+  create(client: { email: string; }) {
+    if(this.auth.loggedIn()) {
+      this.authHttp.post(`${this.domain}/api/user/create`, client)
+      .map(res => res.json())
+      .subscribe((user: User) => {
+        console.log(user);
+        this.users.push(user);
+        this.usersSubject.next(this.users);
+      }, (err) => {
+        console.log(err);
+      });
+    }
+  }
+
   private requestAllUsers() {
     return this.authHttp.get(`${this.domain}/api/user/users`)
     .map(res => res.json())

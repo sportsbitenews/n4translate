@@ -1,0 +1,15 @@
+<md-dialog-actions fxLayoutAlign="end center">
+  <button md-icon-button md-dialog-close>
+    <md-icon>close</md-icon>
+  </button>
+</md-dialog-actions>
+
+<md-dialog-content fxLayout="column" style="min-width: 600px;">
+  <md-input-container>
+    <input [(ngModel)]="client.email" mdInput fxFlex="auto" placeholder="Email">
+  </md-input-container>
+</md-dialog-content>
+
+<md-dialog-actions fxLayoutAlign="end center">
+  <button md-raised-button (click)="create()">Create</button>
+</md-dialog-actions>
