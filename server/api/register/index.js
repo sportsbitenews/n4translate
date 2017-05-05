@@ -64,7 +64,9 @@ router.post('/api/translation/append', Auth.check, (req, res) => {
 
 router.get('/api/projects', Auth.check, (req, res) => {
   Register.getProjects()
-  .then(projects => res.json(projects))
+  .then((projects) => {
+    res.json(projects);
+  })
   .catch((err) => {
     console.log(err);
     res.status(404).send();

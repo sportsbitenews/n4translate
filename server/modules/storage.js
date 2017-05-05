@@ -2,12 +2,20 @@
 const Promise        = require('bluebird')
 const _              = require('lodash');
 
+const collections = new Map();
+
 const loadCollection = (db, name) => {
   return new Promise((resolve, reject) => {
-    db.loadDatabase({}, () => {
-      const collection = db.getCollection(name) || db.addCollection(name);
-      resolve(collection);
-    })
+    if(collections.has(name)) {
+      resolve(collections.get(name));
+    } else {
+      // console.log(`load collection: ${name}`);
+      db.loadDatabase({}, () => {
+        let collection = db.getCollection(name) || db.addCollection(name);
+        collections.set(name, collection);
+        resolve(collection);
+      });
+    }
   });
 };
 

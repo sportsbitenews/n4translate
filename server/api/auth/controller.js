@@ -19,7 +19,6 @@ const authenticate = ({ email, password }) => {
 
 const check = expressJwt({ secret: config.jwt_secret });
 
-
 module.exports = {
   authenticate,
   check,
