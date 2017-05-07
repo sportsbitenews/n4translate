@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ProjectService } from './project/project.service';
 import { AuthService } from './auth/auth.service';
 import { UserService } from './user/user.service';
-
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -17,7 +17,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    console.log(environment);
   }
 
   loggedIn(): boolean {

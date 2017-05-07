@@ -12,10 +12,11 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
 import { get } from "lodash";
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class UserService {
-  private domain: string = 'http://localhost:3000';
+  private domain: string = environment.apiUrl;
 
   private user: User;
   private users: User[];

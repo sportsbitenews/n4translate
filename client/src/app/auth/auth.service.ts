@@ -13,6 +13,8 @@ import 'rxjs/add/operator/map';
 
 import { forOwn, pick } from "lodash";
 
+import { environment } from '../../environments/environment';
+
 interface Pubsub {
   [x: string]: {
     subject: Subject<any>;
@@ -28,7 +30,7 @@ export class AuthService {
     }
   }
 
-  private domain: string = 'http://localhost:3000';
+  private domain: string = environment.apiUrl;
 
   constructor(
     private http: Http,
