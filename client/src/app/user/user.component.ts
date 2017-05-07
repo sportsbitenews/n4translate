@@ -16,7 +16,8 @@ import { UserDialogComponent } from './user-dialog/user-dialog.component';
 })
 export class UserComponent implements OnInit {
 
-  dialogRef: MdDialogRef<UserDialogComponent>;
+  public viewer: User;
+  private dialogRef: MdDialogRef<UserDialogComponent>;
 
   constructor(
     public dialog: MdDialog,
@@ -40,6 +41,15 @@ export class UserComponent implements OnInit {
 
   getUsers(): User[] {
     return this.user.getUsers();
+  }
+
+  setAdmin(client: User) {
+    this.user.setAdmin(client)
+      .subscribe((savedClient: User) => {
+        client.admin = savedClient.admin;
+      }, (err) => {
+        console.log(err);
+      });
   }
 
   openCreateDialog() {

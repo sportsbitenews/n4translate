@@ -23,6 +23,10 @@ const create = _.curry((db, user) => {
   return storage.insert(db, COLLECTION_NAME, user);
 });
 
+const find = _.curry((db, user) => {
+  return storage.find(db, COLLECTION_NAME, user);
+});
+
 const findByEmail = _.curry((db, email) => {
   return storage.findBy(db, COLLECTION_NAME, { email });
 });
@@ -38,6 +42,7 @@ const update = _.curry((db, user) => {
 
 module.exports = {
   create,
+  find,
   findByEmail,
   getAll,
   update,

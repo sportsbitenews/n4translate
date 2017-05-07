@@ -30,8 +30,6 @@ export class AuthService {
     }
   }
 
-  private domain: string = environment.apiUrl;
-
   constructor(
     private http: Http,
     private authHttp: AuthHttp,
@@ -47,7 +45,7 @@ export class AuthService {
   }
 
   login(credentials) {
-    return this.http.post(`${this.domain}/api/authenticate`, credentials)
+    return this.http.post(`${environment.apiUrl}/api/authenticate`, credentials)
       .map(res => res.json())
       .subscribe(
         (data) => {
@@ -65,7 +63,7 @@ export class AuthService {
   }
 
   getLoggedInFromBackend(): Observable<any> {
-    return this.authHttp.get(`${this.domain}/api/authenticated`)
+    return this.authHttp.get(`${environment.apiUrl}/api/authenticated`)
       .map(res => res.json());
   }
 

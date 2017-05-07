@@ -31,8 +31,7 @@ import { environment } from '../../environments/environment';
 @Injectable()
 export class ProjectService {
 
-  private domain = environment.apiUrl;
-  private translationUrl = `${this.domain}/api/project/content`;
+  private translationUrl = `${environment.apiUrl}/api/project/content`;
 
   private propertyRemoved = new Subject<void>();
   public propertyRemovedObservable;
@@ -67,7 +66,7 @@ export class ProjectService {
 
   createProject(data): Observable<any> {
     return this.authHttp
-      .post(`${this.domain}/api/project/create`, data)
+      .post(`${environment.apiUrl}/api/project/create`, data)
       .map(this.extractData)
       .map((project) => {
         this.projectAdded.next(project);
@@ -90,7 +89,7 @@ export class ProjectService {
     }
 
     return this.authHttp
-      .get(`${this.domain}/api/projects`)
+      .get(`${environment.apiUrl}/api/projects`)
       .map(this.extractData)
       .map((projects) => {
         this.projects = projects;
@@ -115,7 +114,7 @@ export class ProjectService {
     translation.lang = lang;
 
     return this.authHttp
-      .post(`${this.domain}/api/translation/append`, {
+      .post(`${environment.apiUrl}/api/translation/append`, {
         $loki: get(project, '$loki'),
         translation,
         content
@@ -129,7 +128,7 @@ export class ProjectService {
 
   setReflangOfProject(project: any, reflang: string): Observable<any> {
     return this.authHttp
-      .post(`${this.domain}/api/project/reflang`, {
+      .post(`${environment.apiUrl}/api/project/reflang`, {
         reflang,
         $loki: get(project, '$loki')
       })
@@ -144,7 +143,7 @@ export class ProjectService {
     this.loadTranslation.next();
 
     return this.authHttp
-      .post(`${this.domain}/api/translation`, data)
+      .post(`${environment.apiUrl}/api/translation`, data)
       .map(this.extractData)
       .map((translation) => {
         this.translationLoaded.next(translation);
@@ -156,7 +155,7 @@ export class ProjectService {
   saveTranslation(translation, content): Observable<any> {
     let body = assign({}, translation, { content });
     return this.authHttp
-      .post(`${this.domain}/api/translation/save`, body)
+      .post(`${environment.apiUrl}/api/translation/save`, body)
       .catch(this.handleError);
   }
 
@@ -244,7 +243,7 @@ export class ProjectService {
 
     if(translation) {
       return this.authHttp
-        .post(`${this.domain}/api/translation`, translation)
+        .post(`${environment.apiUrl}/api/translation`, translation)
         .map(this.extractData)
         .map(json => this.getPropertiesAsList(json))
         .map(properties => this.setSelectedProjectProperties(properties))

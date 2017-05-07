@@ -3,7 +3,6 @@
 <!-- <pre>users: {{ getUsers() | json }}</pre> -->
 <!-- <pre>users$: {{ user.users$ | async | json }}</pre> -->
 
-
 <md-card *ngFor="let client of getUsers()" style="margin: 8px;">
   <md-card-title>{{ client.email }}</md-card-title>
 
@@ -12,12 +11,21 @@
   </md-card-subtitle> -->
 
   <md-card-content>
-    <md-slide-toggle [disabled]="false">
+    <md-slide-toggle [(ngModel)]="client.admin" [disabled]="getUser().email === client.email" [checked]="client.admin" (change)="setAdmin(client, $event)">
       <div fxLayout="row" fxLayoutAlign="start center">
         <span>Supervisor</span>
         <md-icon style="margin-left: 12px;">supervisor_account</md-icon>
       </div>
     </md-slide-toggle>
+
+    <!-- <md-menu #appMenu="mdMenu">
+      <button md-menu-item> Settings </button>
+      <button md-menu-item> Help </button>
+    </md-menu>
+
+    <button md-icon-button [mdMenuTriggerFor]="appMenu">
+       <md-icon>more_vert</md-icon>
+    </button> -->
 
     <!-- <pre>{{ client | json }}</pre> -->
   </md-card-content>

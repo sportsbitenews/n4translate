@@ -60,7 +60,7 @@ const update = (db, name, item) => {
       collection.update(item);
       db.saveDatabase();
 
-      return itme;
+      return item;
     });
 };
 

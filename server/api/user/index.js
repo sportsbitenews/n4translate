@@ -39,12 +39,39 @@ router.post('/api/user/create', Auth.check, (req, res) => {
 
     User.create(user)
     .then((user) => {
-      res.json(user);
+      console.log('created user', user);
+      res.json(_.pick(user, ['$loki', 'email', 'admin', 'meta']));
     })
     .catch((err) => {
       console.log(err);
       res.status(400).send();
     });
+  }
+});
+
+router.post('/api/user/admin', Auth.check, (req, res) => {
+  if (!req.user) {
+    res.status(401).send();
+  } else {
+    let $loki = req.body.$loki;
+    let admin = req.body.admin || false;
+
+    if($loki) {
+      User.find({ $loki })
+      .then((user) => {
+        user.admin = admin;
+        return User.update(user);
+      })
+      .then((user) => {
+        res.json(user);
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(400).send();
+      });
+    } else {
+      res.status(400).send();
+    }
   }
 });
 
