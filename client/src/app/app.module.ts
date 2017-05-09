@@ -35,6 +35,7 @@ import { AuthService } from './auth/auth.service';
 import { UserService } from './user/user.service';
 
 import { ProjectService } from './project/project.service';
+import { UserProjectsComponent } from './user/user-projects/user-projects.component';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig(), http, options);
@@ -84,7 +85,8 @@ const appRoutes: Routes = [
     ProjectDialogComponent,
     ImportTranslationDialogComponent,
     AuthComponent,
-    UserDialogComponent
+    UserDialogComponent,
+    UserProjectsComponent
   ],
   imports: [
     BrowserModule,

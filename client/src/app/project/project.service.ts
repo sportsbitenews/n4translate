@@ -13,8 +13,10 @@ import {
   chain,
   cloneDeep,
   concat,
+  includes,
   isPlainObject,
   isNumber,
+  filter,
   find,
   findIndex,
   forOwn,
@@ -96,6 +98,24 @@ export class ProjectService {
         return projects;
       })
       .catch(this.handleError);
+  }
+
+  getProjectsByIds(ids: number[]): Observable<any> {
+    return this.getProjects()
+      .map((projects) => {
+        return filter(projects, ({ $loki }) => {
+          return includes(ids, $loki);
+        })
+      });
+  }
+
+  getProjectsByExcludeIds(ids: number[]): Observable<any> {
+    return this.getProjects()
+      .map((projects) => {
+        return filter(projects, ({ $loki }) => {
+          return includes(ids, $loki) === false;
+        })
+      });
   }
 
   findProjectByFilename(filename: string): Observable<any> {

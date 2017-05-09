@@ -11,7 +11,8 @@ const PROPERTIES = [
   '$loki',
   'email',
   'admin',
-  'meta'
+  'meta',
+  'projects'
 ];
 
 const project = (user) => {

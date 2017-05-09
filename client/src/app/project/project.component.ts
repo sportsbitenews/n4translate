@@ -1,5 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ProjectService } from './project.service';
+import { UserService } from '../user/user.service';
 import { ActivatedRoute } from '@angular/router';
 
 import { Subscription }   from 'rxjs/Subscription';
@@ -17,6 +18,7 @@ export class ProjectComponent implements OnInit {
   private subs: { [x: string]: Subscription } = {};
 
   constructor(
+    public user: UserService,
     private projectService: ProjectService,
     private route: ActivatedRoute
   ) {}

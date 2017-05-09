@@ -1,4 +1,4 @@
-<md-tab-group fxFlex>
+<md-tab-group fxFlex *ngIf="user.isAdmin()">
   <md-tab label="Table Editor" fxFlex>
     <i18n-project-table [properties]="content"></i18n-project-table>
   </md-tab>
@@ -15,3 +15,5 @@
     <pre>{{ getPaths() | json }}</pre>
   </md-tab> -->
 </md-tab-group>
+
+<i18n-project-table [properties]="content" *ngIf="user.isAdmin() === false"></i18n-project-table>

@@ -40,7 +40,7 @@ router.post('/api/user/create', Auth.check, (req, res) => {
     User.create(user)
     .then((user) => {
       console.log('created user', user);
-      res.json(_.pick(user, ['$loki', 'email', 'admin', 'meta']));
+      res.json(_.pick(user, ['$loki', 'email', 'admin', 'meta', 'projects']));
     })
     .catch((err) => {
       console.log(err);
@@ -73,6 +73,18 @@ router.post('/api/user/admin', Auth.check, (req, res) => {
       res.status(400).send();
     }
   }
+});
+
+router.post('/api/user/projects', Auth.check, (req, res) => {
+  User.updateProjects(req.body)
+  .then((user) => {
+    console.log('/api/user/projects: success', user);
+    res.json({ success: true });
+  })
+  .catch((err) => {
+    console.log(err);
+    res.status(400).send();
+  });
 });
 
 module.exports = router;

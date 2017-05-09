@@ -24,10 +24,20 @@ const update = (user) => {
   return User.update(db, user);
 };
 
+const updateProjects = (client) => {
+  return User.find(db, client)
+    .then((user) => {
+      _.set(user, 'projects', client.projects);
+      return user;
+    })
+    .then(user => User.update(db, user));
+};
+
 module.exports = {
   create,
   find,
   findByEmail,
   getAll,
-  update
+  update,
+  updateProjects
 };

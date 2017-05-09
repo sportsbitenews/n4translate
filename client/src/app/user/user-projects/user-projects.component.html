@@ -1,0 +1,39 @@
+<pre>client: {{ client | json }}</pre>
+<!-- <pre>projects: {{ projects | json }}</pre> -->
+<!-- <pre>clientProjects: {{ clientProjects | json }}</pre> -->
+<!-- <pre>availableProjects: {{ getAvailableProjects() | async | json }}</pre> -->
+
+<!-- <div *ngFor="let project of getAvailableProjects() | async">
+  <pre>{{ project | json }}</pre>
+</div> -->
+
+<md-list>
+  <md-list-item *ngFor="let project of getClientProjects() | async">
+    <div style="min-width: 175px;">{{ project.name }}</div>
+    <button md-icon-button (click)="removeProject(project)">
+      <md-icon>close</md-icon>
+    </button>
+  </md-list-item>
+</md-list>
+
+<div [hidden]="(getAvailableProjects() | async)?.length === 0" style="margin-top: 16px; padding-left: 16px;">
+  <md-input-container>
+    <input mdInput [(ngModel)]="selectedProject" placeholder="Project" [mdAutocomplete]="auto">
+  </md-input-container>
+
+  <md-autocomplete #auto="mdAutocomplete" [displayWith]="displayFn">
+     <md-option *ngFor="let project of getAvailableProjects() | async" [value]="project">
+        {{ project.name }}
+     </md-option>
+  </md-autocomplete>
+
+  <button md-icon-button (click)="addProject()" [disabled]="!selectedProject">
+    <md-icon>add</md-icon>
+  </button>
+</div>
+
+<div style="margin-top: 16px;">
+  <button md-raised-button (click)="saveProjects()" style="margin-left: 10px;">
+    Save <md-icon>save</md-icon>
+  </button>
+</div>

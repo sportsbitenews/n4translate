@@ -3,6 +3,7 @@ import { MdDialog, MdDialogConfig, MdDialogRef } from '@angular/material';
 import { ElementRef } from '@angular/core';
 
 import { ActivatedRoute, Router } from '@angular/router';
+import { UserService } from '../../user/user.service';
 import { ProjectService } from '../project.service';
 import { UploadFileService } from '../../shared/services/upload-file.service';
 
@@ -44,6 +45,7 @@ export class DetailsComponent implements OnDestroy, OnInit {
   private uploadUrl: string = 'http://localhost:3000/api/translation/import';
 
   constructor(
+    public user: UserService,
     private dialog: MdDialog,
     private viewContainerRef: ViewContainerRef,
     private projectService: ProjectService,

@@ -1,11 +1,3 @@
-<!-- <div style="padding: 16px;">
-  <pre style="margin: 0px;">{{ project | json }}</pre>
-</div>
-
-<div *ngIf="project" style="padding: 16px;">
-  <pre style="margin: 0px;">{{ getLangs() | json }}</pre>
-</div> -->
-
 <md-card *ngIf="project" style="margin: 12px;">
   <md-card-title fxLayout="row" fxLayoutAlign="start center">
     <md-icon style="margin-right: 12px;">folder</md-icon> {{ project.name }}
@@ -13,8 +5,8 @@
 
   <md-card-content>
     <div fxLayout="row">
-      <div style="margin-top: 16px;">
-        <md-select placeholder="Reflang"
+      <div style="margin-top: 16px;" *ngIf="user.isAdmin()">
+        <md-select placeholder="Reference language"
           [(ngModel)]="project.reflang"
           name="reflang"
           (change)="updateRefLang($event)"
@@ -25,8 +17,8 @@
         </md-select>
       </div>
 
+      <!-- <md-card-subtitle>Target language</md-card-subtitle> -->
       <div fxFlex style="margin-left: 32px;" fxLayout="row" fxLayoutAlign="start center">
-        <!-- <md-card-subtitle>Dog Breed</md-card-subtitle> -->
         <div fxLayout="row" fxLayoutAlign="start center">
           <md-chip-list *ngIf="project">
             <md-chip *ngFor="let translation of project.translations"
@@ -38,9 +30,9 @@
           </md-chip-list>
         </div>
 
-        <div fxLayout="row" fxLayoutAlign="start center" style="margin-top: 12px; margin-left: 12px;">
+        <div fxLayout="row" fxLayoutAlign="start center" style="margin-top: 12px; margin-left: 12px;" *ngIf="user.isAdmin()">
           <md-input-container style="margin-right: 12px;">
-            <input mdInput [(ngModel)]="lang" placeholder="Lang">
+            <input mdInput [(ngModel)]="lang" placeholder="New target language">
           </md-input-container>
 
           <input #upload style="display: none;" type="file" (change)="onChange($event)"/>
@@ -61,23 +53,23 @@
 </md-card>
 
 <md-card style="margin: 12px;" *ngIf="selectedTranslation">
-  <md-card-title fxLayout="row" fxLayoutAlign="start center">
-    <md-icon style="margin-right: 12px;">translate</md-icon> {{ selectedTranslation.lang }}
-  </md-card-title>
+  <div fxLayout="row" fxLayoutAlign="start center">
+    <md-card-title fxLayout="row" fxLayoutAlign="start center">
+      Translation into {{ selectedTranslation.lang }}
+    </md-card-title>
+
+    <!-- <button md-button (click)="saveContent()">
+      Save <md-icon>save</md-icon>
+    </button> -->
+
+    <a #exportTarget style="display:none"></a>
+
+    <button md-raised-button (click)="export(exportTarget)" style="margin-left: 32px;" *ngIf="user.isAdmin()">
+      Export <md-icon>file_download</md-icon>
+    </button>
+  </div>
 
   <md-card-content>
     <i18n-project-translation [hidden]="!content" [content]="content"></i18n-project-translation>
   </md-card-content>
-
-  <md-card-actions fxLayout="row" fxLayoutAlign="end center">
-    <button md-button (click)="saveContent()">
-      Save <md-icon>save</md-icon>
-    </button>
-
-    <a #exportTarget style="display:none"></a>
-
-    <button md-button (click)="export(exportTarget)">
-      Export <md-icon>file_download</md-icon>
-    </button>
-  </md-card-actions>
 </md-card>

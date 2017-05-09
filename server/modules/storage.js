@@ -9,12 +9,12 @@ const loadCollection = (db, name) => {
     if(collections.has(name)) {
       resolve(collections.get(name));
     } else {
-      // console.log(`load collection: ${name}`);
-      db.loadDatabase({}, () => {
+      console.log(`load collection: ${name}`);
+      // db.loadDatabase({}, () => {
         let collection = db.getCollection(name) || db.addCollection(name);
         collections.set(name, collection);
         resolve(collection);
-      });
+      // });
     }
   });
 };
@@ -57,6 +57,7 @@ const findBy = (db, name, needle) => {
 const update = (db, name, item) => {
   return loadCollection(db, name)
     .then((collection) => {
+      console.log('update', item);
       collection.update(item);
       db.saveDatabase();
 

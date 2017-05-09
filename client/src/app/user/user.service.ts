@@ -96,4 +96,18 @@ export class UserService {
     })
     .subscribe();
   }
+
+  addProjects(client: User): Observable<any> {
+    let url: string = `${environment.apiUrl}/api/user/projects`;
+    let body = pick(client, ['$loki', 'projects']);
+    
+    return this.authHttp.post(url, body)
+    .map(res => res.json())
+    .map((res: any) => {
+      console.log(res);
+      return res;
+    }, (err) => {
+      console.log(err);
+    });
+  }
 }

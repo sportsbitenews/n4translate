@@ -18,14 +18,12 @@
       </div>
     </md-slide-toggle>
 
-    <!-- <md-menu #appMenu="mdMenu">
-      <button md-menu-item> Settings </button>
-      <button md-menu-item> Help </button>
-    </md-menu>
-
-    <button md-icon-button [mdMenuTriggerFor]="appMenu">
-       <md-icon>more_vert</md-icon>
-    </button> -->
+    <div style="padding: 16px 0;" *ngIf="!client.admin && getUser().email !== client.email">
+      <md-card-subtitle>
+        Access to projects:
+      </md-card-subtitle>
+      <app-user-projects [client]="client"></app-user-projects>
+    </div>
 
     <!-- <pre>{{ client | json }}</pre> -->
   </md-card-content>

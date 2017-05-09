@@ -7,7 +7,7 @@ import { UserAgentService } from '../../shared/services/user-agent.service';
 import { Subscription }   from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
 
-import { find, map} from "lodash";
+import { filter, find, includes, map, toUpper } from "lodash";
 
 import { PropertyDialog } from './property-dialog.component';
 
@@ -30,6 +30,7 @@ export class ProjectTableComponent implements OnDestroy, OnInit {
   currentPage: number = 1;
   loading = true;
   dialogRef;
+  needle: string;
 
   propertyRemovedSubscription: Subscription;
   propertyAddedSubscription: Subscription;
@@ -89,7 +90,10 @@ export class ProjectTableComponent implements OnDestroy, OnInit {
   }
 
   getRefProperties(): any[] {
-    return this.projectService.selectedProjectProperties;
+    let needle = toUpper(this.needle);
+    return filter(this.projectService.selectedProjectProperties, (property: { key: string; }) => {
+      return includes(property.key, needle);
+    });
   }
 
   onLogin(credentials: Credentials) {
