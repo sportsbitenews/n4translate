@@ -87,4 +87,16 @@ router.post('/api/user/projects', Auth.check, (req, res) => {
   });
 });
 
+router.post('/api/user/assign/password', Auth.check, (req, res) => {
+  return User.assignPassword(req.body)
+  .then((user) => {
+    // console.log('/api/user/projects: success', user);
+    res.json({ success: true });
+  })
+  .catch((err) => {
+    console.log(err);
+    res.status(400).send();
+  });
+});
+
 module.exports = router;

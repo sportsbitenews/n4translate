@@ -10,19 +10,40 @@
     {{ client.meta.created | date['shortDate'] }}
   </md-card-subtitle> -->
 
-  <md-card-content>
-    <md-slide-toggle [(ngModel)]="client.admin" [disabled]="getUser().email === client.email" [checked]="client.admin" (change)="setAdmin(client, $event)">
-      <div fxLayout="row" fxLayoutAlign="start center">
-        <span>Supervisor</span>
-        <md-icon style="margin-left: 12px;">supervisor_account</md-icon>
-      </div>
-    </md-slide-toggle>
+  <!-- <pre>{{ client | json }}</pre> -->
 
-    <div style="padding: 16px; padding-top: 32px; padding-left: 0;" *ngIf="!client.admin && getUser().email !== client.email">
+  <md-card-content fxLayout="row" fxLayoutAlign="center none">
+    <div style="padding: 16px; padding-top: 32px; padding-left: 16px;" fxFlex>
+      <md-card-subtitle>
+        Assign as supervisor:
+      </md-card-subtitle>
+      <md-slide-toggle [(ngModel)]="client.admin" [disabled]="getUser().email === client.email" [checked]="client.admin" (change)="setAdmin(client, $event)">
+        <div fxLayout="row" fxLayoutAlign="start center">
+          <span>Supervisor</span>
+          <md-icon style="margin-left: 12px;">supervisor_account</md-icon>
+        </div>
+      </md-slide-toggle>
+    </div>
+
+    <div style="padding: 16px; padding-top: 32px; padding-left: 16px;" *ngIf="!client.admin && getUser().email !== client.email" fxFlex>
       <md-card-subtitle>
         Access to projects:
       </md-card-subtitle>
       <app-user-projects [client]="client"></app-user-projects>
+    </div>
+
+    <div style="padding: 16px; padding-top: 32px; padding-left: 16px;" *ngIf="!client.admin && getUser().email !== client.email" fxFlex>
+      <md-card-subtitle>
+        Assign new password for user:
+      </md-card-subtitle>
+
+      <md-input-container>
+        <input [(ngModel)]="client.newPassword" mdInput fxFlex="auto" placeholder="New password">
+      </md-input-container>
+
+      <button md-raised-button (click)="assignPasswordToClient(client)" [disabled]="!client.newPassword">
+        Assign password <md-icon>save</md-icon>
+      </button>
     </div>
 
     <!-- <pre>{{ client | json }}</pre> -->

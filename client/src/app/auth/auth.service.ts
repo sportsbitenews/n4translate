@@ -49,7 +49,7 @@ export class AuthService {
       .map(res => res.json())
       .subscribe(
         (data) => {
-          let user: User = <User>pick(data, ['$loki', 'email', 'admin']);
+          let user: User = <User>pick(data, ['$loki', 'email', 'admin', 'meta', 'projects']);
           localStorage.setItem('token', data.token);
           this.pubsub.loggedIn.subject.next(user);
           this.router.navigateByUrl('/projects');

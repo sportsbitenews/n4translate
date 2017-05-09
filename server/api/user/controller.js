@@ -1,6 +1,7 @@
 'use strict';
 const _         = require('lodash');
 
+const Auth      = require('../auth/service.js');
 const User      = require('./service.js');
 const db        = require('../../modules/service.js').getDb();
 
@@ -33,7 +34,18 @@ const updateProjects = (client) => {
     .then(user => User.update(db, user));
 };
 
+const assignPassword = (client) => {
+  return User.find(db, client)
+    .then((user) => {
+      let password = Auth.hash(client.newPassword);
+      _.set(user, 'password', password);
+      return user;
+    })
+    .then(user => User.update(db, user));
+};
+
 module.exports = {
+  assignPassword,
   create,
   find,
   findByEmail,

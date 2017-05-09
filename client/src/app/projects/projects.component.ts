@@ -70,7 +70,7 @@ export class ProjectsComponent implements OnDestroy, OnInit {
     if(this.user.isAdmin()) {
       return this.projects;
     } else {
-      console.log(this.user.getUser());
+      // console.log(this.user.getUser());
       let ids = get(this.user.getUser(), 'projects', []);
       return filter(this.projects, (project: any) => {
         return includes(ids, project.$loki);

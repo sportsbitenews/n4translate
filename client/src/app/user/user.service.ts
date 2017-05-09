@@ -32,6 +32,7 @@ export class UserService {
       this.authHttp.get(`${environment.apiUrl}/api/user/instance`)
       .map(res => res.json())
       .subscribe((user: User) => {
+        console.log('user/instance', this.user);
         this.user = user;
         this.requestAllUsers();
       }, (err) => {
@@ -110,4 +111,17 @@ export class UserService {
       console.log(err);
     });
   }
+
+  assignPasswordToClient(client: any) {
+    let url: string = `${environment.apiUrl}/api/user/assign/password`;
+    return this.authHttp.post(url, client)
+    .map(res => res.json())
+    .map((res: any) => {
+      client.newPassword = undefined;
+      return res;
+    }, (err) => {
+      console.log(err);
+    });
+  }
+
 }

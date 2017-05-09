@@ -52,6 +52,15 @@ export class UserComponent implements OnInit {
       });
   }
 
+  assignPasswordToClient(client: any) {
+    this.user.assignPasswordToClient(client)
+      .subscribe((res: any) => {
+        console.log(res);
+      }, (err) => {
+        console.log(err);
+      });
+  }
+
   openCreateDialog() {
     let config = new MdDialogConfig();
     config.viewContainerRef = this.viewContainerRef;
