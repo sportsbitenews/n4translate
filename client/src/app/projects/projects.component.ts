@@ -1,12 +1,15 @@
 import { Component, Inject, Input, OnInit, OnDestroy, ViewContainerRef } from '@angular/core';
 import { MdDialog, MdDialogConfig, MdDialogRef } from '@angular/material';
 
+import { UserService } from '../user/user.service';
 import { ProjectService } from '../project/project.service';
 
 import { Subscription }   from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
 
 import { ProjectDialogComponent } from './project-dialog/project-dialog.component';
+
+import { filter, get, includes } from "lodash";
 
 @Component({
   selector: 'app-projects',
@@ -22,7 +25,8 @@ export class ProjectsComponent implements OnDestroy, OnInit {
   constructor(
     public dialog: MdDialog,
     public viewContainerRef: ViewContainerRef,
-    public projectService: ProjectService,
+    public user: UserService,
+    public projectService: ProjectService
   ) {}
 
   ngOnInit() {
@@ -61,5 +65,18 @@ export class ProjectsComponent implements OnDestroy, OnInit {
         if(project) this.create(project);
       });
   }
+
+  getProjects(): any[] {
+    if(this.user.isAdmin()) {
+      return this.projects;
+    } else {
+      console.log(this.user.getUser());
+      let ids = get(this.user.getUser(), 'projects', []);
+      return filter(this.projects, (project: any) => {
+        return includes(ids, project.$loki);
+      });
+    }
+  }
+
 
 }

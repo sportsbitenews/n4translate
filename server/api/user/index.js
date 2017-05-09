@@ -10,7 +10,7 @@ router.get('/api/user/instance', Auth.check, (req, res) => {
   if (!req.user) {
     res.status(401).send();
   } else {
-    res.json(_.pick(req.user, ['$loki', 'email', 'admin']));
+    res.json(_.pick(req.user, ['$loki', 'email', 'admin', 'meta', 'projects']));
   }
 });
 

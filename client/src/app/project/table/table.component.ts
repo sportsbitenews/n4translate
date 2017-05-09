@@ -93,10 +93,11 @@ export class ProjectTableComponent implements OnDestroy, OnInit {
   }
 
   save(entity) {
-    // this.projectService.add(entity, this.properties);
     this.projectService.saveTranslationProperty(this.translation, entity)
       .subscribe((res: any) => {
         console.log(res);
+        this.projectService.add(entity, this.properties);
+        this.updateList();
       }, (err) => {
         console.log(err);
       });

@@ -1,5 +1,11 @@
+<!-- <pre>{{ projects | json }}</pre> -->
+
+<md-card *ngIf="getProjects().length === 0" style="margin: 16px;">
+  No projects assigned to edit. Ask your supervisor, please.
+</md-card>
+
 <div>
-  <div class="i18n-project" *ngFor="let project of projects" style="margin: 12px;" routerLink="/project/details/{{ project.filename }}">
+  <div class="i18n-project" *ngFor="let project of getProjects()" style="margin: 12px;" routerLink="/project/details/{{ project.filename }}">
     <md-card class="project-card" md-ripple>
       <md-card-title>{{ project.name }}</md-card-title>
 
@@ -12,7 +18,7 @@
   </div>
 </div>
 
-<div fxLayoutAlign="end center" style="margin-right: 42px;">
+<div fxLayoutAlign="end center" style="margin-right: 42px;" *ngIf="user.isAdmin()">
   <button md-fab (click)="openCreateDialog()">
     <md-icon>create_new_folder</md-icon>
   </button>

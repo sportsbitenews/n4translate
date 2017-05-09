@@ -181,7 +181,6 @@ export class ProjectService {
 
   saveTranslationProperty(translation, property): Observable<any> {
     let body = assign({}, translation, { property });
-    console.log('body', body);
 
     return this.authHttp
       .post(`${environment.apiUrl}/api/translation/property/save`, body)

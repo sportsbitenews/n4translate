@@ -12,7 +12,7 @@ const authenticate = ({ email, password }) => {
   return User.findByEmail(email)
     .then((user) => {
       if(user && Auth.hash(password) === user.password) {
-        return _.pick(user, ['$loki', 'email', 'admin']);
+        return _.pick(user, ['$loki', 'email', 'admin', 'meta', 'projects']);
       }
     });
 };
