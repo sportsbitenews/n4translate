@@ -58,9 +58,9 @@
       Translation into {{ selectedTranslation.lang }}
     </md-card-title>
 
-    <!-- <button md-button (click)="saveContent()">
+    <button md-button (click)="saveContent()">
       Save <md-icon>save</md-icon>
-    </button> -->
+    </button>
 
     <a #exportTarget style="display:none"></a>
 
@@ -70,6 +70,6 @@
   </div>
 
   <md-card-content>
-    <i18n-project-translation [hidden]="!content" [content]="content"></i18n-project-translation>
+    <i18n-project-translation [hidden]="!content" [content]="content" [translation]="selectedTranslation"></i18n-project-translation>
   </md-card-content>
 </md-card>

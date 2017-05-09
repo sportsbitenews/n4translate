@@ -125,4 +125,16 @@ router.post('/api/translation/save', Auth.check, (req, res) => {
     });
 });
 
+router.post('/api/translation/property/save', Auth.check, (req, res) => {
+  Project.saveEntity(req.body)
+    .then((content) => {
+      // console.log(content);
+      res.json(content);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(404).send();
+    });
+});
+
 module.exports = router;

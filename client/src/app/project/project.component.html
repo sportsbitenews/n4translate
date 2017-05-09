@@ -1,6 +1,6 @@
 <md-tab-group fxFlex *ngIf="user.isAdmin()">
   <md-tab label="Table Editor" fxFlex>
-    <i18n-project-table [properties]="content"></i18n-project-table>
+    <i18n-project-table [properties]="content" [translation]="translation"></i18n-project-table>
   </md-tab>
 
   <!-- <md-tab label="Tree Editor">
@@ -14,6 +14,8 @@
   <!-- <md-tab label="Property Paths" fxFlex>
     <pre>{{ getPaths() | json }}</pre>
   </md-tab> -->
+
+  <pre>{{ translation | json }}</pre>
 </md-tab-group>
 
-<i18n-project-table [properties]="content" *ngIf="user.isAdmin() === false"></i18n-project-table>
+<i18n-project-table [properties]="content" [translation]="translation" *ngIf="user.isAdmin() === false"></i18n-project-table>

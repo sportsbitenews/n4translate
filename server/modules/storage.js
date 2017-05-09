@@ -9,12 +9,9 @@ const loadCollection = (db, name) => {
     if(collections.has(name)) {
       resolve(collections.get(name));
     } else {
-      console.log(`load collection: ${name}`);
-      // db.loadDatabase({}, () => {
-        let collection = db.getCollection(name) || db.addCollection(name);
-        collections.set(name, collection);
-        resolve(collection);
-      // });
+      let collection = db.getCollection(name) || db.addCollection(name);
+      collections.set(name, collection);
+      resolve(collection);
     }
   });
 };

@@ -13,6 +13,8 @@ import { Subscription }   from 'rxjs/Subscription';
 
 export class ProjectComponent implements OnInit {
   @Input() content;
+  @Input() translation;
+
   errorMessage;
 
   private subs: { [x: string]: Subscription } = {};
@@ -24,7 +26,7 @@ export class ProjectComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-
+    
   }
 
   getPaths() {

@@ -7,7 +7,7 @@ import { UserAgentService } from '../../shared/services/user-agent.service';
 import { Subscription }   from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
 
-import { filter, find, includes, map, toUpper } from "lodash";
+import { cloneDeep, filter, find, includes, map, toUpper } from "lodash";
 
 import { PropertyDialog } from './property-dialog.component';
 
@@ -25,6 +25,7 @@ interface Credentials {
 
 export class ProjectTableComponent implements OnDestroy, OnInit {
   @Input() properties;
+  @Input() translation;
 
   list = [];
   currentPage: number = 1;
@@ -79,25 +80,33 @@ export class ProjectTableComponent implements OnDestroy, OnInit {
 
   updateList() {
     let candidates = this.projectService.getPropertiesAsList(this.properties);
-    // console.log(candidates);
-    this.list = map(this.getRefProperties(), (property) => {
-      return find(candidates, { key: property.key });
+
+    this.list = map(cloneDeep(this.projectService.selectedProjectProperties), (property: any) => {
+      let target = find(candidates, { key: property.key });
+
+      if(target) {
+        property.target = target;
+      }
+
+      return property;
     });
   }
 
   save(entity) {
-    this.projectService.add(entity, this.properties);
+    // this.projectService.add(entity, this.properties);
+    this.projectService.saveTranslationProperty(this.translation, entity)
+      .subscribe((res: any) => {
+        console.log(res);
+      }, (err) => {
+        console.log(err);
+      });
   }
 
-  getRefProperties(): any[] {
+  getFilteredProperties(): any[] {
     let needle = toUpper(this.needle);
-    return filter(this.projectService.selectedProjectProperties, (property: { key: string; }) => {
-      return includes(property.key, needle);
-    });
-  }
-
-  onLogin(credentials: Credentials) {
-    console.log(credentials);
+    return filter(this.list, (property: any) => {
+        return includes(property.key, needle);
+      });
   }
 
   style() {

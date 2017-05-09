@@ -179,6 +179,15 @@ export class ProjectService {
       .catch(this.handleError);
   }
 
+  saveTranslationProperty(translation, property): Observable<any> {
+    let body = assign({}, translation, { property });
+    console.log('body', body);
+
+    return this.authHttp
+      .post(`${environment.apiUrl}/api/translation/property/save`, body)
+      .catch(this.handleError);
+  }
+
   private extractData(res: Response) {
     return res.json();
   }
@@ -240,6 +249,7 @@ export class ProjectService {
   }
 
   add(entity, json) {
+    console.log(entity, json);
     set(json, entity.key, entity.value);
     this.propertyAdded.next();
   }

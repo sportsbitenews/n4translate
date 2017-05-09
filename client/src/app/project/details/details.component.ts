@@ -165,7 +165,7 @@ export class DetailsComponent implements OnDestroy, OnInit {
   }
 
   saveContent() {
-    console.log(this.selectedTranslation, this.content);
+    // console.log(this.selectedTranslation, this.content);
     this.projectService.saveTranslation(this.selectedTranslation, this.content)
     .subscribe(
        (res) => {

@@ -1,4 +1,4 @@
-<pre>client: {{ client | json }}</pre>
+<!-- <pre>client: {{ client | json }}</pre> -->
 <!-- <pre>projects: {{ projects | json }}</pre> -->
 <!-- <pre>clientProjects: {{ clientProjects | json }}</pre> -->
 <!-- <pre>availableProjects: {{ getAvailableProjects() | async | json }}</pre> -->
@@ -7,7 +7,7 @@
   <pre>{{ project | json }}</pre>
 </div> -->
 
-<md-list>
+<md-list [hidden]="(getClientProjects() | async)?.length === 0">
   <md-list-item *ngFor="let project of getClientProjects() | async">
     <div style="min-width: 175px;">{{ project.name }}</div>
     <button md-icon-button (click)="removeProject(project)">
@@ -15,6 +15,10 @@
     </button>
   </md-list-item>
 </md-list>
+
+<div [hidden]="(getClientProjects() | async)?.length > 0">
+  User has no access to any projects!
+</div>
 
 <div [hidden]="(getAvailableProjects() | async)?.length === 0" style="margin-top: 16px; padding-left: 16px;">
   <md-input-container>
@@ -32,7 +36,7 @@
   </button>
 </div>
 
-<div style="margin-top: 16px;">
+<div style="margin-top: 16px; padding-left: 8px;">
   <button md-raised-button (click)="saveProjects()" style="margin-left: 10px;">
     Save <md-icon>save</md-icon>
   </button>

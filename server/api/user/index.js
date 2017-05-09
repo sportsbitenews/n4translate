@@ -78,7 +78,7 @@ router.post('/api/user/admin', Auth.check, (req, res) => {
 router.post('/api/user/projects', Auth.check, (req, res) => {
   User.updateProjects(req.body)
   .then((user) => {
-    console.log('/api/user/projects: success', user);
+    // console.log('/api/user/projects: success', user);
     res.json({ success: true });
   })
   .catch((err) => {

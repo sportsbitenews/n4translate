@@ -12,13 +12,13 @@ const getJSON = (filename) => {
   return util.readJSON(filepath);
 };
 
-const saveEntity = (filename, { path, value }) => {
+const saveEntity = ({ filename, property }) => {
   return getJSON(filename)
     .then((json) => {
-      _.set(json, path, value);
+      _.set(json, property.key, property.value);
 
       let filepath = getFilepath(filename);
-      return util.outputFile(filepath, json);
+      return util.writeJson(filepath, json);
     });
 };
 
