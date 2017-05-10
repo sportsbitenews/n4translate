@@ -26,15 +26,7 @@ export class UserProjectsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // console.log(this.client);
     this.client.projects = this.client.projects || [];
-
-    // this.projectService.getProjectsByIds(this.client.projects)
-    //   .subscribe((projects: any[]) => {
-    //     this.clientProjects = projects;
-    //   }, (err) => {
-    //     console.log(err);
-    //   });
 
     this.projectService.getProjects()
       .subscribe((projects: any[]) => {
@@ -56,7 +48,7 @@ export class UserProjectsComponent implements OnInit {
     return project ? project.name : '';
   }
 
-  addProject(project: any) {
+  addProject() {
     if(this.selectedProject) {
       this.client.projects.push(this.selectedProject.$loki);
     }

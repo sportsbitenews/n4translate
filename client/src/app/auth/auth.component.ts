@@ -17,18 +17,25 @@ interface Credentials {
 export class AuthComponent implements OnInit {
 
   credentials: Credentials = {};
+  showUnauthorizedMessage = '';
 
   constructor(private auth: AuthService) { }
 
   ngOnInit() {
-    // this.auth.commander.loggedIn.observable
-    // .subscribe((value) => {
-    //   console.log('loggedIn', value);
-    // });
+    
   }
 
   login() {
-    this.auth.login(this.credentials);
+    this.auth.login(this.credentials)
+    .subscribe(
+      (data) => {
+        this.showUnauthorizedMessage = '';
+      },
+      (error) => {
+        this.showUnauthorizedMessage = 'Email and password are not matched.';
+        console.log(error)
+      }
+    );
   }
 
   getLoggedInFromBackend() {

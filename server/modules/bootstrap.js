@@ -32,11 +32,7 @@ const insertDefaultUser = (db) => {
   .then(users => users.length > 0)
   .then((hasUsers) => {
     if(hasUsers === false) {
-      return User.create(db, {
-        email: 'andre@g.com',
-        password: '1234',
-        admin: true
-      });
+      return User.create(db, require('../default.user.json'));
     }
   })
   .catch(console.log);

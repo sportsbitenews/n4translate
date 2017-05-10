@@ -33,8 +33,12 @@
         </md-hint>
       </md-input-container>
 
+      <md-hint style="color: #f44336">
+        {{ showUnauthorizedMessage }}
+      </md-hint>
+
       <!-- <pre>{{ loginForm.form | json }}</pre> -->
-      <button md-raised-button type="submit" style="margin: 16px;" [disabled]="!loginForm.form.valid">Submit</button>
+      <button md-raised-button type="submit" style="margin: 16px;" [disabled]="!loginForm.form.valid">Login</button>
     </form>
 
     <!-- <pre>{{ loggedIn() }}</pre>

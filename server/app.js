@@ -11,7 +11,13 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// app.use('/', express.static(path.resolve(__dirname, '../client/dist')));
+const env = process.argv[2] || 'dev';
+// console.log(process.argv);
+
+if(env === 'prod') {
+  console.log('static file hosting');
+  app.use('/', express.static(path.resolve(__dirname, '../client/dist')));
+}
 
 const db = require('./modules/service').getDb();
 const bootstrap = require('./modules/bootstrap');

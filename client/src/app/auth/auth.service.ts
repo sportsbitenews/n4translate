@@ -44,18 +44,15 @@ export class AuthService {
     });
   }
 
-  login(credentials) {
+  login(credentials): Observable<any> {
     return this.http.post(`${environment.apiUrl}/api/authenticate`, credentials)
       .map(res => res.json())
-      .subscribe(
-        (data) => {
-          let user: User = <User>pick(data, ['$loki', 'email', 'admin', 'meta', 'projects']);
-          localStorage.setItem('token', data.token);
-          this.pubsub.loggedIn.subject.next(user);
-          this.router.navigateByUrl('/projects');
-        },
-        error => console.log(error)
-      );
+      .map((data) => {
+        let user: User = <User>pick(data, ['$loki', 'email', 'admin', 'meta', 'projects']);
+        localStorage.setItem('token', data.token);
+        this.pubsub.loggedIn.subject.next(user);
+        this.router.navigateByUrl('/projects');
+      });
   }
 
   loggedIn() {

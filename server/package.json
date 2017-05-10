@@ -5,8 +5,7 @@
   "description": "i18n angular distributing web-service",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
-    "test": "node dev.js"
+    "start": "node app.js"
   },
   "engines": {
     "node": ">=6"
