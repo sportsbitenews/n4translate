@@ -14,10 +14,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const env = process.argv[2] || 'dev';
 // console.log(process.argv);
 
-if(env === 'prod') {
-  console.log('static file hosting');
-  app.use('/', express.static(path.resolve(__dirname, '../client/dist')));
-}
+// if(env === 'prod') {
+//   console.log('static file hosting');
+//   app.use('/', express.static(path.resolve(__dirname, '../client/dist')));
+// }
 
 const db = require('./modules/service').getDb();
 const bootstrap = require('./modules/bootstrap');
