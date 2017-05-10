@@ -1,7 +1,5 @@
 {
   "crypto": {
-    "salt": "-- INSERT SEED --",
     "algorithm": "sha256"
-  },
-  "jwt_secret": "secret"
+  }
 }

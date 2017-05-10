@@ -21,6 +21,7 @@ const project = (user) => {
 
 const create = _.curry((db, user) => {
   user.password = Auth.hash(user.password);
+  console.log(user);
   return storage.insert(db, COLLECTION_NAME, user);
 });
 

@@ -14,13 +14,17 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // app.use('/', express.static(path.resolve(__dirname, '../client/dist')));
 
 const db = require('./modules/service').getDb();
+const bootstrap = require('./modules/bootstrap');
 
-db.loadDatabase({}, () => {
-  require('./modules/bootstrap')(db);
+bootstrap.ensureHashSecrets()
+.then(() => {
+  db.loadDatabase({}, () => {
+    bootstrap.insertDefaultUser(db);
 
-  app.use(require('./api/auth'));
-  app.use(require('./api/user'));
-  app.use(require('./api/register'));
+    app.use(require('./api/auth'));
+    app.use(require('./api/user'));
+    app.use(require('./api/register'));
+  });
 });
 
 const server = require('http').Server(app);

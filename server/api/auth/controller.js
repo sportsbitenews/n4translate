@@ -3,7 +3,7 @@ const expressJwt     = require('express-jwt');
 const crypto         = require('crypto');
 const _              = require('lodash');
 
-const config         = require('../../config.json');
+const secrets         = require('../../modules/secrets.js');
 
 const User           = require('../user/controller');
 const Auth           = require('./service');
@@ -17,7 +17,7 @@ const authenticate = ({ email, password }) => {
     });
 };
 
-const check = expressJwt({ secret: config.jwt_secret });
+const check = expressJwt({ secret: secrets.getJWT() });
 
 module.exports = {
   authenticate,

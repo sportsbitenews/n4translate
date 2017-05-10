@@ -1,21 +1,48 @@
 'use strict';
-const User = require('../api/user/service');
+const Promise  = require('bluebird')
+const crypto    = require('crypto');
+const util      = require('./util');
 
-module.exports = (db) => {
-  const insertDefaultUser = () => {
-    User.getAll(db)
-    .then(users => users.length > 0)
-    .then((hasUsers) => {
-      if(hasUsers === false) {
-        return User.create(db, {
-          email: 'andre@g.com',
-          password: '1234',
-          admin: true
-        });
-      }
-    })
-    .catch(console.log);
-  };
+const config    = require('../config.json');
+const User      = require('../api/user/service');
 
-  insertDefaultUser();
-}
+const createHash = () => {
+  return crypto.randomBytes(64).toString('hex');
+};
+
+const ensureHashSecrets = () => {
+  let filepath = `${__dirname}/../repository/secrets.json`;
+
+  return new Promise((resolve, reject) => {
+    if(util.exists(filepath)) {
+      resolve(true);
+    } else {
+      return util.writeJson(filepath, {
+        salt: createHash(),
+        jwt_secret: createHash()
+      })
+      .then(() => resolve(true))
+      .catch(err => reject(err));
+    }
+  });
+};
+
+const insertDefaultUser = (db) => {
+  return User.getAll(db)
+  .then(users => users.length > 0)
+  .then((hasUsers) => {
+    if(hasUsers === false) {
+      return User.create(db, {
+        email: 'andre@g.com',
+        password: '1234',
+        admin: true
+      });
+    }
+  })
+  .catch(console.log);
+};
+
+module.exports = {
+  ensureHashSecrets,
+  insertDefaultUser
+};
