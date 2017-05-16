@@ -24,13 +24,16 @@
 
     <!-- <pre>{{ property | json }}</pre> -->
     <md-card-content fxLayout="column" style="margin-top: 8px;">
-      <!-- <md-input-container fxFlex>
-        <textarea mdInput [(ngModel)]="property.value" placeholder="Translation reference" rows="2" disabled></textarea>
-      </md-input-container> -->
-
       <md-input-container fxFlex *ngIf="property.target">
-        <textarea mdInput [(ngModel)]="property.target.value" placeholder="Translation" rows="2" (change)="save(property.target)"></textarea>
+        <textarea mdInput
+          [(ngModel)]="property.target.value"
+          placeholder="Translation"
+          rows="2"
+          (change)="save(property.target)">
+        </textarea>
       </md-input-container>
+
+      <!-- (focus)="focused(property)" -->
 
       <button md-raised-button md-icon-button (click)="save(property.target)" style="margin-right: 12px;">
         <md-icon>save</md-icon>

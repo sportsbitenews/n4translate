@@ -71,6 +71,30 @@ const appendTranslationToProject = ({ $loki, translation }) => {
   });
 };
 
+const removeTranslationFromProject = ({ $loki, translation }) => {
+  return storage.loadCollection(db, COLLECTION_NAME)
+  .then((collection) => {
+    let project = findProjectByCollection(collection, { $loki });
+
+    if(project) {
+      let translations = _.get(project, 'translations', []);
+
+      let filename = _.get(translation, 'filename');
+      if(filename) {
+        let index = _.findIndex(translations, { filename });
+        if(index > -1) {
+          translations.splice(index, 1);
+          _.set(project, 'translations', translations);
+          collection.update(project);
+          db.saveDatabase();
+        }
+      }
+    }
+
+    return project;
+  });
+};
+
 const setReflangOfProject = ({ $loki, reflang }) => {
   return storage.loadCollection(db, COLLECTION_NAME)
   .then((collection) => {
@@ -94,5 +118,6 @@ module.exports = {
   appendTranslationToProject,
   getProjects,
   importTranslationToProject,
+  removeTranslationFromProject,
   setReflangOfProject
 };

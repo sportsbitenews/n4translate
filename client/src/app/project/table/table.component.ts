@@ -86,6 +86,7 @@ export class ProjectTableComponent implements OnDestroy, OnInit {
 
       if(target) {
         property.target = target;
+        // property.origin = cloneDeep(target)
       }
 
       return property;
@@ -95,12 +96,21 @@ export class ProjectTableComponent implements OnDestroy, OnInit {
   save(entity) {
     this.projectService.saveTranslationProperty(this.translation, entity)
       .subscribe((res: any) => {
-        console.log(res);
         this.projectService.add(entity, this.properties);
         this.updateList();
       }, (err) => {
         console.log(err);
       });
+  }
+
+  focused(entity: any) {
+    if(this.entityHasChanged(entity)) {
+      this.save(entity);
+    }
+  }
+
+  private entityHasChanged(property: any): boolean {
+    return property.origin.value !== property.target.value;
   }
 
   getFilteredProperties(): any[] {

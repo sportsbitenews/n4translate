@@ -137,4 +137,19 @@ router.post('/api/translation/property/save', Auth.check, (req, res) => {
     });
 });
 
+router.post('/api/translation/remove', Auth.check, (req, res) => {
+  Project.removeTranslation(req.body.translation)
+    .then(() => {
+      return Register.removeTranslationFromProject(req.body);
+    })
+    .then((project) => {
+      // console.log(project);
+      res.json(project);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(404).send();
+    });
+});
+
 module.exports = router;

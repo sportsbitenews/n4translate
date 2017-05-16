@@ -10,7 +10,7 @@ import {UploadFileService} from '../../shared/services/upload-file.service';
 import {Subscription} from 'rxjs/Subscription';
 import {Observable} from 'rxjs/Observable';
 
-import {find, findIndex, first, get, isString, has, last, map, trim, set} from "lodash";
+import {find, findIndex, first, get, isString, has, last, map, pick, trim, set} from "lodash";
 
 import {ImportTranslationDialogComponent} from '../import-translation-dialog/import-translation-dialog.component';
 import {environment} from '../../../environments/environment';
@@ -212,6 +212,23 @@ export class DetailsComponent implements OnDestroy, OnInit {
             // console.log(properties);
           });
       });
+  }
+
+  remove(translation: any) {
+    this.projectService.removeTranslation({ translation, $loki: this.project.$loki })
+      .subscribe(
+        (project) => {
+          console.log('project', project);
+
+          this.project = project;
+
+          this.projectService.updateProject(this.project);
+
+          let translation = get(this.project, 'translations', []);
+          this.selectTranslation(last(translation));
+        },
+        (err) => console.log(err)
+      );
   }
 
 }

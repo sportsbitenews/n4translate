@@ -179,6 +179,13 @@ export class ProjectService {
       .catch(this.handleError);
   }
 
+  removeTranslation(options: any): Observable<any> {
+    return this.authHttp
+      .post(`${environment.apiUrl}/api/translation/remove`, options)
+      .map(this.extractData)
+      .catch(this.handleError);
+  }
+
   saveTranslationProperty(translation, property): Observable<any> {
     let body = assign({}, translation, { property });
 

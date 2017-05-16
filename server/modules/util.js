@@ -14,6 +14,10 @@ const readJSON = (filepath) => {
   return fs.readJsonAsync(filepath);
 };
 
+const removeFile = (filepath) => {
+  return fs.removeAsync(filepath);
+};
+
 const outputJson = (filepath, data) => {
   return fs.outputJsonAsync(filepath, data);
 };
@@ -32,5 +36,6 @@ module.exports = {
   outputJson,
   readFile,
   readJSON,
+  removeFile,
   writeJson
 }

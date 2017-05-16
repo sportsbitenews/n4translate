@@ -40,10 +40,16 @@ const saveTranslation = (translation) => {
   return util.writeJson(filepath, translation.content);
 }
 
+const removeTranslation = (translation) => {
+  let filepath = getFilepath(translation.filename);
+  return util.removeFile(filepath);
+}
+
 module.exports = {
+  createTranslation,
   getJSON,
   model,
+  removeTranslation,
   saveEntity,
-  createTranslation,
-  saveTranslation
+  saveTranslation,
 };
