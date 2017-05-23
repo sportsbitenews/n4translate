@@ -86,7 +86,11 @@ export class ProjectTableComponent implements OnDestroy, OnInit {
 
       if(target) {
         property.target = target;
-        // property.origin = cloneDeep(target)
+      } else {
+        property.target = {
+          key: property.key,
+          value: ''
+        }
       }
 
       return property;
