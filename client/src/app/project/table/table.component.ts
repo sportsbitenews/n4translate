@@ -120,7 +120,7 @@ export class ProjectTableComponent implements OnDestroy, OnInit {
   getFilteredProperties(): any[] {
     let needle = toUpper(this.needle);
     return filter(this.list, (property: any) => {
-        return includes(property.key, needle);
+        return includes(toUpper(property.key), needle);
       });
   }
 
