@@ -29,15 +29,23 @@
           [(ngModel)]="property.target.value"
           placeholder="Translation"
           rows="2"
-          (change)="save(property.target)">
+          (keydown)="property.status = 'edit'"
+          (change)="save(property.target); property.status = 'loading'">
         </textarea>
       </md-input-container>
+      <p *ngIf="property?.status === 'edit'">editing</p>
+      <p *ngIf="!property.status">saved</p>
 
+      <!--<pre>{{ property | json }}</pre>-->
       <!-- (focus)="focused(property)" -->
 
-      <button md-raised-button md-icon-button (click)="save(property.target)" style="margin-right: 12px;">
+    <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
+      <button md-raised-button md-icon-button (click)="save(property.target); property.status = 'loading'" style="margin-right: 12px;">
         <md-icon>save</md-icon>
       </button>
+      <md-progress-spinner *ngIf="property?.status === 'loading'" mode="indeterminate"></md-progress-spinner>
+    </div>
+
     </md-card-content>
   </md-card>
 

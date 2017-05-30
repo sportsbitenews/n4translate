@@ -32,6 +32,7 @@ export class ProjectTableComponent implements OnDestroy, OnInit {
   loading = true;
   dialogRef;
   needle: string;
+  status: string;
 
   propertyRemovedSubscription: Subscription;
   propertyAddedSubscription: Subscription;
