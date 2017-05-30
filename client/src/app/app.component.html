@@ -3,6 +3,9 @@
 
   <div [hidden]="!loggedIn()">
     <nav class="i18n-toolbar">
+      <h1 fxLayout="column" fxLayoutAlign="center center">
+        <a class="logo">N4Group</a>
+      </h1>
       <ul>
         <li *ngIf="isAdmin()">
           <a md-ripple mdRippleColor="rgba(255, 255, 255, 0.1)" routerLink="/users" routerLinkActive="active">Users</a>
