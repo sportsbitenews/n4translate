@@ -40,6 +40,7 @@ export class ProjectTableComponent implements OnDestroy, OnInit {
 
   loadTranslationSubscription: Subscription;
   translationsLoadedSubscription: Subscription;
+  selectedProjectPropertiesSubscription: Subscription;
 
   constructor(
     public dialog: MdDialog,
@@ -71,14 +72,17 @@ export class ProjectTableComponent implements OnDestroy, OnInit {
 
     this.translationsLoadedSubscription = this.projectService.translationLoadedObservable
     .subscribe((properties) => {
+      // console.log('this.properties', this.properties);
+      // console.log('this.projectService.selectedProjectProperties', this.projectService.selectedProjectProperties);
       this.properties = properties;
       this.updateList();
       this.loading = false;
     });
 
-    setTimeout(() => {
+    this.selectedProjectPropertiesSubscription = this.projectService.selectedProjectPropertiesObservable
+    .subscribe(() => {
       this.updateList();
-    }, 200);
+    });
   }
 
   updateList() {
@@ -195,5 +199,6 @@ export class ProjectTableComponent implements OnDestroy, OnInit {
 
     this.loadTranslationSubscription.unsubscribe();
     this.translationsLoadedSubscription.unsubscribe();
+    this.selectedProjectPropertiesSubscription.unsubscribe();
   }
 }

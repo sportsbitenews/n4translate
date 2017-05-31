@@ -3,8 +3,10 @@ import { Http, Response } from '@angular/http';
 import { AuthHttp } from 'angular2-jwt';
 
 import { Subject }    from 'rxjs/Subject';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subscription }   from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
+
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
@@ -53,6 +55,9 @@ export class ProjectService {
   private translationLoaded = new Subject<any>();
   public translationLoadedObservable;
 
+  private selectedProjectPropertiesSubject = new BehaviorSubject<any>([]);
+  public selectedProjectPropertiesObservable;
+
   private projects;
   public selectedProjectProperties;
 
@@ -64,6 +69,7 @@ export class ProjectService {
 
     this.loadTranslationObservable = this.loadTranslation.asObservable().share();
     this.translationLoadedObservable = this.translationLoaded.asObservable().share();
+    this.selectedProjectPropertiesObservable = this.selectedProjectPropertiesSubject.asObservable().share();
   }
 
   createProject(data): Observable<any> {
@@ -271,6 +277,7 @@ export class ProjectService {
 
   setSelectedProjectProperties(properties) {
     this.selectedProjectProperties = properties;
+    this.selectedProjectPropertiesSubject.next(properties);
     return this.selectedProjectProperties;
   }
 
