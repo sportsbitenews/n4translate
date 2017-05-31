@@ -1,4 +1,16 @@
-md-progress-spinner {
+md-progress-spinner.progress {
   width: 30px;
   height: 30px;
+}
+
+.error {
+  color: #f44336;
+}
+
+snack-bar-container.success {
+  background-color: #32CD32 !important;
+}
+
+snack-bar-container.fail {
+  background-color: #f44336 !important;
 }

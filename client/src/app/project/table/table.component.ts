@@ -1,5 +1,5 @@
-import { Component, Inject, Input, OnInit, OnDestroy, ViewContainerRef } from '@angular/core';
-import { MdDialog, MdDialogConfig, MdDialogRef } from '@angular/material';
+import { Component, Inject, Input, OnInit, OnDestroy, ViewContainerRef, ViewEncapsulation } from '@angular/core';
+import { MdDialog, MdDialogConfig, MdDialogRef, MdSnackBar, MdSnackBarConfig } from '@angular/material';
 
 import { ProjectService } from '../project.service';
 import { UserAgentService } from '../../shared/services/user-agent.service';
@@ -20,7 +20,8 @@ interface Credentials {
   selector: 'i18n-project-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss'],
-  providers: []
+  providers: [],
+  encapsulation: ViewEncapsulation.None //hinzugefügt wegen Bug mit extraClasses von Snackbar
 })
 
 export class ProjectTableComponent implements OnDestroy, OnInit {
@@ -44,7 +45,8 @@ export class ProjectTableComponent implements OnDestroy, OnInit {
     public dialog: MdDialog,
     public viewContainerRef: ViewContainerRef,
     public projectService: ProjectService,
-    public userAgentService: UserAgentService
+    public userAgentService: UserAgentService,
+    public snackBar: MdSnackBar
   ) {
 
   }
@@ -84,6 +86,7 @@ export class ProjectTableComponent implements OnDestroy, OnInit {
 
     this.list = map(cloneDeep(this.projectService.selectedProjectProperties), (property: any) => {
       let target = find(candidates, { key: property.key });
+      property.status = 'saved';
 
       if(target) {
         property.target = target;
@@ -99,13 +102,31 @@ export class ProjectTableComponent implements OnDestroy, OnInit {
   }
 
   save(entity) {
+    entity.status = 'loading';
     this.projectService.saveTranslationProperty(this.translation, entity)
-      .subscribe((res: any) => {
+      .subscribe((res: any) => {setTimeout(() => {
         this.projectService.add(entity, this.properties);
         this.updateList();
+        entity.status = 'saved';
+        this.status='saved';
+        this.openSnackBar('save successful', entity); }, 3000);
       }, (err) => {
         console.log(err);
+        this.openSnackBar('save failed', entity);
+        entity.status = 'failed';
       });
+  }
+
+  openSnackBar(msg, entity) {
+    let config = new MdSnackBarConfig();
+    config.duration = 2000;
+    if(msg == 'save successful') {
+      config.extraClasses = ['success'];
+    }
+    else if (msg == 'save failed') {
+      config.extraClasses = ['fail'];
+    }
+    this.snackBar.open('Translation Key: ' + entity.key, msg, config);
   }
 
   focused(entity: any) {

@@ -30,20 +30,30 @@
           placeholder="Translation"
           rows="2"
           (keydown)="property.status = 'edit'"
-          (change)="save(property.target); property.status = 'loading'">
+          (change)="save(property.target); property.status = 'loading'"
+          [disabled]="property.target.status === 'loading'">
         </textarea>
       </md-input-container>
-      <p *ngIf="property?.status === 'edit'">editing</p>
-      <p *ngIf="!property.status">saved</p>
+      <!--<p *ngIf="property?.status === 'edit'">editing</p>-->
+      <!--<p *ngIf="!property.status">saved</p>-->
 
       <!--<pre>{{ property | json }}</pre>-->
       <!-- (focus)="focused(property)" -->
 
     <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
-      <button md-raised-button md-icon-button (click)="save(property.target); property.status = 'loading'" style="margin-right: 12px;">
-        <md-icon>save</md-icon>
+      <button md-raised-button
+        [disabled]="property.target.status === 'loading'"
+        (click)="save(property.target); property.status = 'loading'"
+        style="margin-right: 12px;">
+        SAVE
       </button>
-      <md-progress-spinner *ngIf="property?.status === 'loading'" mode="indeterminate"></md-progress-spinner>
+      <md-icon *ngIf="property?.status === 'saved'">save</md-icon>
+      <span *ngIf="property?.status === 'saved'">currently saved</span>
+      <md-icon *ngIf="property?.status === 'edit'">mode_edit</md-icon>
+      <span *ngIf="property?.status === 'edit'">editing</span>
+      <md-progress-spinner class="progress" *ngIf="property?.target.status === 'loading'" mode="indeterminate"></md-progress-spinner>
+      <md-icon class="error" *ngIf="property?.target.status === 'failed'">report</md-icon>
+      <span class="error" *ngIf="property?.target.status === 'failed'">failed to save in Backend</span>
     </div>
 
     </md-card-content>
