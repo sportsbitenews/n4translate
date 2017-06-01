@@ -13,6 +13,7 @@ import {Observable} from 'rxjs/Observable';
 import {find, findIndex, first, get, isString, has, last, map, pick, trim, set} from "lodash";
 
 import {ImportTranslationDialogComponent} from '../import-translation-dialog/import-translation-dialog.component';
+import {DeleteTranslationConfirmDialogComponent} from '../delete-translation-confirm-dialog/delete-translation-confirm-dialog.component';
 import {environment} from '../../../environments/environment';
 
 @Component({
@@ -30,6 +31,7 @@ export class DetailsComponent implements OnDestroy, OnInit {
   errorMessage;
 
   importTranslationDialogRef: MdDialogRef<ImportTranslationDialogComponent>
+  deleteTranslationConfirmDialogRef: MdDialogRef<DeleteTranslationConfirmDialogComponent>
 
   private subs: { [x: string]: Subscription } = {};
   private uploadUrl: string = `${environment.apiUrl}/api/translation/import`;
@@ -229,6 +231,20 @@ export class DetailsComponent implements OnDestroy, OnInit {
         },
         (err) => console.log(err)
       );
+  }
+
+  openDeleteTranslationConfirmDialog() {
+    let config = new MdDialogConfig();
+    config.viewContainerRef = this.viewContainerRef;
+
+    this.deleteTranslationConfirmDialogRef = this.dialog.open(DeleteTranslationConfirmDialogComponent, config);
+    this.deleteTranslationConfirmDialogRef.componentInstance.selectedTranslation = this.selectedTranslation;
+
+    this.deleteTranslationConfirmDialogRef.afterClosed()
+      .subscribe(translation => {
+        console.log('translation', translation);
+        if(translation) {this.remove(translation)}
+      });
   }
 
 }

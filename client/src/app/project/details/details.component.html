@@ -68,7 +68,7 @@
       Export <md-icon>file_download</md-icon>
     </button>
 
-    <button md-raised-button (click)="remove(selectedTranslation)" style="margin-left: 32px;" *ngIf="user.isAdmin()">
+    <button md-raised-button (click)="openDeleteTranslationConfirmDialog()" style="margin-left: 32px;" *ngIf="user.isAdmin()">
       Remove translation <md-icon>delete</md-icon>
     </button>
   </div>

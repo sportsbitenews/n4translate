@@ -26,6 +26,7 @@ import { ProjectsComponent } from './projects/projects.component';
 import { DetailsComponent } from './project/details/details.component';
 import { ProjectDialogComponent } from './projects/project-dialog/project-dialog.component';
 import { ImportTranslationDialogComponent } from './project/import-translation-dialog/import-translation-dialog.component';
+import { DeleteTranslationConfirmDialogComponent } from './project/delete-translation-confirm-dialog/delete-translation-confirm-dialog.component';
 import { UserDialogComponent } from './user/user-dialog/user-dialog.component';
 
 import { UploadFileService } from './shared/services/upload-file.service';
@@ -84,6 +85,7 @@ const appRoutes: Routes = [
     DetailsComponent,
     ProjectDialogComponent,
     ImportTranslationDialogComponent,
+    DeleteTranslationConfirmDialogComponent,
     AuthComponent,
     UserDialogComponent,
     UserProjectsComponent
@@ -102,7 +104,8 @@ const appRoutes: Routes = [
     ImportTranslationDialogComponent,
     PropertyDialog,
     ProjectDialogComponent,
-    UserDialogComponent
+    UserDialogComponent,
+    DeleteTranslationConfirmDialogComponent
   ],
   providers: [
     AuthService,

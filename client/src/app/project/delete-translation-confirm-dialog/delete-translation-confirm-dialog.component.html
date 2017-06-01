@@ -1,0 +1,14 @@
+<md-dialog-actions fxLayoutAlign="end center">
+  <button md-icon-button md-dialog-close>
+    <md-icon>close</md-icon>
+  </button>
+</md-dialog-actions>
+
+<md-dialog-content fxLayout="column" style="margin-bottom: 15px; margin-top: 10px;">
+  <p>Do you really want to remove {{selectedTranslation.lang}} translation?</p>
+</md-dialog-content>
+
+<md-dialog-actions fxLayoutAlign="end center" fxLayoutGap="10px">
+  <button md-raised-button md-dialog-close>Cancel<md-icon>clear</md-icon></button>
+  <button md-raised-button (click)="delete()">Confirm<md-icon>done</md-icon></button>
+</md-dialog-actions>
