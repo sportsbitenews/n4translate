@@ -108,12 +108,12 @@ export class ProjectTableComponent implements OnDestroy, OnInit {
   save(entity) {
     entity.status = 'loading';
     this.projectService.saveTranslationProperty(this.translation, entity)
-      .subscribe((res: any) => {setTimeout(() => {
+      .subscribe((res: any) => {
         this.projectService.add(entity, this.properties);
         this.updateList();
         entity.status = 'saved';
         this.status='saved';
-        this.openSnackBar('save successful', entity); }, 3000);
+        this.openSnackBar('save successful', entity);
       }, (err) => {
         console.log(err);
         this.openSnackBar('save failed', entity);

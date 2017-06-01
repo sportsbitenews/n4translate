@@ -134,10 +134,26 @@ export class ProjectService {
     return find(project.translations, { lang: reflang });
   }
 
+  private emptyValues(json) {
+    let container: any = {};
+
+    forOwn(json, (value, key) => {
+      if(isPlainObject(value)) {
+        set(container, key, this.emptyValues(value));
+      } else {
+        set(container, key, '');
+      }
+    });
+
+    return container;
+  }
+
   appendTranslationToProject(project: any, lang: string, content: any): Observable<any> {
     let translation = cloneDeep(this.getRefTranslationMeta(project));
     translation.filename = `${translation.filename}_${lang}`;
     translation.lang = lang;
+
+    content = this.emptyValues(content);
 
     return this.authHttp
       .post(`${environment.apiUrl}/api/translation/append`, {
