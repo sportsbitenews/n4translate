@@ -5,8 +5,6 @@
     {{ client.meta.created | date['shortDate'] }}
   </md-card-subtitle> -->
 
-  <!-- <pre>{{ client | json }}</pre> -->
-
   <md-card-content fxLayout="row">
 
     <div *ngIf="(client.admin && getUser().email === client.email) || client.admin" fxFlex>
