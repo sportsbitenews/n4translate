@@ -7,8 +7,9 @@
 
   <!-- <pre>{{ client | json }}</pre> -->
 
-  <md-card-content fxLayout="row" fxLayoutAlign="center none">
-    <div style="padding: 16px; padding-top: 32px; padding-left: 16px;" fxFlex>
+  <md-card-content fxLayout="row">
+
+    <div *ngIf="(client.admin && getUser().email === client.email) || client.admin" fxFlex>
       <md-card-subtitle>
         Assign as supervisor:
       </md-card-subtitle>
@@ -20,26 +21,37 @@
       </md-slide-toggle>
     </div>
 
-    <div style="padding: 16px; padding-top: 32px; padding-left: 16px;" *ngIf="!client.admin && getUser().email !== client.email" fxFlex>
-      <md-card-subtitle>
-        Access to projects:
-      </md-card-subtitle>
-      <app-user-projects [client]="client"></app-user-projects>
-    </div>
+    <md-tab-group *ngIf="!client.admin && getUser().email !== client.email">
 
-    <div style="padding: 16px; padding-top: 32px; padding-left: 16px;" *ngIf="!client.admin && getUser().email !== client.email" fxFlex>
-      <md-card-subtitle>
-        Assign new password for user:
-      </md-card-subtitle>
+      <md-tab label="Assign as supervisor" fxFlex>
+        <div fxLayout="row" fxLayoutAlign="start center" style="padding: 16px;">
+          <md-slide-toggle [(ngModel)]="client.admin" [disabled]="getUser().email === client.email" [checked]="client.admin" (change)="setAdmin(client, $event)">
+            <div fxLayout="row" fxLayoutAlign="start center">
+              <span>Supervisor</span>
+              <md-icon style="margin-left: 12px;">supervisor_account</md-icon>
+            </div>
+          </md-slide-toggle>
+        </div>
+      </md-tab>
 
-      <md-input-container>
-        <input [(ngModel)]="client.newPassword" mdInput fxFlex="auto" placeholder="New password">
-      </md-input-container>
+      <md-tab label="Access to projects" fxFlex>
+        <div fxLayout="row" fxLayoutAlign="start center" style="padding: 16px;">
+          <app-user-projects [client]="client"></app-user-projects>
+        </div>
+      </md-tab>
 
-      <button md-raised-button (click)="assignPasswordToClient(client)" [disabled]="!client.newPassword">
-        Assign password <md-icon>save</md-icon>
-      </button>
-    </div>
+      <md-tab label="Assign new password for user" fxFlex>
+        <div fxLayout="row" fxLayoutAlign="start center" style="padding: 16px;">
+          <md-input-container>
+            <input [(ngModel)]="client.newPassword" mdInput fxFlex="auto" placeholder="New password">
+          </md-input-container>
+
+          <button md-raised-button (click)="assignPasswordToClient(client)" [disabled]="!client.newPassword">
+            Assign password <md-icon>save</md-icon>
+          </button>
+        </div>
+      </md-tab>
+    </md-tab-group>
 
     <!-- <pre>{{ client | json }}</pre> -->
   </md-card-content>
