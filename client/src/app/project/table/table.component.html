@@ -13,8 +13,6 @@
     </md-slide-toggle>
   </div>
 
-  <!-- <pre>{{ list | json }}</pre> -->
-
   <md-card *ngFor="let property of getFilteredProperties() | paginate: { itemsPerPage: 20, currentPage: currentPage }; let i = index;" style="margin: 8px;">
     <div fxLayout="row" fxLayoutAlign="start center" style="padding-top: 5px 0;">
       <div style="min-width: 140px; color: rgba(0, 0, 0, 0.38); font-size: 11px;">Translation key:</div>
@@ -26,7 +24,6 @@
       <div>{{ property.value }}</div>
     </div>
 
-    <!-- <pre>{{ property | json }}</pre> -->
     <md-card-content fxLayout="column" style="margin-top: 8px;">
       <md-input-container fxFlex *ngIf="property.target">
         <textarea mdInput
@@ -38,27 +35,22 @@
           [disabled]="property.target.status === 'loading'">
         </textarea>
       </md-input-container>
-      <!--<p *ngIf="property?.status === 'edit'">editing</p>-->
-      <!--<p *ngIf="!property.status">saved</p>-->
 
-      <!--<pre>{{ property | json }}</pre>-->
-      <!-- (focus)="focused(property)" -->
-
-    <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
-      <button md-raised-button
-        [disabled]="property.target.status === 'loading'"
-        (click)="save(property.target); property.status = 'loading'"
-        style="margin-right: 12px;">
-        SAVE
-      </button>
-      <md-icon *ngIf="property?.status === 'saved'">save</md-icon>
-      <p *ngIf="property?.status === 'saved'">currently saved</p>
-      <md-icon *ngIf="property?.status === 'edit'">mode_edit</md-icon>
-      <p *ngIf="property?.status === 'edit'">editing</p>
-      <md-progress-spinner class="progress" *ngIf="property?.target.status === 'loading'" mode="indeterminate"></md-progress-spinner>
-      <md-icon class="error" *ngIf="property?.target.status === 'failed'">report</md-icon>
-      <p class="error" *ngIf="property?.target.status === 'failed'">failed to save in Backend</p>
-    </div>
+      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
+        <button md-raised-button
+          [disabled]="property.target.status === 'loading'"
+          (click)="save(property.target); property.status = 'loading'"
+          style="margin-right: 12px;">
+          SAVE
+        </button>
+        <md-icon *ngIf="property?.status === 'saved'">save</md-icon>
+        <p *ngIf="property?.status === 'saved'">currently saved</p>
+        <md-icon *ngIf="property?.status === 'edit'">mode_edit</md-icon>
+        <p *ngIf="property?.status === 'edit'">editing</p>
+        <md-progress-spinner class="progress" *ngIf="property?.target.status === 'loading'" mode="indeterminate"></md-progress-spinner>
+        <md-icon class="error" *ngIf="property?.target.status === 'failed'">report</md-icon>
+        <p class="error" *ngIf="property?.target.status === 'failed'">failed to save in Backend</p>
+      </div>
 
     </md-card-content>
   </md-card>
