@@ -7,7 +7,7 @@ import { UserAgentService } from '../../shared/services/user-agent.service';
 import { Subscription }   from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
 
-import { cloneDeep, filter, find, includes, map, toUpper } from "lodash";
+import { chain, cloneDeep, filter, find, includes, map, toUpper } from "lodash";
 
 import { PropertyDialog } from './property-dialog.component';
 
@@ -34,6 +34,7 @@ export class ProjectTableComponent implements OnDestroy, OnInit {
   dialogRef;
   needle: string;
   status: string;
+  toggleFilter = false;
 
   propertyRemovedSubscription: Subscription;
   propertyAddedSubscription: Subscription;
@@ -145,9 +146,18 @@ export class ProjectTableComponent implements OnDestroy, OnInit {
 
   getFilteredProperties(): any[] {
     let needle = toUpper(this.needle);
-    return filter(this.list, (property: any) => {
+
+    return chain(this.list)
+      .filter((property: any) => {
+        if(this.toggleFilter && property.status != 'edit') {
+          return property.target.value ===  '';
+        }
+        return true;
+      })
+      .filter((property: any) => {
         return includes(toUpper(property.key), needle);
-      });
+      })
+      .value();
   }
 
   style() {

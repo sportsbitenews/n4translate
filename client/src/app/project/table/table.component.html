@@ -7,6 +7,10 @@
     <md-input-container>
       <input mdInput placeholder="Translation key" [(ngModel)]="needle">
     </md-input-container>
+
+    <md-slide-toggle style="margin-left: 14px;" [(ngModel)]="toggleFilter">
+      Show ONLY non-translated Translations
+    </md-slide-toggle>
   </div>
 
   <!-- <pre>{{ list | json }}</pre> -->
@@ -48,12 +52,12 @@
         SAVE
       </button>
       <md-icon *ngIf="property?.status === 'saved'">save</md-icon>
-      <span *ngIf="property?.status === 'saved'">currently saved</span>
+      <p *ngIf="property?.status === 'saved'">currently saved</p>
       <md-icon *ngIf="property?.status === 'edit'">mode_edit</md-icon>
-      <span *ngIf="property?.status === 'edit'">editing</span>
+      <p *ngIf="property?.status === 'edit'">editing</p>
       <md-progress-spinner class="progress" *ngIf="property?.target.status === 'loading'" mode="indeterminate"></md-progress-spinner>
       <md-icon class="error" *ngIf="property?.target.status === 'failed'">report</md-icon>
-      <span class="error" *ngIf="property?.target.status === 'failed'">failed to save in Backend</span>
+      <p class="error" *ngIf="property?.target.status === 'failed'">failed to save in Backend</p>
     </div>
 
     </md-card-content>
