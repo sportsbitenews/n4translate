@@ -6,38 +6,34 @@
 <!-- <div *ngFor="let project of getAvailableProjects() | async">
   <pre>{{ project | json }}</pre>
 </div> -->
+<md-tab-group>
+  <md-tab label="Assigned Projects" fxFlex>
+    <md-list [hidden]="(getClientProjects() | async)?.length === 0">
+      <md-list-item *ngFor="let project of getClientProjects() | async">
+        <div style="min-width: 175px;">{{ project.name }}</div>
+        <button md-icon-button (click)="removeProject(project)">
+          <md-icon>close</md-icon>
+        </button>
+      </md-list-item>
+    </md-list>
 
-<md-list [hidden]="(getClientProjects() | async)?.length === 0">
-  <md-list-item *ngFor="let project of getClientProjects() | async">
-    <div style="min-width: 175px;">{{ project.name }}</div>
-    <button md-icon-button (click)="removeProject(project)">
-      <md-icon>close</md-icon>
-    </button>
-  </md-list-item>
-</md-list>
+    <div [hidden]="(getClientProjects() | async)?.length > 0">
+      User has no access to any projects!
+    </div>
+  </md-tab>
 
-<div [hidden]="(getClientProjects() | async)?.length > 0">
-  User has no access to any projects!
-</div>
+  <md-tab label="Available Projects" fxFlex [disabled]="(getAvailableProjects() | async)?.length === 0">
+    <div style="margin-top: 16px; padding-left: 16px;">
+      <md-list>
+        <md-list-item *ngFor="let project of getAvailableProjects() | async">
+          <button md-button (click)="addProject(project)">{{ project.name }}</button>
+        </md-list-item>
+      </md-list>
+    </div>
 
-<div [hidden]="(getAvailableProjects() | async)?.length === 0" style="margin-top: 16px; padding-left: 16px;">
-  <md-input-container>
-    <input mdInput [(ngModel)]="selectedProject" placeholder="Project" [mdAutocomplete]="auto">
-  </md-input-container>
+    <div [hidden]="(getAvailableProjects() | async)?.length > 0">
+      There are no available projects!
+    </div>
+  </md-tab>
 
-  <md-autocomplete #auto="mdAutocomplete" [displayWith]="displayFn">
-     <md-option *ngFor="let project of getAvailableProjects() | async" [value]="project">
-        {{ project.name }}
-     </md-option>
-  </md-autocomplete>
-
-  <button md-icon-button (click)="addProject()" [disabled]="!selectedProject">
-    <md-icon>add</md-icon>
-  </button>
-</div>
-
-<div style="margin-top: 16px; padding-left: 8px;">
-  <button md-raised-button (click)="saveProjects()" style="margin-left: 10px;">
-    Save project changes <md-icon>save</md-icon>
-  </button>
-</div>
+</md-tab-group>

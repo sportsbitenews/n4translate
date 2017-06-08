@@ -1,7 +1,7 @@
 import { User } from './user.interface';
 
-import { Component, OnInit, ViewContainerRef } from '@angular/core';
-import { MdDialog, MdDialogConfig, MdDialogRef } from '@angular/material';
+import { Component, OnInit, ViewContainerRef, ViewEncapsulation } from '@angular/core';
+import { MdDialog, MdDialogConfig, MdDialogRef, MdSnackBar, MdSnackBarConfig } from '@angular/material';
 
 import { UserService } from './user.service';
 
@@ -12,7 +12,8 @@ import { UserDialogComponent } from './user-dialog/user-dialog.component';
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
-  styleUrls: ['./user.component.scss']
+  styleUrls: ['./user.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class UserComponent implements OnInit {
 
@@ -22,7 +23,8 @@ export class UserComponent implements OnInit {
   constructor(
     public dialog: MdDialog,
     public viewContainerRef: ViewContainerRef,
-    public user: UserService
+    public user: UserService,
+    public snackBar: MdSnackBar
   ) {
 
   }
@@ -56,9 +58,23 @@ export class UserComponent implements OnInit {
     this.user.assignPasswordToClient(client)
       .subscribe((res: any) => {
         console.log(res);
+        this.openSnackBar('successful');
       }, (err) => {
         console.log(err);
+        this.openSnackBar('failed');
       });
+  }
+
+  openSnackBar(msg) {
+    let config = new MdSnackBarConfig();
+    config.duration = 2000;
+    if(msg == 'successful') {
+      config.extraClasses = ['success'];
+    }
+    else if (msg == 'failed') {
+      config.extraClasses = ['fail'];
+    }
+    this.snackBar.open('Assign Password: ', msg, config);
   }
 
   openCreateDialog() {

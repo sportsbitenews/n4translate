@@ -48,10 +48,11 @@ export class UserProjectsComponent implements OnInit {
     return project ? project.name : '';
   }
 
-  addProject() {
-    if(this.selectedProject) {
-      this.client.projects.push(this.selectedProject.$loki);
+  addProject(project: any) {
+    if(project) {
+      this.client.projects.push(project.$loki);
     }
+    this.saveProjects();
   }
 
   removeProject(project: any) {
@@ -60,6 +61,7 @@ export class UserProjectsComponent implements OnInit {
         return $loki === project.$loki;
       });
     }
+    this.saveProjects();
   }
 
   saveProjects() {
@@ -70,4 +72,5 @@ export class UserProjectsComponent implements OnInit {
         console.log(err);
       });
   }
+
 }
