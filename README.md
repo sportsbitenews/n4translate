@@ -1,11 +1,11 @@
 # n4translate
-i18n angular distributing web service
+Web application for managing i18n translations of an Angular application.
 
 # Client configuration
-## [Assing production apiUrl into production environment](https://github.com/n4group/n4translate/blob/master/client/src/environments/environment.prod.ts)
+## [Setting production apiUrl into production environment](https://github.com/n4group/n4translate/blob/master/client/src/environments/environment.prod.ts)
 
 # Server configuration
-## [Insert default user into DB:](https://github.com/n4group/n4translate/tree/master/server)
+## [Insert default user into DB](https://github.com/n4group/n4translate/tree/master/server)
 Create a file 'default.user.json' with content similar to 'default.user.example.json', so a initial user can be created on an initial deploy.
 
 # Deployment
