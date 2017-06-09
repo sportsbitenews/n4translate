@@ -6,6 +6,8 @@ import { UserService } from '../../user/user.service';
 import { Subscription }   from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
 
+import { includes } from 'lodash';
+
 @Component({
   selector: 'app-user-dialog',
   templateUrl: './user-dialog.component.html',
@@ -14,6 +16,7 @@ import { Observable } from 'rxjs/Observable';
 export class UserDialogComponent implements OnInit {
 
   client: { email: string };
+  checkUserExist = false;
 
   constructor(
     public dialogRef: MdDialogRef<UserDialogComponent>,
@@ -23,11 +26,27 @@ export class UserDialogComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.checkUserExist = false;
+  }
 
+  checkExistingUsers() {
+    this.checkUserExist = false;
+
+    let userEmails = this.userService
+      .getUsers()
+      .map(user => user.email);
+
+    this.checkUserExist = includes(userEmails, this.client.email);
   }
 
   create() {
-    this.dialogRef.close(this.client);
+    if(this.checkUserExist == false) {
+      this.dialogRef.close(this.client);
+    }
+  }
+
+  clearCheckUser() {
+    this.checkUserExist = false;
   }
 
 }

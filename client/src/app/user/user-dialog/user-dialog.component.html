@@ -6,10 +6,25 @@
 
 <md-dialog-content fxLayout="column" style="min-width: 600px;">
   <md-input-container>
-    <input [(ngModel)]="client.email" mdInput fxFlex="auto" placeholder="Email">
+    <input name="email" [(ngModel)]="client.email" #email="ngModel" mdInput fxFlex="auto" placeholder="Email"
+      pattern="^[a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,15})$" required
+      (keydown)="clearCheckUser()">
+      <!--before pattern (EMAIL_REGEX), the "email"-validator was used-->
+
+    <md-hint *ngIf="email.dirty || email.touched" [hidden]="email.pristine || email.valid" style="color: #f44336">
+      <span [hidden]="email.errors?.required || !email.errors?.pattern">This doesn't appear to be a valid email address.</span>
+      <span [hidden]="!email.errors?.required">Email is required.</span>
+    </md-hint>
   </md-input-container>
 </md-dialog-content>
 
 <md-dialog-actions fxLayoutAlign="end center">
-  <button md-raised-button (click)="create()">Create</button>
+  <button md-raised-button (click)="checkExistingUsers(); create()" [disabled]="!email.valid">Create</button>
 </md-dialog-actions>
+
+<div *ngIf="checkUserExist === true" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+  <md-icon style="color: #f44336;">warning</md-icon>
+  <span style="color: #f44336; font-size: 14px;">
+    A User with this email already exist!
+  </span>
+</div>
