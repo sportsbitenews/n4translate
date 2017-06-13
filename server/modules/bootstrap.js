@@ -27,18 +27,20 @@ const ensureHashSecrets = () => {
   });
 };
 
-const insertDefaultUser = (db) => {
-  return User.getAll(db)
+const insertDefaultUser = () => {
+  return User.getAll()
   .then(users => users.length > 0)
   .then((hasUsers) => {
     if(hasUsers === false) {
-      return User.create(db, require('../default.user.json'));
+      return User.create(require('../default.user.json'));
     }
   })
   .catch(console.log);
 };
 
 module.exports = {
-  ensureHashSecrets,
-  insertDefaultUser
+  initiate: () => {
+    return ensureHashSecrets()
+      .then(() => insertDefaultUser());
+  }
 };

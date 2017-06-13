@@ -4,6 +4,7 @@ import { Component, OnInit, ViewContainerRef, ViewEncapsulation } from '@angular
 import { MdDialog, MdDialogConfig, MdDialogRef, MdSnackBar, MdSnackBarConfig } from '@angular/material';
 
 import { UserService } from './user.service';
+import { ProjectService } from '../project/project.service';
 
 import { Observable } from 'rxjs/Observable';
 
@@ -17,6 +18,7 @@ import { UserDialogComponent } from './user-dialog/user-dialog.component';
 })
 export class UserComponent implements OnInit {
 
+  public ready: boolean = false;
   public viewer: User;
   private dialogRef: MdDialogRef<UserDialogComponent>;
 
@@ -24,13 +26,19 @@ export class UserComponent implements OnInit {
     public dialog: MdDialog,
     public viewContainerRef: ViewContainerRef,
     public user: UserService,
-    public snackBar: MdSnackBar
+    public snackBar: MdSnackBar,
+    public projectService: ProjectService
   ) {
 
   }
 
   ngOnInit() {
-
+    this.projectService.getProjects()
+      .subscribe((projects: any[]) => {
+        this.ready = true;
+      }, (err) => {
+        console.log(err);
+      });
   }
 
   isAdmin(): boolean {

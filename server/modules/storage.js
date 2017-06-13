@@ -16,15 +16,6 @@ const loadCollection = (db, name) => {
   });
 };
 
-const insert = (db, name, item) => {
-  return loadCollection(db, name)
-    .then((collection) => {
-      const data = collection.insert(item);
-      db.saveDatabase();
-      return item;
-    });
-};
-
 const find = (db, name, { $loki }) => {
   return loadCollection(db, name)
     .then((collection) => {
@@ -51,10 +42,23 @@ const findBy = (db, name, needle) => {
     });
 };
 
+const getAll = (db, name) => {
+  return loadCollection(db, name)
+    .then(collection => collection.data);
+};
+
+const insert = (db, name, item) => {
+  return loadCollection(db, name)
+    .then((collection) => {
+      const data = collection.insert(item);
+      db.saveDatabase();
+      return item;
+    });
+};
+
 const update = (db, name, item) => {
   return loadCollection(db, name)
     .then((collection) => {
-      // console.log('update', item);
       collection.update(item);
       db.saveDatabase();
 
@@ -65,7 +69,8 @@ const update = (db, name, item) => {
 module.exports = {
   find,
   findBy,
+  getAll,
   insert,
   loadCollection,
-  update
+  update,
 }

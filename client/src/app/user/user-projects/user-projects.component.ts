@@ -11,7 +11,7 @@ import { remove } from "lodash";
 @Component({
   selector: 'app-user-projects',
   templateUrl: './user-projects.component.html',
-  styleUrls: ['./user-projects.component.css']
+  styleUrls: ['./user-projects.component.scss']
 })
 export class UserProjectsComponent implements OnInit {
   @Input() client: User;

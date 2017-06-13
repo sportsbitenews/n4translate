@@ -3,20 +3,26 @@ const _         = require('lodash');
 const Promise   = require('bluebird')
 const fs        = require('fs');
 
-const storage   = require('../../modules/storage.js');
-const db        = require('../../modules/service.js').getDb();
+const service   = require('../../modules/service');
+const storage   = require('../../modules/storage');
 
 const COLLECTION_NAME = 'projects';
 
 const getProjects = () => {
-  return storage.loadCollection(db, COLLECTION_NAME)
-  .then((collection) => {
-    return collection.data;
-  });
+  return service.getDb()
+    .then((db) => {
+      return storage.loadCollection(db, COLLECTION_NAME);
+    })
+    .then((collection) => {
+      return collection.data;
+    });
 };
 
 const addProject = (project) => {
-  return storage.insert(db, COLLECTION_NAME, project);
+  return service.getDb()
+    .then((db) => {
+      return storage.insert(db, COLLECTION_NAME, project);
+    });
 };
 
 const findProjectByCollection = (collection, { $loki }) => {
@@ -30,87 +36,107 @@ const findProjectByCollection = (collection, { $loki }) => {
 };
 
 const importTranslationToProject = ({ $loki, reflang }, translation) => {
-  return storage.loadCollection(db, COLLECTION_NAME)
-  .then((collection) => {
-    let project = findProjectByCollection(collection, { $loki });
+  let db;
+  return service.getDb()
+    .then((dbInstance) => {
+      db = dbInstance;
+      return storage.loadCollection(db, COLLECTION_NAME);
+    })
+    .then((collection) => {
+      let project = findProjectByCollection(collection, { $loki });
 
-    if(project) {
-      let translations = _.get(project, 'translations', []);
+      if(project) {
+        let translations = _.get(project, 'translations', []);
 
-      translations.push(translation);
-      _.set(project, 'translations', translations);
+        translations.push(translation);
+        _.set(project, 'translations', translations);
 
-      if(reflang) {
-        _.set(project, 'reflang', reflang);
+        if(reflang) {
+          _.set(project, 'reflang', reflang);
+        }
+
+        collection.update(project);
+        db.saveDatabase();
       }
 
-      collection.update(project);
-      db.saveDatabase();
-    }
-
-    return project;
-  });
+      return project;
+    });
 };
 
 const appendTranslationToProject = ({ $loki, translation }) => {
-  return storage.loadCollection(db, COLLECTION_NAME)
-  .then((collection) => {
-    let project = findProjectByCollection(collection, { $loki });
+  let db;
+  return service.getDb()
+    .then((dbInstance) => {
+      db = dbInstance;
+      return storage.loadCollection(db, COLLECTION_NAME)
+    })
+    .then((collection) => {
+      let project = findProjectByCollection(collection, { $loki });
 
-    if(project) {
-      let translations = _.get(project, 'translations', []);
+      if(project) {
+        let translations = _.get(project, 'translations', []);
 
-      translations.push(translation);
-      _.set(project, 'translations', translations);
+        translations.push(translation);
+        _.set(project, 'translations', translations);
 
-      collection.update(project);
-      db.saveDatabase();
-    }
+        collection.update(project);
+        db.saveDatabase();
+      }
 
-    return project;
-  });
+      return project;
+    });
 };
 
 const removeTranslationFromProject = ({ $loki, translation }) => {
-  return storage.loadCollection(db, COLLECTION_NAME)
-  .then((collection) => {
-    let project = findProjectByCollection(collection, { $loki });
+  let db;
+  return service.getDb()
+    .then((dbInstance) => {
+      db = dbInstance;
+      return storage.loadCollection(db, COLLECTION_NAME)
+    })
+    .then((collection) => {
+      let project = findProjectByCollection(collection, { $loki });
 
-    if(project) {
-      let translations = _.get(project, 'translations', []);
+      if(project) {
+        let translations = _.get(project, 'translations', []);
 
-      let filename = _.get(translation, 'filename');
-      if(filename) {
-        let index = _.findIndex(translations, { filename });
-        if(index > -1) {
-          translations.splice(index, 1);
-          _.set(project, 'translations', translations);
-          collection.update(project);
-          db.saveDatabase();
+        let filename = _.get(translation, 'filename');
+        if(filename) {
+          let index = _.findIndex(translations, { filename });
+          if(index > -1) {
+            translations.splice(index, 1);
+            _.set(project, 'translations', translations);
+            collection.update(project);
+            db.saveDatabase();
+          }
         }
       }
-    }
 
-    return project;
-  });
+      return project;
+    });
 };
 
 const setReflangOfProject = ({ $loki, reflang }) => {
-  return storage.loadCollection(db, COLLECTION_NAME)
-  .then((collection) => {
-    let project = findProjectByCollection(collection, { $loki });
+  let db;
+  return service.getDb()
+    .then((dbInstance) => {
+      db = dbInstance;
+      return storage.loadCollection(db, COLLECTION_NAME)
+    })
+    .then((collection) => {
+      let project = findProjectByCollection(collection, { $loki });
 
-    if(project) {
-      let translations = _.get(project, 'translations', []);
+      if(project) {
+        let translations = _.get(project, 'translations', []);
 
-      _.set(project, 'reflang', reflang);
+        _.set(project, 'reflang', reflang);
 
-      collection.update(project);
-      db.saveDatabase();
-    }
+        collection.update(project);
+        db.saveDatabase();
+      }
 
-    return project;
-  });
+      return project;
+    });
 };
 
 module.exports = {
