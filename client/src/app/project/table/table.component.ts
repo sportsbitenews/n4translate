@@ -185,7 +185,9 @@ export class ProjectTableComponent implements OnDestroy, OnInit {
         return true;
       })
       .filter((property: any) => {
-        return includes(toUpper(property.key), needle);
+        return includes(toUpper(property.key), needle) ||
+          includes(toUpper(property.value), needle) ||
+          includes(toUpper(property.target.value), needle);
       })
       .value();
   }
