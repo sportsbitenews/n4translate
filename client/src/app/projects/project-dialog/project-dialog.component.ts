@@ -41,6 +41,8 @@ export class ProjectDialogComponent implements OnInit {
     let projectNames = this.projects.map(project => project.name);
 
     this.checkProjectExist = includes(projectNames, this.project.name);
+
+    this.create();
   }
 
   create() {

@@ -11,7 +11,7 @@
 </md-dialog-content>
 
 <md-dialog-actions fxLayoutAlign="end center">
-  <button md-raised-button (click)="checkExistingProjects(); create()" [disabled]="!project.name">Create</button>
+  <button md-raised-button (click)="checkExistingProjects();" [disabled]="!project.name">Create</button>
 </md-dialog-actions>
 
 <div *ngIf="checkProjectExist === true" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">

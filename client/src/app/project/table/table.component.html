@@ -30,6 +30,7 @@
           [(ngModel)]="property.target.value"
           placeholder="Translation"
           rows="2"
+          (keyup)="checkVariablesFromTranslationUnchanged(property.target, property)"
           (keydown)="property.status = 'edit'"
           (change)="save(property.target); property.status = 'loading'"
           [disabled]="property.target.status === 'loading'">
@@ -50,6 +51,7 @@
         <md-progress-spinner class="progress" *ngIf="property?.target.status === 'loading'" mode="indeterminate"></md-progress-spinner>
         <md-icon class="error" *ngIf="property?.target.status === 'failed'">report</md-icon>
         <p class="error" *ngIf="property?.target.status === 'failed'">failed to save in Backend</p>
+        <span class="error" *ngIf="!checkVariablesFromTranslationUnchanged(property.target, property)">Variables in Translation changed!</span>
       </div>
 
     </md-card-content>

@@ -19,7 +19,7 @@
 </md-dialog-content>
 
 <md-dialog-actions fxLayoutAlign="end center">
-  <button md-raised-button (click)="checkExistingUsers(); create()" [disabled]="!email.valid">Create</button>
+  <button md-raised-button (click)="checkExistingUsers()" [disabled]="!email.valid">Create</button>
 </md-dialog-actions>
 
 <div *ngIf="checkUserExist === true" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">

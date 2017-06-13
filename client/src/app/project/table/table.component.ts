@@ -35,6 +35,8 @@ export class ProjectTableComponent implements OnDestroy, OnInit {
   needle: string;
   status: string;
   toggleFilter = false;
+  variablesFromTranslation = [];
+  beforeEdit = [];
 
   propertyRemovedSubscription: Subscription;
   propertyAddedSubscription: Subscription;
@@ -120,6 +122,34 @@ export class ProjectTableComponent implements OnDestroy, OnInit {
         this.openSnackBar('save failed', entity);
         entity.status = 'failed';
       });
+  }
+
+  loadVariablesFromTranslationInList(entity) {
+    let regexp = /{{\s*[\w\.]+\s*}}/g;
+    let variable;
+    let variablesList = [];
+    while (variable = regexp.exec(entity.value)) {
+      variablesList.push(variable[0]);
+    }
+    return variablesList;
+  }
+
+  checkVariablesFromTranslationUnchanged(entity, property) {
+    if(entity.key === property.key) {
+      this.beforeEdit = this.loadVariablesFromTranslationInList(property);
+    }
+    this.variablesFromTranslation = this.loadVariablesFromTranslationInList(entity);
+
+    if(this.beforeEdit.length !== this.variablesFromTranslation.length) {
+      return false;
+    }
+
+    for(var i = this.beforeEdit.length; i--;) {
+      if(this.beforeEdit[i] !== this.variablesFromTranslation[i]) {
+        return false;
+      }
+    }
+    return true;
   }
 
   openSnackBar(msg, entity) {

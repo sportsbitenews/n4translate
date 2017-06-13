@@ -37,6 +37,8 @@ export class UserDialogComponent implements OnInit {
       .map(user => user.email);
 
     this.checkUserExist = includes(userEmails, this.client.email);
+
+    this.create();
   }
 
   create() {
