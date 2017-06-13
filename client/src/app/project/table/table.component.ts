@@ -191,7 +191,7 @@ export class ProjectTableComponent implements OnDestroy, OnInit {
       })
       .value();
   }
-
+  
   style() {
 		let style = {};
 
