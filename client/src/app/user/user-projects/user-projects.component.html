@@ -2,7 +2,7 @@
   <md-card fxFlex>
     <md-card-title>Assigned Projects</md-card-title>
     <md-card-content>
-      <md-list [hidden]="(getClientProjects() | async)?.length === 0">
+      <md-list [hidden]="(getClientProjects() | async)?.length === 0" class="i18n-list-item">
         <md-list-item *ngFor="let project of getClientProjects() | async" (click)="removeProject(project)">
           <div class="i18n-rippled-list-item" md-ripple fxLayoutAlign="start center">
             {{ project.name }}
@@ -21,7 +21,7 @@
     <md-card-title>Available Projects</md-card-title>
     <md-card-content>
       <md-list>
-        <md-list-item *ngFor="let project of getAvailableProjects() | async" (click)="addProject(project)">
+        <md-list-item *ngFor="let project of getAvailableProjects() | async" (click)="addProject(project)" class="i18n-list-item">
           <div class="i18n-rippled-list-item" md-ripple fxLayoutAlign="start center">
             {{ project.name }}
           </div>

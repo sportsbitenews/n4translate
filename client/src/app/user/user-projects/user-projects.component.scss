@@ -1,9 +1,9 @@
+.i18n-list-item:hover {
+  cursor: pointer;
+}
+
 .i18n-rippled-list-item {
   height: 100%;
   width: 100%;
-  min-width: 175px;
-
-  :hover {
-    cursor: pointer;
-  }
+  min-width: 164px;
 }
