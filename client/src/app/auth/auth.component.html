@@ -9,7 +9,7 @@
           #email="ngModel"
           placeholder="Email"
           autocomplete="off"
-          pattern="^[a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,15})$"
+          pattern="^[a-zA-Z0-9]+(\.[_a-zA-Z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,15})$"
           required>
 
         <md-hint *ngIf="email.dirty || email.touched" [hidden]="email.pristine || email.valid" style="color: #f44336">

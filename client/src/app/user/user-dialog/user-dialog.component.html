@@ -7,7 +7,7 @@
 <md-dialog-content fxLayout="column" style="min-width: 600px;">
   <md-input-container>
     <input name="email" [(ngModel)]="client.email" #email="ngModel" mdInput fxFlex="auto" placeholder="Email"
-      pattern="^[a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,15})$" required
+      pattern="^[a-zA-Z0-9]+(\.[_a-zA-Z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,15})$" required
       (keydown)="clearCheckUser()">
       <!--before pattern (EMAIL_REGEX), the "email"-validator was used-->
 
