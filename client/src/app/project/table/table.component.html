@@ -5,7 +5,7 @@
     </button>
 
     <md-input-container>
-      <input mdInput placeholder="Text or Translation key" [(ngModel)]="needle">
+      <input mdInput placeholder="Text or Translation key" [(ngModel)]="needle" (change)="loadFilteredPropertiesList(); status = 'edit';">
     </md-input-container>
 
     <md-slide-toggle style="margin-left: 14px;" [(ngModel)]="toggleFilter">
@@ -13,49 +13,98 @@
     </md-slide-toggle>
   </div>
 
-  <md-card *ngFor="let property of getFilteredProperties() | paginate: { itemsPerPage: 20, currentPage: currentPage }; let i = index;" style="margin: 8px;">
-    <div fxLayout="row" fxLayoutAlign="start center" style="padding-top: 5px 0;">
-      <div style="min-width: 140px; color: rgba(0, 0, 0, 0.38); font-size: 11px;">Translation key:</div>
-      <div>{{ property.key }}</div>
-    </div>
-
-    <div fxLayout="row" fxLayoutAlign="start center" style="padding-top: 5px;">
-      <div style="min-width: 140px; color: rgba(0, 0, 0, 0.38); font-size: 11px;">Translation reference:</div>
-      <div>{{ property.value }}</div>
-    </div>
-
-    <md-card-content fxLayout="column" style="margin-top: 8px;">
-      <md-input-container fxFlex *ngIf="property.target">
-        <textarea mdInput
-          [(ngModel)]="property.target.value"
-          placeholder="Translation"
-          rows="2"
-          (keyup)="checkVariablesFromTranslationUnchanged(property.target, property)"
-          (keydown)="property.status = 'edit'"
-          (change)="save(property.target); property.status = 'loading'"
-          [disabled]="property.target.status === 'loading'">
-        </textarea>
-      </md-input-container>
-
-      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
-        <button md-raised-button
-          [disabled]="property.target.status === 'loading'"
-          (click)="save(property.target); property.status = 'loading'"
-          style="margin-right: 12px;">
-          SAVE
-        </button>
-        <md-icon *ngIf="property?.status === 'saved'">save</md-icon>
-        <p *ngIf="property?.status === 'saved'">currently saved</p>
-        <md-icon *ngIf="property?.status === 'edit'">mode_edit</md-icon>
-        <p *ngIf="property?.status === 'edit'">editing</p>
-        <md-progress-spinner class="progress" *ngIf="property?.target.status === 'loading'" mode="indeterminate"></md-progress-spinner>
-        <md-icon class="error" *ngIf="property?.target.status === 'failed'">report</md-icon>
-        <p class="error" *ngIf="property?.target.status === 'failed'">failed to save in Backend</p>
-        <span class="error" *ngIf="!checkVariablesFromTranslationUnchanged(property.target, property)">Variables in Translation changed!</span>
+  <div *ngIf="status !== 'edit'">
+    <md-card *ngFor="let property of getFilteredProperties() | paginate: { itemsPerPage: 20, currentPage: currentPage }; let i = index;" style="margin: 8px;">
+      <div fxLayout="row" fxLayoutAlign="start center" style="padding-top: 5px 0;">
+        <div style="min-width: 140px; color: rgba(0, 0, 0, 0.38); font-size: 11px;">Translation key:</div>
+        <div>{{ property.key }}</div>
       </div>
 
-    </md-card-content>
-  </md-card>
+      <div fxLayout="row" fxLayoutAlign="start center" style="padding-top: 5px;">
+        <div style="min-width: 140px; color: rgba(0, 0, 0, 0.38); font-size: 11px;">Translation reference:</div>
+        <div>{{ property.value }}</div>
+      </div>
+
+      <md-card-content fxLayout="column" style="margin-top: 8px;">
+        <md-input-container fxFlex *ngIf="property.target">
+          <textarea mdInput
+            [(ngModel)]="property.target.value"
+            placeholder="Translation"
+            rows="2"
+            (keyup)="checkVariablesFromTranslationUnchanged(property.target, property)"
+            (keydown)="property.status = 'edit'"
+            (change)="save(property.target); property.status = 'loading'"
+            [disabled]="property.target.status === 'loading'">
+          </textarea>
+        </md-input-container>
+
+        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
+          <button md-raised-button
+            [disabled]="property.target.status === 'loading'"
+            (click)="save(property.target); property.status = 'loading'"
+            style="margin-right: 12px;">
+            SAVE
+          </button>
+          <md-icon *ngIf="property?.status === 'saved'">save</md-icon>
+          <p *ngIf="property?.status === 'saved'">currently saved</p>
+          <md-icon *ngIf="property?.status === 'edit'">mode_edit</md-icon>
+          <p *ngIf="property?.status === 'edit'">editing</p>
+          <md-progress-spinner class="progress" *ngIf="property?.target.status === 'loading'" mode="indeterminate"></md-progress-spinner>
+          <md-icon class="error" *ngIf="property?.target.status === 'failed'">report</md-icon>
+          <p class="error" *ngIf="property?.target.status === 'failed'">failed to save in Backend</p>
+          <span class="error" *ngIf="!checkVariablesFromTranslationUnchanged(property.target, property)">Variables in Translation changed!</span>
+        </div>
+
+      </md-card-content>
+    </md-card>
+  </div>
+
+  <div *ngIf="status === 'edit'">
+    <md-card *ngFor="let property of filteredProperties | paginate: { itemsPerPage: 20, currentPage: currentPage }; let i = index;" style="margin: 8px;"
+        [hidden]="property.status !== 'edit'">
+      <div fxLayout="row" fxLayoutAlign="start center" style="padding-top: 5px 0;">
+        <div style="min-width: 140px; color: rgba(0, 0, 0, 0.38); font-size: 11px;">Translation key:</div>
+        <div>{{ property.key }}</div>
+      </div>
+
+      <div fxLayout="row" fxLayoutAlign="start center" style="padding-top: 5px;">
+        <div style="min-width: 140px; color: rgba(0, 0, 0, 0.38); font-size: 11px;">Translation reference:</div>
+        <div>{{ property.value }}</div>
+      </div>
+
+      <md-card-content fxLayout="column" style="margin-top: 8px;">
+        <md-input-container fxFlex *ngIf="property.target">
+          <textarea mdInput
+            [(ngModel)]="property.target.value"
+            placeholder="Translation"
+            rows="2"
+            (keyup)="checkVariablesFromTranslationUnchanged(property.target, property)"
+            (keydown)="property.status = 'edit'"
+            (change)="save(property.target); property.status = 'loading'"
+            [disabled]="property.target.status === 'loading'">
+          </textarea>
+        </md-input-container>
+
+        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="20px">
+          <button md-raised-button
+            [disabled]="property.target.status === 'loading'"
+            (click)="save(property.target); property.status = 'loading'"
+            style="margin-right: 12px;">
+            SAVE
+          </button>
+          <md-icon *ngIf="property?.status === 'saved'">save</md-icon>
+          <p *ngIf="property?.status === 'saved'">currently saved</p>
+          <md-icon *ngIf="property?.status === 'edit'">mode_edit</md-icon>
+          <p *ngIf="property?.status === 'edit'">editing</p>
+          <md-progress-spinner class="progress" *ngIf="property?.target.status === 'loading'" mode="indeterminate"></md-progress-spinner>
+          <md-icon class="error" *ngIf="property?.target.status === 'failed'">report</md-icon>
+          <p class="error" *ngIf="property?.target.status === 'failed'">failed to save in Backend</p>
+          <span class="error" *ngIf="!checkVariablesFromTranslationUnchanged(property.target, property)">Variables in Translation changed!</span>
+        </div>
+
+      </md-card-content>
+    </md-card>
+  </div>
 
   <pagination-controls (pageChange)="currentPage = $event"></pagination-controls>
 </div>

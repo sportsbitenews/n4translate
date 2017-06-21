@@ -37,6 +37,7 @@ export class ProjectTableComponent implements OnDestroy, OnInit {
   toggleFilter = false;
   variablesFromTranslation = [];
   beforeEdit = [];
+  filteredProperties = [];
 
   propertyRemovedSubscription: Subscription;
   propertyAddedSubscription: Subscription;
@@ -191,7 +192,11 @@ export class ProjectTableComponent implements OnDestroy, OnInit {
       })
       .value();
   }
-  
+
+  loadFilteredPropertiesList() {
+    this.filteredProperties = this.getFilteredProperties();
+  }
+
   style() {
 		let style = {};
 
