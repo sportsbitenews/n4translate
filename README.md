@@ -1,5 +1,5 @@
 # About *n4translate*
-The web application *n4translate* allows it to manage the i18n translations of multiple Angular applications. 
+The web application *n4translate* helps software companies to manage the i18n translations of multiple Angular applications. 
 
 When localizing custom software, customers often want to provide the translations for their application by themselves or have translation companies providing it. In this situation, *n4translate* helps the software manufacturer to manage the translations of multiple of his software projects for different customers. 
 
