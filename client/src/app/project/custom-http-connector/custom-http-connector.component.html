@@ -1,0 +1,16 @@
+<md-dialog-actions fxLayoutAlign="end center" style="min-width: 900px;">
+  <button md-icon-button md-dialog-close>
+    <md-icon>close</md-icon>
+  </button>
+</md-dialog-actions>
+
+<md-dialog-content fxLayout="column" style="margin-bottom: 15px; margin-top: 10px;">
+  <md-input-container>
+    <textarea [(ngModel)]="optionsText" mdInput fxFlex="auto" placeholder="HTTP-Endpoints" rows="20"></textarea>
+  </md-input-container>
+</md-dialog-content>
+
+<md-dialog-actions fxLayoutAlign="end center" fxLayoutGap="10px">
+  <button md-raised-button md-dialog-close>Cancel<md-icon>clear</md-icon></button>
+  <button md-raised-button (click)="create()">Create<md-icon>done</md-icon></button>
+</md-dialog-actions>

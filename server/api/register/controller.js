@@ -127,8 +127,6 @@ const setReflangOfProject = ({ $loki, reflang }) => {
       let project = findProjectByCollection(collection, { $loki });
 
       if(project) {
-        let translations = _.get(project, 'translations', []);
-
         _.set(project, 'reflang', reflang);
 
         collection.update(project);
@@ -139,11 +137,33 @@ const setReflangOfProject = ({ $loki, reflang }) => {
     });
 };
 
+const setCustomHttpConnector = ({ $loki, customHttpConnector }) => {
+  let db;
+  return service.getDb()
+    .then((dbInstance) => {
+      db = dbInstance;
+      return storage.loadCollection(db, COLLECTION_NAME)
+    })
+    .then((collection) => {
+      let project = findProjectByCollection(collection, { $loki });
+
+      if(project) {
+        _.set(project, 'customHttpConnector', customHttpConnector);
+
+        collection.update(project);
+        db.saveDatabase();
+      }
+
+      return project;
+    });
+}
+
 module.exports = {
   addProject,
   appendTranslationToProject,
   getProjects,
   importTranslationToProject,
   removeTranslationFromProject,
-  setReflangOfProject
+  setReflangOfProject,
+  setCustomHttpConnector
 };

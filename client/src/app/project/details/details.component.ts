@@ -14,6 +14,8 @@ import {find, findIndex, first, get, isString, has, last, map, pick, trim, set} 
 
 import {ImportTranslationDialogComponent} from '../import-translation-dialog/import-translation-dialog.component';
 import {DeleteTranslationConfirmDialogComponent} from '../delete-translation-confirm-dialog/delete-translation-confirm-dialog.component';
+import {CustomHttpConnectorComponent} from '../custom-http-connector/custom-http-connector.component';
+
 import {environment} from '../../../environments/environment';
 
 @Component({
@@ -32,6 +34,7 @@ export class DetailsComponent implements OnDestroy, OnInit {
 
   importTranslationDialogRef: MdDialogRef<ImportTranslationDialogComponent>
   deleteTranslationConfirmDialogRef: MdDialogRef<DeleteTranslationConfirmDialogComponent>
+  customHttpConnectorComponentDialogRef: MdDialogRef<CustomHttpConnectorComponent>
 
   private subs: { [x: string]: Subscription } = {};
   private uploadUrl: string = `${environment.apiUrl}/api/translation/import`;
@@ -244,6 +247,18 @@ export class DetailsComponent implements OnDestroy, OnInit {
       .subscribe(translation => {
         console.log('translation', translation);
         if(translation) {this.remove(translation)}
+      });
+  }
+
+  openCustomHttpConnectorDialog() {
+    let config = new MdDialogConfig();
+    config.viewContainerRef = this.viewContainerRef;
+
+    this.customHttpConnectorComponentDialogRef = this.dialog.open(CustomHttpConnectorComponent, config);
+
+    this.customHttpConnectorComponentDialogRef.afterClosed()
+      .subscribe((options) => {
+        console.log('custom http options', options);
       });
   }
 

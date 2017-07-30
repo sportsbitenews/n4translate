@@ -1,6 +1,18 @@
 <md-card *ngIf="project" style="margin: 12px;">
   <md-card-title fxLayout="row" fxLayoutAlign="start center">
     <md-icon style="margin-right: 12px;">folder</md-icon> {{ project.name }}
+
+    <span fxFlex></span>
+
+    <div *ngIf="user.isAdmin()">
+      <md-menu #appMenu="mdMenu">
+        <button md-menu-item (click)="openCustomHttpConnectorDialog()"> Anable custom HTTP-Service </button>
+      </md-menu>
+
+      <button md-icon-button [mdMenuTriggerFor]="appMenu">
+         <md-icon>more_vert</md-icon>
+      </button>
+    </div>
   </md-card-title>
 
   <md-card-content>
@@ -57,10 +69,6 @@
     <md-card-title fxLayout="row" fxLayoutAlign="start center">
       Translation into {{ selectedTranslation.lang }}
     </md-card-title>
-
-    <!-- <button md-button (click)="saveContent()">
-      Save <md-icon>save</md-icon>
-    </button> -->
 
     <a #exportTarget style="display:none"></a>
 

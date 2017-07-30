@@ -37,6 +37,7 @@ import { UserService } from './user/user.service';
 
 import { ProjectService } from './project/project.service';
 import { UserProjectsComponent } from './user/user-projects/user-projects.component';
+import { CustomHttpConnectorComponent } from './project/custom-http-connector/custom-http-connector.component';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig(), http, options);
@@ -88,7 +89,8 @@ const appRoutes: Routes = [
     DeleteTranslationConfirmDialogComponent,
     AuthComponent,
     UserDialogComponent,
-    UserProjectsComponent
+    UserProjectsComponent,
+    CustomHttpConnectorComponent
   ],
   imports: [
     BrowserModule,
@@ -101,6 +103,7 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes)
   ],
   entryComponents: [
+    CustomHttpConnectorComponent,
     ImportTranslationDialogComponent,
     PropertyDialog,
     ProjectDialogComponent,
