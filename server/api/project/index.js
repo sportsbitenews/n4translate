@@ -33,23 +33,28 @@ const model = ({ name }) => {
 const createTranslation = (project, lang) => {
   let filepath = getFilepath(`${project.filename}-${lang}`);
   return util.outputFile(filepath, translation.content);
-}
+};
 
 const saveTranslation = (translation) => {
   let filepath = getFilepath(translation.filename);
   return util.writeJson(filepath, translation.content);
-}
+};
 
 const removeTranslation = (translation) => {
   let filepath = getFilepath(translation.filename);
   return util.removeFile(filepath);
-}
+};
+
+const saveCustomHttpConfig = (config) => {
+
+};
 
 module.exports = {
   createTranslation,
   getJSON,
   model,
   removeTranslation,
+  saveCustomHttpConfig,
   saveEntity,
   saveTranslation,
 };

@@ -1,0 +1,15 @@
+{
+  "basePathname": "{domain}",
+  "getTranslations": {
+    "method": "GET",
+    "pathname": "/i18n/{lang}"
+  },
+  "updateSingleTranslation": {
+    "method": "PATCH",
+    "pathname": "/i18n/{lang}",
+    "bodyMapping": {
+      "jsonPath" : "key",
+      "value" : "translation"
+    }
+  }
+}
