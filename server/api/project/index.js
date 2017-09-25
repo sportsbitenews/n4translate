@@ -45,16 +45,11 @@ const removeTranslation = (translation) => {
   return util.removeFile(filepath);
 };
 
-const saveCustomHttpConfig = (config) => {
-
-};
-
 module.exports = {
   createTranslation,
   getJSON,
   model,
   removeTranslation,
-  saveCustomHttpConfig,
   saveEntity,
   saveTranslation,
 };

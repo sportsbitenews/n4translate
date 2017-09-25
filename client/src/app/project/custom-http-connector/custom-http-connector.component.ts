@@ -12,18 +12,21 @@ import { Observable } from 'rxjs/Observable';
   styleUrls: ['./custom-http-connector.component.css']
 })
 export class CustomHttpConnectorComponent implements OnInit {
+  project: any;
 
   options = {
     basePathname: "",
-    getTranslations: {
-      method: "GET",
-      pathname: ""
-    },
-    saveTranslation: {
-      method: "POST",
-      pathname: "",
-      data: {}
-    },
+    translations: [{
+      getTranslations: {
+        method: "GET",
+        pathname: ""
+      },
+      saveTranslation: {
+        method: "POST",
+        pathname: "",
+        data: {}
+      },
+    }]
   };
 
   optionsText: string;
@@ -34,6 +37,7 @@ export class CustomHttpConnectorComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.options = this.project.customHttpConnector || this.options;
     this.optionsText = JSON.stringify(this.options, null, 2);
   }
 

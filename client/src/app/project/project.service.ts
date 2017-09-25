@@ -311,4 +311,18 @@ export class ProjectService {
       return Observable.of(this.selectedProjectProperties);
     }
   }
+
+  enableCustomHttp(project: any, customHttpConnector: any) {
+    // console.log('custom http options', customHttpConnector);
+    const body = { project, customHttpConnector };
+    return this.authHttp
+      .post(`${environment.apiUrl}/api/project/enableCustomHttp`, body)
+      .map(this.extractData)
+      .map((updatedProject: any) => {
+        project = updatedProject;
+        console.log(project);
+      })
+      .catch(this.handleError)
+      .subscribe();
+  }
 }

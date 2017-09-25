@@ -101,16 +101,25 @@ router.post('/api/project/reflang', Auth.check, (req, res) => {
 });
 
 router.post('/api/translation', Auth.check, (req, res) => {
-  // console.log('/api/translation', req.body.filename);
-
-  Project.getJSON(req.body.filename)
-    .then((content) => {
-      res.json(content);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(404).send();
-    });
+  if(req.body.filename) {
+    Project.getJSON(req.body.filename)
+      .then((content) => {
+        res.json(content);
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(404).send();
+      });
+  } else {
+    Register.getCustomTranslation(req.body)
+      .then((content) => {
+        res.json(content);
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(404).send();
+      });
+  }
 });
 
 router.post('/api/translation/save', Auth.check, (req, res) => {
@@ -126,15 +135,29 @@ router.post('/api/translation/save', Auth.check, (req, res) => {
 });
 
 router.post('/api/translation/property/save', Auth.check, (req, res) => {
-  Project.saveEntity(req.body)
-    .then((content) => {
-      // console.log(content);
-      res.json(content);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(404).send();
-    });
+  if(req.body.filename) {
+    Project.saveEntity(req.body)
+      .then((content) => {
+        res.json(content);
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(404).send();
+      });
+  } else {
+    Register.saveCustomEntity(req.body)
+      .then((content) => {
+        console.log(content.body);
+        res.json({
+          succesful: true,
+          response: content.body
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(404).send();
+      });
+  }
 });
 
 router.post('/api/translation/remove', Auth.check, (req, res) => {
@@ -144,6 +167,20 @@ router.post('/api/translation/remove', Auth.check, (req, res) => {
     })
     .then((project) => {
       // console.log(project);
+      res.json(project);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(404).send();
+    });
+});
+
+router.post('/api/project/enableCustomHttp', Auth.check, (req, res) => {
+  const { project, customHttpConnector } = req.body;
+
+  Register.saveCustomHttpConfig(project, customHttpConnector)
+    .then((project) => {
+      console.log(project);
       res.json(project);
     })
     .catch((err) => {

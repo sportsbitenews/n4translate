@@ -5,6 +5,7 @@ const fs        = require('fs');
 
 const service   = require('../../modules/service');
 const storage   = require('../../modules/storage');
+const remote    = require('../../modules/remote');
 
 const COLLECTION_NAME = 'projects';
 
@@ -15,7 +16,29 @@ const getProjects = () => {
     })
     .then((collection) => {
       return collection.data;
+    })
+    .then((projects) => {
+      return _.map(projects, prepareCustomHttpTranslations);
     });
+};
+
+const prepareCustomHttpTranslations = (project) => {
+  if(_.has(project, 'customHttpConnector')) {
+    project.translations = _
+      .chain(_.get(project, 'customHttpConnector.translations', []))
+      .map((translation) => {
+        return {
+          lang: translation.lang,
+          customHttpConnector: true,
+          $loki: project.$loki
+        };
+      })
+      .value();
+
+    return project;
+  }
+
+  return project;
 };
 
 const addProject = (project) => {
@@ -158,12 +181,62 @@ const setCustomHttpConnector = ({ $loki, customHttpConnector }) => {
     });
 }
 
+const saveCustomHttpConfig = (project, customHttpConnector) => {
+  return setCustomHttpConnector({
+    $loki: project.$loki,
+    customHttpConnector
+  });
+};
+
+const getCustomTranslation = ({ $loki, lang, customHttpConnector }) => {
+  return getCustomHttpConfig({ $loki, lang })
+    .then((customHttpConfig) => {
+      if(customHttpConfig) {
+        return remote.getTranslations(customHttpConfig, lang);
+      }
+    });
+};
+
+const getCustomHttpConfig = ({ $loki, lang }) => {
+  let db;
+  return service.getDb()
+    .then((dbInstance) => {
+      db = dbInstance;
+      return storage.loadCollection(db, COLLECTION_NAME)
+    })
+    .then((collection) => {
+      let project = findProjectByCollection(collection, { $loki });
+
+      if(_.has(project, 'customHttpConnector.translations')) {
+        const customHttpConnector = project.customHttpConnector;
+
+        const customHttpConfig = Object.assign({}, _.find(customHttpConnector.translations, { lang }));
+        _.set(customHttpConfig, 'basePathname', customHttpConnector.basePathname);
+
+        return customHttpConfig;
+      }
+    });
+}
+
+const saveCustomEntity = ({ $loki, lang, property }) => {
+  return getCustomHttpConfig({ $loki, lang })
+    .then((customHttpConfig) => {
+      // console.log(customHttpConfig, lang, property);
+      if(customHttpConfig) {
+        return remote.updateSingleTranslation(customHttpConfig, lang, property);
+      }
+    });
+};
+
 module.exports = {
   addProject,
   appendTranslationToProject,
+  getCustomTranslation,
   getProjects,
   importTranslationToProject,
   removeTranslationFromProject,
   setReflangOfProject,
+  saveCustomEntity,
+  saveCustomHttpConfig,
   setCustomHttpConnector
 };

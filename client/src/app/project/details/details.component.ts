@@ -255,10 +255,13 @@ export class DetailsComponent implements OnDestroy, OnInit {
     config.viewContainerRef = this.viewContainerRef;
 
     this.customHttpConnectorComponentDialogRef = this.dialog.open(CustomHttpConnectorComponent, config);
+    this.customHttpConnectorComponentDialogRef.componentInstance.project = this.project;
 
     this.customHttpConnectorComponentDialogRef.afterClosed()
       .subscribe((options) => {
-        console.log('custom http options', options);
+        if(options) {
+          this.projectService.enableCustomHttp(this.project, options);
+        }
       });
   }
 
