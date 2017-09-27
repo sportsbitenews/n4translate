@@ -74,15 +74,6 @@ export class DetailsComponent implements OnDestroy, OnInit {
         console.log('DetailsComponent removed!');
         this.saveContent();
       }, error => console.log(error));
-
-    // this.progress = Observable.create(observer => {
-    //   this.progressObserver = observer
-    // }).share();
-    //
-    // this.progress.subscribe(
-    //   data => {
-    //     console.log(`progress = ${data}`);
-    //   });
   }
 
   ngOnDestroy () {

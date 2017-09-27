@@ -29,7 +29,8 @@
         </md-select>
       </div>
 
-      <!-- <md-card-subtitle>Target language</md-card-subtitle> -->
+      <!-- <pre>{{ project | json }}</pre> -->
+
       <div fxFlex style="margin-left: 32px;" fxLayout="row" fxLayoutAlign="start center">
         <div fxLayout="row" fxLayoutAlign="start center">
           <md-chip-list *ngIf="project">
@@ -50,7 +51,13 @@
           <input #upload style="display: none;" type="file" (change)="onChange($event)"/>
 
           <div fxLayout="row" fxLayoutAlign="start center">
-            <button md-raised-button md-icon-button (click)="upload.click()" style="margin-right: 12px;" mdTooltip="Import" disabled="{{ invalidLang() }}">
+            <button md-raised-button
+                    md-icon-button
+                    *ngIf="!project.customHttpConnector"
+                    (click)="upload.click()"
+                    style="margin-right: 12px;"
+                    mdTooltip="Import"
+                    disabled="{{ invalidLang() }}">
               <md-icon>file_upload</md-icon>
             </button>
 

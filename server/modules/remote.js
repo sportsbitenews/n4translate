@@ -31,7 +31,7 @@ const updateSingleTranslation = (config, lang = 'DE', translation) => {
 };
 
 const createTranslation = (customHttpConfig, translations, lang) => {
-  const settings = customHttpConfig.createTranslations;
+  const settings = customHttpConfig.createTranslations.createOptions;
 
   const uriCompiled = _.template(`${customHttpConfig.basePathname}${settings.pathname}`);
   const uri = uriCompiled({ lang });
@@ -42,20 +42,30 @@ const createTranslation = (customHttpConfig, translations, lang) => {
     json: true
   };
 
-  return got(uri, options);
+  return got(uri, options)
+    .then(() => {
+      return createTranslationConfig(customHttpConfig.createTranslations, lang);
+    });
 };
 
-// const options = require('../repository/api.json');
-// getTranslations(options)
-//   .then((response) => {
-//       let json = JSON.parse(response.body);
-//       console.log(JSON.stringify(json, null, 2));
-//   })
-//   .catch((error) => {
-//       console.log(error.response.body);
-//   });
+const createTranslationConfig = (createTranslations, lang) => {
+  if(!createTranslations) return null;
+
+  const config = { lang };
+
+  _.forOwn(createTranslations.rest, (options, type) => {
+    let optionsAsString = JSON.stringify(options);
+    const compiled = _.template(optionsAsString);
+    optionsAsString = compiled({ lang });
+
+    _.set(config, type, JSON.parse(optionsAsString));
+  });
+
+  return config;
+};
 
 module.exports = {
+  createTranslationConfig,
   createTranslation,
   getTranslations,
   updateSingleTranslation,

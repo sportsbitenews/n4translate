@@ -46,20 +46,31 @@ router.post('/api/translation/append', Auth.check, (req, res) => {
   let $loki = _.parseInt(req.body.$loki);
   let translation = req.body.translation;
 
-  Project.saveTranslation({
-    filename: translation.filename,
-    content: req.body.content
-  })
-  .then(() => {
-    return Register.appendTranslationToProject({ $loki, translation });
-  })
-  .then((project) => {
-    res.json(project);
-  })
-  .catch((err) => {
-    console.log(err);
-    res.sendStatus(400);
-  });
+  if(translation.customHttpConnector) {
+    Register.saveCustomHttpTranslation(req.body)
+      .then((content) => {
+        res.json(content);
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(404).send();
+      });
+  } else {
+    Project.saveTranslation({
+      filename: translation.filename,
+      content: req.body.content
+    })
+    .then(() => {
+      return Register.appendTranslationToProject({ $loki, translation });
+    })
+    .then((project) => {
+      res.json(project);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.sendStatus(400);
+    });
+  }
 });
 
 router.get('/api/projects', Auth.check, (req, res) => {

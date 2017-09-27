@@ -228,6 +228,41 @@ const saveCustomEntity = ({ $loki, lang, property }) => {
     });
 };
 
+const saveCustomHttpTranslation = ({ $loki, translation, content }) => {
+  let db, project, collection;
+
+  return service.getDb()
+    .then((dbInstance) => {
+      db = dbInstance;
+      return storage.loadCollection(db, COLLECTION_NAME)
+    })
+    .then((projects) => {
+      collection = projects;
+      project = findProjectByCollection(collection, { $loki });
+
+      if(_.has(project, 'customHttpConnector.createTranslations')) {
+        return project.customHttpConnector;
+      }
+    })
+    .then((customHttpConnector) => {
+      if(customHttpConnector) {
+        return remote.createTranslation(customHttpConnector, content, translation.lang);
+      }
+    })
+    .then((translationConfig) => {
+      if(translationConfig) {
+        project.customHttpConnector.translations.push(translationConfig);
+
+        collection.update(project);
+        db.saveDatabase();
+
+        return prepareCustomHttpTranslations(project);
+      }
+
+      return project;
+    });
+};
+
 module.exports = {
   addProject,
   appendTranslationToProject,
@@ -238,5 +273,6 @@ module.exports = {
   setReflangOfProject,
   saveCustomEntity,
   saveCustomHttpConfig,
+  saveCustomHttpTranslation,
   setCustomHttpConnector
 };
